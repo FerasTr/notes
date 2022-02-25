@@ -1,0 +1,8 @@
+:PROPERTIES:
+:ID:       6396875a-1a4f-48fd-8b47-190176d553dd
+:END:
+#+title: Docker
+#+filetags: :cloud:devops:linux:
+
+* Resources
+- Docker for beginners ([[https://docker-curriculum.com/][link]])

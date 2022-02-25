@@ -1,0 +1,10 @@
+:PROPERTIES:
+:ID:       c24ef766-74fc-42ba-b168-aed0c37c212b
+:END:
+#+title: Content Delivery Networks
+#+filetags: :networking:
+
+* Overview
+A CDN helps reduce the traffic from a busy website. Since static files are heavily used in [[id:a567db1a-0b32-4ff1-879f-c976f53e75e5][Web Development]] ([[id:50e7f683-acd1-4ceb-994a-d371c7c28be3][Javascript]], CSS, Images, Videos), we can host them on other servers and then serve them to the used based on which server is closest to him.
+* Resources
+- TryHackMe's [[https://tryhackme.com/room/puttingitalltogether][room]] "Putting it all together"

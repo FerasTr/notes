@@ -1,0 +1,15 @@
+:PROPERTIES:
+:ID:       8643d3a6-4633-4947-bef9-42b62ed9c5d4
+:END:
+#+title: RSA
+#+filetags: :math:cryptography:
+
+* Overview
+#+begin_quote
+RSA (Rivest–Shamir–Adleman) is a public-key cryptosystem ... In a public-key cryptosystem, the encryption key is public and distinct from the decryption key, which is kept secret (private). An RSA user creates and publishes a public key based on two large prime numbers, along with an auxiliary value. The prime numbers are kept secret. Messages can be encrypted by anyone, via the public key, but can only be decoded by someone who knows the prime numbers.
+
+The security of RSA relies on the practical difficulty of factoring the product of two large prime numbers, the "factoring problem". Breaking RSA encryption is known as the RSA problem. Whether it is as difficult as the factoring problem is an open question. There are no published methods to defeat the system if a large enough key is used.
+#+end_quote
+
+* Resources
+- Wikipedia's [[https://en.wikipedia.org/wiki/RSA_(cryptosystem)][article]] about RSA

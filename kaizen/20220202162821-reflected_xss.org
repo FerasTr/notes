@@ -1,0 +1,5 @@
+:PROPERTIES:
+:ID:       d4335212-4121-4151-bd33-fa0ff006104c
+:END:
+#+title: Reflected XSS
+#+filetags: :xss:webexp:

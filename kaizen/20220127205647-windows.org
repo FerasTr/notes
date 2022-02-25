@@ -1,0 +1,41 @@
+:PROPERTIES:
+:ID:       907eaf13-2a98-4c84-8b75-4ee052d3bf52
+:END:
+#+title: Windows
+#+filetags: :os:
+
+* Filesystem
+The file systyem used in modern versions of Windows is [[id:8f933838-376b-495f-bb22-dbb8ef1d97c8][NTFS]].
+
+Before NTFS, there was [[id:36e9e0fb-cd77-48ba-bcb8-85ab28c593a2][FAT]] (FAT16/FAT32) and [[id:67e8dc12-b26e-4b1e-9bea-9d6d523e1a3a][HPFS]].
+
+* System Configuration
+** Computer Management
+The Computer Management ~compmgmt~ utility has three primary sections:
+1. System Tools
+2. Storage
+3. Services and Applications
+*** System Tools
+**** Task Scheduler
+With Task Scheduler, we can create and manage common tasks that our computer will carry out automatically at the times we specify. A task can run an application, a script, etc., and they can be configured to run at any point. A task can run at login or logout. Tasks can also be configured to run at a specific schedule.
+
+**** Event Viewer
+Event Viewer allows us to view events that have occurred on the computer. These records of events can be seen as an audit train that can be used to understand the activity of the computer system. This information is often used to diagnose problems and investigate actions executed on the system.
+
+There are five types of events that can be logged: Error, Warning, Information, Success Audit and Failure Audit.
+
+**** Shared Folders
+In Shared Folders, we can see a complete list of shares and folders shared that others can connect to. Under *Shares* we can see the default share of Windows, C$, and default remote administration shares created by windows such as ADMIN$.
+
+Under *Sessions*, we see a list of users who are currently connected to the shares. While in *Open Files*  we see the folders/files that users are accessing.
+
+
+** System Information
+The System Information ~msinfo32~ gathers information about the computer and displays a view of the hardware, system components and software environment.
+
+** Windows Registry
+Windows Registry is a central hierarchical database used to store information necessary to configure the system for one or more users, applications and hardware devices. We can view/edit registry by using ~regedit~.
+
+* Resources
+- Windows [[https://docs.microsoft.com/en-us/troubleshoot/windows-client/backup-and-storage/fat-hpfs-and-ntfs-file-systems][documentation]] of file systems
+- TryHackMe's [[https://tryhackme.com/room/windowsfundamentals1xbx][room]] on Windows

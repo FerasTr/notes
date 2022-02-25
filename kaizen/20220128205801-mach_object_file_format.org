@@ -1,0 +1,5 @@
+:PROPERTIES:
+:ID:       a3e4c9ff-a445-4d8b-9f4b-f11e008cd47f
+:ROAM_ALIASES: Mach-O
+:END:
+#+title: Mach Object File Format

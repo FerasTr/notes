@@ -1,0 +1,5 @@
+:PROPERTIES:
+:ID:       d021d8bf-bd38-4e54-b469-e2c9a8c4e7c8
+:END:
+#+title: Stored XSS
+#+filetags: :webexp:xss:

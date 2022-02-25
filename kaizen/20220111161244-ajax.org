@@ -1,0 +1,7 @@
+:PROPERTIES:
+:ID:       a8674408-c841-4212-9b34-e474b1387b6c
+:END:
+#+title: AJAX
+
+* Overview
+This allows us to make requests to other websites (domains) or apis, without refreshing the page or rerunning the code.

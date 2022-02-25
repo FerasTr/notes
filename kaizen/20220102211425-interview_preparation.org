@@ -1,0 +1,19 @@
+:PROPERTIES:
+:ID:       f9546923-3a8e-4e43-94f7-5ec6a338b40e
+:END:
+#+title: Interview Preparation
+#+description: General tips and tricks for interview prep
+#+filetags: :Studying:Interview-Prep:
+
+* Overview
+In these notes, I collect general tips and tricks that I learned throughout my learning process for any field. I focus more on:
+- Soft skills
+- Mindset
+- Goal setting
+- General resources
+
+* Field Specific
+Some tricks are field specific. For each field I've collected popular methods for preparing and expanding my knowledge.
+
+- [[id:6b9784f9-9e3e-4d22-acaa-ba236764a36b][Cybersecurity Interview Preparation]]
+- [[id:67496b47-6c5b-4acb-895a-6211bf9d61f6][Programming Interview Preparation]]

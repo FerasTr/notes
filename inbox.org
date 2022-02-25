@@ -1,0 +1,10 @@
+#+TITLE: Inbox
+
+
+* TODO Look into the LEMP stack
+* TODO Read the metasploit unleashed documentation by offensive security
+* TODO Expand on ELF files using the provided series of articles in the resource section
+* TODO Read the 4 part medium articles about x64 exploitation in [[id:b52b44e8-d225-4619-9b2b-6a2900a753f7][Assembly]]
+* TODO Write an http proxy client
+* TODO Learn about linux logs and ~journalctl~
+* IDEA علم الدنيوي يأتي تبعا لعلم يرضي الله تعالى، فلا يتصور في رجل يريد ان يملك الارض ان يكون جاهلا باسباب ملك هذه الارض.

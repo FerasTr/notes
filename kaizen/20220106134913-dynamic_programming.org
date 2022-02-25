@@ -1,0 +1,10 @@
+:PROPERTIES:
+:ID:       e2723e28-73a4-49a8-9311-ace10972c4c0
+:END:
+#+title: Dynamic Programming
+#+filetags: :problem-solving:algorithms:
+
+* Overview
+If some problem instances can be seen as pieces of other problem instances, we can /store/ our work along the way to avoid doing the same work twice. The real benefit happens when one subproblem is part of multiple larger problems.
+* Resources
+- [[https://www.youtube.com/watch?v=iv_yHjmkv4I&list=PLKQ5LYb497AZIZe9dBWy8GwLluVaMQVj0&index=17][Dynamic Programming (Think Like a Programmer)]]

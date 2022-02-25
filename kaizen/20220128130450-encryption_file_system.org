@@ -1,0 +1,5 @@
+:PROPERTIES:
+:ID:       8c0a451b-90b6-40f9-a6b1-a7f24992e7a5
+:ROAM_ALIASES: EFS
+:END:
+#+title: Encryption File System

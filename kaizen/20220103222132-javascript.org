@@ -1,0 +1,5 @@
+:PROPERTIES:
+:ID:       50e7f683-acd1-4ceb-994a-d371c7c28be3
+:END:
+#+title: Javascript
+#+filetags: :prog-lag:programming:

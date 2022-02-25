@@ -1,0 +1,24 @@
+:PROPERTIES:
+:ID:       5ce2e7a8-ca40-4af9-a183-deea2cd7df5c
+:END:
+#+title: Stack Canaries
+#+filetags: :binaryexp:binary:
+
+* Overview
+Stack Canaries are a secret value placed on the stack which changes every time the program is started. Prior to a function return, the stack canary is checked and if it appears to be modified, the program exists immediately.
+
+This feature can be disable using the compilation flag ~-fno-stack-protector~.
+
+* Bypassing Stack Canaries
+It is hard to guess 64-bit value. However, it is possible to leak the address or bruteforce the canary.
+
+** Stack Canary Leaking
+If we can read the data in the stack canary, we can send it back to the program later because the canary stays the same throughout execution. On [[id:6d27fa9e-41fb-487d-946f-ce77f3940374][Linux]], the first byte of the stack canary a NULL character, meaning that string functions will stop when they hit it.
+
+** Bruteforcing a Stack Canary
+The canary is determined when the program starts up for the first time which means that if the program forks, it keeps the same stack cookie in the child process. This means that if the input that can overwrite the canary is sent to the child, we can use whether it crashes as an oracle and bruteforce 1 byte at a time.
+
+This method can be used on fork-and-accept servers where connections are spun off to child processes. We can test for a crash with different bytes until we correctly guess a byte.
+
+* Resources
+- ctf101

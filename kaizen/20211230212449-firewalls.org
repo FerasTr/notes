@@ -1,0 +1,41 @@
+:PROPERTIES:
+:ID:       ca521fdf-af2d-4ec5-adbf-bec4a3d71881
+:END:
+#+title: Firewalls
+#+filetags: :Networking: :Cybersecurity:
+
+
+* What is a Firewall?
+A firewall is a device within a network responsible for determining what traffic is allowed to enter and exit. More specifically, firewalls determine if traffic can travel across open ports.
+
+We can permit or deny a packet from entering or exiting based on numerous factors such as:
+- Where the traffic is coming from?
+- Where is the traffic going to?
+- What port is the traffic for?
+- What protocl is the traffic using?
+
+Firewalls perform packet inspection to determine the answers to these questions.
+
+Firewalls can be categorised into 2 to 5 categories. The two primary categories are:
++ Stateful
+    This type of firewall usese the entire information fomr a connection; rather than inspecting an individual packet, this firewall determines the behaviour of a device based upon the entire connection.
+
+    This firewall type consumes many resources as the decision making is dynamic.
+
+    For example, a stateful firewall could allow the first parts of a TCP handshake that would later fail. Or if a connection from a host is bad, it will block the entire device.
++ Stateless
+    This type of firewall uses a static set of rules to determine whether or not indiviudal packets are acceptable or not.
+
+    This firwall type usese much fewer resources than alternatives, but they are much dumber. They are as effective as the rules that are defined within them, if a rule is not exactly matched, it is effectively useless.
+
+    For example, a stateless firewall will block bad packets from a device but not the entire device. These firewalls are great when receiving large amounts of traffic from a set of hosts (DDOS).
+
+* Software
+The technical term for firewalls is *Intrusion Preventation System* (IPS). In this section we discus some of the popular options (basic and enterprise).
+** Snort
+From Snort's [[https://www.snort.org/][website]]:
+#+begin_quote
+Snort is the foremost Open Source Intrusion Prevention System (IPS) in the world. Snort IPS uses a series of rules that help define malicious network activity and uses those rules to find packets that match against them and generates alerts for users.
+
+Snort can be deployed inline to stop these packets, as well. Snort has three primary uses: As a packet sniffer like tcpdump, as a packet logger — which is useful for network traffic debugging, or it can be used as a full-blown network intrusion prevention system. Snort can be downloaded and configured for personal and business use alike.
+#+end_quote

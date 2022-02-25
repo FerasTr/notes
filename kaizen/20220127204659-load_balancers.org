@@ -1,0 +1,13 @@
+:PROPERTIES:
+:ID:       39f8f220-b8de-4e9e-9849-33c1fb6912ab
+:END:
+#+title: Load Balancers
+#+filetags: :networking:
+
+* Overview
+When a website receives high traffic, it sometimes becomes unresponsive, this is unacceptable when we demand high availability. A solution to this problem is to add more servers, but this introduced another problem, how can we decide which server is to receive the next load of traffic?
+
+Load balancers will receive requests, then forward it to one of the multiple servers. Different algorithms are used to determine which server to use, such as /round-robin/ and /weighted/.
+
+* Resources
+- TryHackMe's [[https://tryhackme.com/room/puttingitalltogether][room]] "Putting it all together"

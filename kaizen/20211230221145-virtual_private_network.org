@@ -1,0 +1,32 @@
+:PROPERTIES:
+:ID:       d37868e3-3220-4acc-b4a4-d3f6996238c3
+:ROAM_ALIASES: VPN
+:END:
+#+title: Virtual Private Network
+#+filetags: :Cybersecurity:Networking:
+
+* What is a VPN?
+A Virtual Private Network (VPN) is a [[id:c702e8f9-1347-486d-81b1-be99b1d46338][networking]] technology tthat allows devices on sperate networks to communicate "securely" by creating a dedicated path between each other over the Internet, this path is known as a *tunnel*. Devices connected within this tunnel form their own private network.
+
+There are some benefits to useing a VPN, such as:
+- Allows networks in different geographical locations to be connected.
+    For example, a business with multiple offices will use VPNs to allow all offices to access resources like servers/infrastructure.
+- Offers privacy.
+    VPN technologies uses encryption to protect data. This means that it can only be understoon between the devices it was being sent from and is destined for.
+- Offers anonymity.
+    Traffic is viewed by your ISP and other intermediaries and therefore tracked. A VPN provides anonymity from certain threats.
+
+* VPN Technologies
+VPN technology has improved over the years. Some existing VPN technologies are:
+- IPSec
+    Internet Protocol Security (IPSec), encrypts data using the existing IP framework.
+
+    IPSec is difficult to setup in comparison to alternatives; however, if successful, it boasts strong encryption and is also supported on many devices.
+- PPP
+    This technology is used by PPTP to allow for authentication and provide encryption of data. VPNs work by using a private key and public certificate.
+
+    This technology is not capable of leaving a network by itself (non-routable).
+- PPTP
+    The Point-to-Point Tunneling Protocol (PPTP), iis the technology that allows the data from PPP to travel and leave a network.
+
+    PPTP is easy to setup and is supported by most devices. It is, however, weakly encrypted in comparision to alternatives.

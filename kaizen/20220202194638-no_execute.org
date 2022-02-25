@@ -1,0 +1,10 @@
+:PROPERTIES:
+:ID:       54d4c71b-b187-4257-8262-01e9fabaf056
+:ROAM_ALIASES: NXB
+:END:
+#+title: No eXecute
+
+* Overview
+The No eXecute or the NX bit, also known as Data Execution Prevention or DEP, marks certain areas of the program as not executable, meaning that stored input or data cannot be executed as code. This prevents attackers from being able to jump to custom [[id:64aedabb-2b15-4499-b97e-cf271301e2e2][shellcode]] that they've stored on the stack or in a global variable.
+
+This feature can be disable using the compilation flag ~-z execstack~.

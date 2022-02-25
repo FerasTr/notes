@@ -1,0 +1,141 @@
+:PROPERTIES:
+:ID:       c702e8f9-1347-486d-81b1-be99b1d46338
+:END:
+#+title: Networking
+#+filetags: :Networking:
+
+
+* The Internet
+The Internet is a computer network that interconnects computing devices. These devices are called *hosts* (because they host/run application programs) or *end systems* (becuase they are at the edge of the Internet). End systems are connected together  by a network of *communication links* (coaxial cable, copper wire, optical fiber, radio spectrum) and *packet switches*. Different links can transmit data at different rates, with the *transmission rate* of a link measured in bits/second.
+
+When a host has data to send to another host, the sending host segments the data and adds header bytes to each segment, now called *packets*. The packets are then sent through the network to the destination host, where they are reassembled into the original data.
+
+A packet switch takes a packet arriving on one of its incoming links and forwards that packet on one of its outgoing links. The two most prominent types of switches are *routers* and *link-layer switches*. Link layer switches are typically used in access networks. Routers are typically used in the network core. The sequence of links that a packet travels to the destination is called a *route* or *path*.
+
+End systems, packet switches, and other pieces of the Internet run *protocols* ([[id:77ebd523-d896-42ca-9177-d0298be306bb][Networking Protocols]]) that control the sending and receiveing of information within the Internet. [[id:ca5aa1c6-9074-46d1-aebf-1f7970f6a8f8][TCP]] and [[id:c30f9b34-b91d-461b-a67d-99a3f7b26f18][IP]] are tow of the most important protocols. The Internet's principal protocols are known as TCP/IP. *Internet standards* exist so that everyone agree on what each and every protocol does.
+
+The Internet is an infrastructure that provides services to applications. End systems attached to the internet provide a *socket interface* that specifies how a program running on one end system asks the Internet infrastructure to deliver data to a specific destination program running on another end system. The socket interface is a set of rules that the sending program must follow so that the Internet can deliver the data.
+
+* Components of the Internet
+Hosts are sometimes divided into two categories: *clients* and *servers*. Clients are (sometimes) everyday devices. Servers are machines that store and distribute data, they usually set in data centers.
+* Identifying Devices on a Network
+To communicate and maintain order, devices must be both identifying and identifiable on a network.
+
+Devices on a network are very similar to humans in the fact that we have two ways of being identified:
+
+- Our Name
+- Our Fingerprints
+
+Now we can change our name through deed poll, but we can't, however, change our fingerprints. Every human has an individual set of fingerprints which means that even if they change their name, there is still an identity behind it. Devices have the same thing: two means of identification, with one being permeable. These are:
+
+- An Internet protocol (IP) Address
+- A Media Access Control (MAC) Address -- think of this as being similar to a serial number.
+
+** IP Address
+An IP address can be used as a way of identifying a host on a network for a period of time. IP addresses can be assigned either manually, by entering them physically into a device, or automatically and most commonly by using a DHCP server.
+
+Two versions of IP address are used: IPv4 and IPv6. IPv4 supports 2^32 different address (4.29 Billion) whilst IPv6 supports 2^128 (340 Trillion) and is more efficient.
+
+Some IP addresses serve a special purpose. For example, 127.0.0.1 is often referred to as the 'loopback address' or 'localhost'. By default, any packet or traffic destined to this address won't leave the host.
+
+*** IPv4
+An example of an IPv4 address:
+
+#+begin_center
+192.168.1.1
+#+end_center
+
+An IP address is a set of numbers that are divided into four octets. In the example above, 192 is the first octet, 168 is the second octet... Each octet is of range 0-255.
+
+IP addresses can change from device to device but cannot be active simultaneously more than once within the same network.
+
+An IP address can be a public or private address. A public address is for identifying devices on the internet. A private address is for identifying devices on the same network (between each other).
+
+*** IPv6
+
+An example of an IPv6 address:
+
+#+begin_center
+2a000:22c4:a531:c500:425f:cce6:c36b:f64d
+#+end_center
+*** Subnetting
+In this section, we are using IPv4 as an example.
+
+Subnetting is the term given to splitting up a network into smaller networks /within itself/. Subnetting is acheived by splitting up the number of hosts that can fit within the network.
+
+Subnets use IP addresses in three different ways:
+- Identify the network address (prefix).
+- Identify the host address (identifier).
+- Identfiy the default gateway.
+
+ | type            | purpose                                                                      |                         binary form | dot-decimal notation |
+ |-----------------+------------------------------------------------------------------------------+-------------------------------------+----------------------|
+ | IP address      | Identfiy device on network with network address and host identifier          | 11000000.00000000.00000010.10000010 |          192.0.2.130 |
+ | Network Address | Identfiy the start of the subnet                                             | 11000000.00000000.00000010.00000000 |            192.0.2.0 |
+ | Host Address    | Identify a device on the subnet                                              | 00000000.00000000.00000000.10000010 |            0.0.0.130 |
+ | Default Gateway | Special address for device capable of sending information to another network | 11000000.00000000.00000010.11111110 |          192.0.2.254 |
+ | Subnet Mask     | Yields routing prefix when applied by a bitwise AND to any IP in the network | 11111111.11111111.11111111.00000000 |        255.255.255.0 |
+
+** MAC Address
+Devices on a network will all have a physical network interface, which is a microchip board found on the device's motherboard. This network interface is assigned a unique address at the factory it was built at, called a MAC address. The MAC address is a twelve-character hexadecimal number seperated by colons.
+
+An example of a MAC address:
+
+#+begin_center
+a4:c3:f0:85:ac:2d
+#+end_center
+
+The first six characters represent the organizationally unique identifier (OUI), and the last six are the network interface controller (NIC). In other words, the company and the device itself.
+
+In the human analogy above, we compared a MAC address to a fingerprint, the difference between them is that a MAC address can be spoofed. A device can pretend to be another device by simply spoofing the MAC address of the target device.
+
+* Local Area Network
+** Topologies
+*** Star
+Devices are individually connected via a central networking device such as a switch or a hub.
+- Cons
+  - Expensive.
+  - Single point of failure.
+- Pros
+  - Scalable.
+
+*** Bus
+Devices are connected via a single connection which is known as a backbone cable. All the data destined for each device travels along the same cable.
+- Cons
+  - Can get bottlenecked if all devices are requesting data.
+  - Hard to identify which device is experiencing issues with data all travelling along the same route.
+  - Single point of failure along the bus cable.
+- Pros
+  - Cost-efficient to set up.
+
+*** Ring or Token
+Devices are connected directly to each other to form a loop. Data is sent through the loop until it reaches its destination. A device will prioritize sending its own data before forwarding incoming data.
+- Cons
+  - Data will not necessarily take the shortest path to the target.
+  - A cable break between two devices will interrupt the flow of data for all devices.
+- Pros
+  - Less prone to bottlenecks, less amount of data is travelling at any given time compared to the bus topology.
+** Switch
+Switches are dedicated devices within a network that are  designed to aggregate multiple other devices. These devices plug into a switch's port. Switches keep track of what device is connected to which port, this way, when they receive a packet, its sent to the intended target, unlike hubs or repeaters where a packet is repeated to every port untill it reaches its destination.
+
+For example, given 50 computers, we can connect them to the internet by splitting them to two switches. Only the switches are connected to the router which in ture is connected to the internet.
+
+Switches can operate at both layer 2 and layer 3 of the [[id:b741e7dd-a3cd-49aa-8cd4-a6633340adcf][OSI Model]]. However, these are exclusive in the sense that Layer 2 switches cannot operate at Layer 3.
+
+Layer 2 switches will forward frames onto the conneced devices using their MAC address.
+
+Layer 3 switches can perform /some/ of the responsabilites of a router. These switches will send frames to devices and route packets to other devices using the IP protocol (layer 2 switches route using the MAC only).
+
+** Routers
+Routers connect networks and pass data between them. The process of doing so is called routing.
+
+Routing is what we call data travelling across networks. A router must create a path for the data such that the data coming from one network can successfully travel to the target network.
+
+Routers operate at Layer 3 of the [[id:b741e7dd-a3cd-49aa-8cd4-a6633340adcf][OSI Model]].
+** VLAN
+Virtual Local Area Network (VLAN) allows specific devices within a network to be virtually split up. This split means they can still have internet access but they are treated separately from other parts of the network. This seperation improves security.
+* Ports
+** Port Forwarding
+A device running any service on a specific port is only visible to devices in that LAN (intranet). To give other devices in a different network access to thr running service, we need to forward any incoming connection to that port. To do so, we use the router's public ip address along side an available port on the router, to forward any incoming traffic to the local IP address and port.
+* OSI Model
+The [[id:b741e7dd-a3cd-49aa-8cd4-a6633340adcf][OSI Model]] streamlines the communication functions of a computing system without regard to its underlying internal strucutre and technology. The flow of data is partitioned into seven abstraction layers, from the physical implementation of bits to the highes-level representation of data of a distributed application.

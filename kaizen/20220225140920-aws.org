@@ -1,0 +1,16 @@
+:PROPERTIES:
+:ID:       511383bd-90cb-4739-a261-8fa4cc0ce736
+:END:
+#+title: AWS
+
+* Overview
+Amazon AWS is a public cloud service provider. Most major enterprises leverage AWS in some form or another for Compute Services, Big Data or Machine Learning, Data Archive, Video Streaming, IoT, etc.
+
+AWS divides its infrastructure into Regions, mostly independent clusters of datacenters. Within each region are availability zones (AZ). Each AZ in a region leverages separate power grids and usually are located in different flood plains. This redundancy allows you to establish highly resilient architectures to withstand significant weather or geological events, or more frequently, hardware or facility failures.
+
+* Amazon S3
+Amazon S3 (Simple Storage Service) is their hosted object storage service. Objects are stored in Buckets. To highly simplify the concept of object storage, Buckets are key-value stores, with the Object Key being a full pathname for a file and the value being the contents of the file. S3 is a publicly hosted service - it doesn't exist behind a corporate firewall, making it convenient for hosting public content. AWS has an entire feature set around hosting a public website in S3.
+
+AWS Buckets use a global namespace. Only one AWS customer can create a bucket named ~bestfestivalcompany-images~.
+
+The option ~--no-sign-request~ allows you to request data from S3 without being an AWS Customer.

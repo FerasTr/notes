@@ -1,0 +1,21 @@
+:PROPERTIES:
+:ID:       c5239a45-7f94-4650-8f13-d83680fd9f99
+:END:
+#+title: XOR Encryption
+#+filetags: :cryptography:Cybersecurity:ctf:
+
+* Overview
+[[id:4c1bef71-2cde-4e74-a474-e4e311e056fd][XOR]] can be used to encrypt data with a secret key, this is done by iterating over each byte in the data and performing the XOR operation.
+
+#+begin_src python
+>>> data = 'CAPTURETHEFLAG'
+>>> key = 'A'
+>>> encrypted = ''.join([chr(ord(x) ^ ord(key)) for x in data])
+>>> encrypted
+'\x02\x00\x11\x15\x14\x13\x04\x15\t\x04\x07\r\x00\x06'
+>>> decrypted = ''.join([chr(ord(x) ^ ord(key)) for x in encrypted])
+>>> decrypted
+'CAPTURETHEFLAG'
+#+end_src
+* Resources
+- ctf101

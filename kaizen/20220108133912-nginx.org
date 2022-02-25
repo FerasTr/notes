@@ -1,0 +1,7 @@
+:PROPERTIES:
+:ID:       1c716f3e-8a85-4847-a1a5-722bfc7d2e84
+:END:
+#+title: NGINX
+
+* Resources
+- [[https://nginx.org/en/docs/beginners_guide.html][Official Beginner's Guide]]

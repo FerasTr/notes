@@ -1,0 +1,51 @@
+:PROPERTIES:
+:ID:       c18c1ea1-0be0-4fc5-88ee-0681f8ba0928
+:END:
+#+title: Netmon
+#+filetags: :windows:ctf:hackthebox:writeup:
+
+* Description
+No description is provided.
+
+* Recon
+Starting with an ~nmap~ scan, we see the following ports open:
+- 21 - ftp - Microsoft ftpd - anonymous login allowed
+- 80 - http - Indy httpd 18.1.37.13946
+- 135 - msrpc
+- 139 - netbios-ssn
+- 445 - microsoft-ds - Microsoft Windows Server 2008 R2
+
+* Foothold
+After logging into the ftp server with the anonymous login, it is possible to browse the [[id:907eaf13-2a98-4c84-8b75-4ee052d3bf52][Windows]] server and get the user flag.
+
+The PRTG application is running on a web server, which means that there is a configuration file somewhere to find. Looking up the application online shows that the configuration is saved under the Program Data directory. We can ~cd~ there and download the configuration file and its backup.
+
+The configuration file is encrypted, it is also from the year 2019. The backup file is from 2018 and its not encrypted. Searching for a password and a username using ~grep~ shows us the following credentials:
+#+begin_example
+User: prtgadmin
+Password: PrTg@dmin2018
+#+end_example
+
+Using the above password doesn't work, but since its from 2018, we can try incrementing the year and see if it works.
+#+begin_example
+User: prtgadmin
+Password: PrTg@dmin2019
+#+end_example
+We now can login.
+
+We can use the above credentials in [[id:4b5fff4e-378c-4a29-93da-c852c5cf79d3][Metasploit]] using the "prtg_authenticated_rce" to get a remote shell on the server.
+
+Navigating to the desktop of the current user (authority), we can retrieve the flag.
+
+* Flag
+** root
+#+begin_example
+HTB{c62ff02648cf0d5b0a8208b8994d3bfd}
+#+end_example
+
+** user
+#+begin_example
+HTB{bdca09d08a1ba5df438a352c977a0f18}
+#+end_example
+* Notes
+* Resources

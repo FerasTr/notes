@@ -1,0 +1,26 @@
+:PROPERTIES:
+:ID:       061d8767-7f33-4e9f-8ab0-aec0e164a501
+:END:
+#+title: Find The Easy Pass
+#+filetags: :ctf:reversing:hackthebox:writeup:
+
+* Description
+#+begin_quote
+Find the password (say PASS) and enter the flag in the form HTB{PASS}
+#+end_quote
+
+** Extras
+An executable is provided as a download.
+
+* Recon
+The provided binary is a PE32 executable for MS Windows (per ~file~). Running it in wine displays a box where a password can be entered and a button for checking the password.
+
+When entering a wrong password, a pop up shows up with text: "Wrong Password". We can look for this string in [[file:20220124115825-ghidra.org][Ghidra]] in the data/strings window. The decompiled code is very messy (on purpose!). Since we know that a check happens right before the pop up, we can look for it in a debugger.
+
+* Foothold
+Using [[id:840e3e45-92e8-462b-b6e8-e62e4f26584b][ollydbg]] running inside ~wine~, we can look for strings there. Searching for "Wrong Password", we find it in right after a ~JNZ~ and a ~CALL~ operations. It looks like the string is being compared inside the called procedure. We set a breakpoint on the ~CALL~ operation, and proceed to step inside the method. We see that our string is being loaded inside the ~EAX~ register. We also notice the string "fortran!" in the ~EDX~ register, we suspect that its the password. Indeed, the function compares the content of ~EAX~ and ~EDX~, and jumps accordingly.
+
+* Flag
+#+begin_example
+HTB{fortran!}
+#+end_example

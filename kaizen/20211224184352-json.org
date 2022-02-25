@@ -1,0 +1,11 @@
+:PROPERTIES:
+:ID:       82459a7f-b642-476b-ac16-2d5784d29dbe
+:END:
+#+title: JSON
+#+description: Learning JSON
+
+
+* JWT
+#+begin_quote
+[[id:8b76eb72-ae21-4e36-97fe-5ccf308a27d9][JWT]] is a standard for creating data with optional signature and/or optional encryption whose payload holds JSON that asserts some number of claims.
+#+end_quote

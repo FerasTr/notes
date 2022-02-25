@@ -1,0 +1,8 @@
+:PROPERTIES:
+:ID:       584a53ed-edbe-46fe-9d38-df00a0eb71b0
+:END:
+#+title: Pwntools
+#+filetags: :tool:ctf:python:
+
+* Resources
+- Short [[https://github.com/Gallopsled/pwntools-tutorial#readme][tutorials]] on GitHub

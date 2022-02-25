@@ -1,0 +1,38 @@
+:PROPERTIES:
+:ID:       8b76eb72-ae21-4e36-97fe-5ccf308a27d9
+:END:
+#+title: JWT
+#+description: Json Web Tokens
+
+* Introduction
+#+begin_quote
+JSON Web Token (JWT) is a standard for creating tokens that assert some number of claims. For example, a server could generate a token that has the claim "logged in as admin" and provide that to a client. The client could then use that token to prove that they are logged in as admin. The tokens are signed by the server's key, so the server is able to verify that the token is legitimate.
+#+end_quote
+JWTs have three parts: Header, Payload, Signature.
+
+The header identifies which algorithm is used to generate the signature. For example:
+#+begin_src pyrhon
+header = '{"alg":"HS256","typ":"JWT"}'
+#+end_src
+The payload contains info about the claim to the server.
+#+begin_src python
+payload = '{"loggedInAs":"admin","iat":1422779638}'
+#+end_src
+The signature is calculated by base64url encoding the header and payload.
+#+begin_src python
+key = 'secretkey'
+unsignedToken = encodeBase64(header) + '.' + encodeBase64(payload)
+signature = HMAC-SHA256(key, unsignedToken)
+#+end_src
+The token becomes: ~eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJsb2dnZWRJbkFzIjoiYWRtaW4iLCJpYXQiOjE0MjI3Nzk2Mzh9.gzSraSYS8EXBxLN_oWnFSRgCzcmJmMjLiuyu5CSpyHI~
+#+begin_src python
+token = encodeBase64(header) + '.' + encodeBase64(payload) + '.' + encodeBase64(signature)
+#+end_src
+
+* Vulnerabilities
+** The "None" Algorithm
+This is none as "CVE-2015-9235"
+
+* Resources
+- https://jwt.io/ can be used to decode, verify and generate JWTs
+- [[https://auth0.com/blog/critical-vulnerabilities-in-json-web-token-libraries/][Critical vulnerabilities in JSON Web Token libraries]]

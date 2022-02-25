@@ -1,0 +1,10 @@
+:PROPERTIES:
+:ID:       4273fcdf-58e9-409b-b196-19860eb9478c
+:END:
+#+title: Repetition
+#+filetags: :learning:
+
+* Overview
+#+begin_quote
+Repetition Guarantees Success
+#+end_quote

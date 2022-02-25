@@ -1,0 +1,107 @@
+:PROPERTIES:
+:ID:       825b38f4-8a43-4b92-8460-a7414435e44c
+:END:
+#+title: Requests
+#+filetags: :programming:Networking:library:python:
+
+* Overview
+Requests is a Python library that allows us to do HTTP requests to websites, to get information, post information and much more.
+
+* Installation
+#+begin_src sh
+pip install requests
+#+end_src
+
+* Getting Content
+Lets say we want to grab an image from a website ([[https://imgs.xkcd.com/comics/python.png][xkcd comic]]). First we need to import the requests library:
+#+begin_src python :results output :session req
+import requests
+#+end_src
+Next, we create a ~get~ request for that page:
+#+begin_src python :results output :session req
+r = requests.get('https://imgs.xkcd.com/comics/python.png')
+#+end_src
+And print the response:
+#+begin_src python :results output :session req
+print(r)
+#+end_src
+
+#+RESULTS:
+: <Response [200]>
+
+/Note that we can get the attributes of ~r~ using ~dir(r)~, and we can get more info using ~help(r)~./
+
+To get the image as bytes:
+#+begin_src python :results output :session req
+# writing it to file is better
+with open('/tmp/comic.png', 'wb') as f:
+    f.write(r.content)
+#+end_src
+
+In a [[id:1ec5d57d-b0df-4429-bc7e-aa6dfe97b381][URL]], we sometimes need to provide a query string or a fragment. This can be given explicitly to requests as a full URL path.
+
+A better approach is to create a payload dictionary and pass it along to the ~get~ function, which will construct the full URL correctly.
+#+begin_src python :results output :session req
+payload = {'page': 2, 'count': 25}
+r = requests.get('https://httpbin.org/get', params=payload)
+print(r.text)
+#+end_src
+
+#+RESULTS:
+#+begin_example
+{
+  "args": {
+    "count": "25",
+    "page": "2"
+  },
+  "headers": {
+    "Accept": "*/*",
+    "Accept-Encoding": "gzip, deflate",
+    "Host": "httpbin.org",
+    "User-Agent": "python-requests/2.22.0",
+    "X-Amzn-Trace-Id": "Root=1-61d87064-4fc9f3187525ea184be27f3f"
+  },
+  "origin": "109.64.26.20",
+  "url": "https://httpbin.org/get?page=2&count=25"
+}
+#+end_example
+* Posting Content
+Just like the previous section. We can post to a website using the ~post()~ function provided by requests.
+
+We also provide a payload using the ~data~ parameter.
+#+begin_src python :results output :session req
+payload = {'username': 'fdxd', 'pass': 'test'}
+r = requests.post('https://httpbin.org/post', data=payload)
+print(r.text)
+#+end_src
+
+#+RESULTS:
+#+begin_example
+{
+  "args": {},
+  "data": "",
+  "files": {},
+  "form": {
+    "pass": "test",
+    "username": "fdxd"
+  },
+  "headers": {
+    "Accept": "*/*",
+    "Accept-Encoding": "gzip, deflate",
+    "Content-Length": "23",
+    "Content-Type": "application/x-www-form-urlencoded",
+    "Host": "httpbin.org",
+    "User-Agent": "python-requests/2.22.0",
+    "X-Amzn-Trace-Id": "Root=1-61d87152-7eb9762265fb39fb73772806"
+  },
+  "json": null,
+  "origin": "109.64.26.20",
+  "url": "https://httpbin.org/post"
+}
+#+end_example
+
+/Note that we need to look at the [[id:c11dfdff-dac6-40ba-b8a0-f37e30abe8fc][HTML]], of a webpage to get the id of an element when we want to post information./
+
+* Resources
+- Corey Schafer's [[https://www.youtube.com/watch?v=tb8gHvYlCFs][video]] about the library
+- Requests [[https://docs.python-requests.org/en/latest/][documentation]]

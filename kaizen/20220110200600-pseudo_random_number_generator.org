@@ -1,0 +1,6 @@
+:PROPERTIES:
+:ID:       161ddc43-35eb-40a0-ac4d-315afc63121d
+:ROAM_ALIASES: PRNG
+:END:
+#+title: Pseudo-Random Number Generator
+#+filetags: :cryptography:

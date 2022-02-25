@@ -1,0 +1,78 @@
+:PROPERTIES:
+:ID:       4b5fff4e-378c-4a29-93da-c852c5cf79d3
+:END:
+#+title: Metasploit
+#+filetags: :ctf:tool:
+
+* Overview
+#+begin_quote
+Metasploit is the most widely used exploitation framework. Metasploit is a powerful tool that can support all phases of a penetration testing engagement, from information gathering to post-exploitation.
+#+end_quote
+
+The main components of the framework can be summarized as follows:
+- ~msfconsole~ is the main CLI.
+- /Modules/ that support exploits, scanning, payloads and many more.
+- Stand-alone /tools/ that will help vulnerability research and assessment as well as penetration testing.
+
+* Usage
+To launch the main console of the Metasploit Framework, we use the command ~msfconsole~.
+
+The Metasploit console can be used like a regular shell, commands like ~ls~ and ~cat~ work as usual. It also supports tab completion.
+
+~help~ followed by a command name can give additional information regarding the usage of the command. ~history~ is used to see the previous commands.
+
+When switching between modules, be wary of context change, as variables set in one module are not translated to another and only kept in that context.
+
+To use a module, we type the ~use exploits/path/to/exploit~ command. The command prompt will change to the exploit directory. Another way of selecting a module is by typing ~use~ followed by the number at the beginning of the search result.
+
+We type ~show options~ to print options related to the exploit we have chosen earlier such as the context. The output of ~show~ depends on the current context.
+
+We can see available modules by typing ~show~ followed by a module type (auxiliary, payload, exploit, etc.).
+
+To show information regarding a specific module, we type ~info~ within its context. To leave a context we use the ~back~ command.
+
+To search the available database of Metasploit, we use the ~search~ command. This command can be used to search using CVE numbers, exploit names or even target systems.
+
+** Parameters
+Once inside the context of a module using the ~use~ command followed by the module name, we need to set some parameters. Based on the module we are using, additional or different parameters may need to be set. Use the ~show options~ command to list the required parameters.
+
+Parameters are set using the same syntax: ~set PARAM_NAME VALUE~. They can be cleared using the ~unset PARAM_NAME~ command for one specific parameter, or we can clear them all with ~unset all~.
+
+Some parameters we will often see:
+- RHOST is the IP address of the target system. We can set a single IP or a network range. Supports CIDR notation and files as input (one IP per line).
+- RPORT is the port on the target system.
+- PAYLOAD is the payload we want to use with the exploit.
+- LHOST is the attacking machine IP address.
+- LPORT is the attacking machine's port, used for reverse shell.
+- SESSION is used for post-exploitation modules that will connect to the target system using an existing connection.
+
+We can set global parameters to be used inside any context. This can be done using the ~setg~ command (same syntax as before). To clear global values we use ~unsetg~.
+
+** Using a Module
+Once all module parameters are set, we can launch the module using the ~exploit~ or ~run~ command. To run the exploit in the background, we use the ~-z~ flag. Some models provide the ~check~ command which is used to check if the target is vulnerable or not.
+
+*** Sessions
+Once a vulnerability has been successfully exploited, a session will be created. This is the communication channel established between the target system and Metasploit.
+
+We use the ~background~ command to background the session prompt and go back to the msfconsole prompt.
+
+To view sessions, we use the ~sessions~ command. We can interact with a session using the ~sessions -i X~ command.
+
+** Connecting to a Database
+We can connect the framework to a [[id:0f4caff7-0472-4b78-925c-7da09ce4a086][postgresql]] database. In [[id:52ca2e79-c3b9-4c96-8286-45fac01b8d61][Kali]], we start the service using ~systemctl start postgresql~, and then we create and initialize the msf database with ~msfdb init~.
+
+We can skip the previous step by just running ~msfdb run~.
+
+** Searching
+We can search for an exploit from exploit-db.com using the ~searchsploit~ command.
+
+* Modules
+** Payloads
+There are three directories under payloads: singles, stagers and stages.
+- Singles: Self-contained payloads that don't need to download additional components to run.
+- Stagers: Responsible for setting up a connection channel between Metasploit and the target system.
+- Stages: Downloaded by the stager. This allows for larger sized payloads.
+
+
+* Resources
+- TryHackMe's [[https://tryhackme.com/room/metasploitintro][room]] about Metasploit

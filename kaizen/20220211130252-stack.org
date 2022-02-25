@@ -1,0 +1,8 @@
+:PROPERTIES:
+:ID:       98e6ed1f-3131-479e-955f-afaf73ed0e42
+:END:
+#+title: Stack
+#+filetags: :ds:
+
+* Overview
+A stack is a data structure that stores data values contiguously in memory. Unlike an array, however, you access data only at the top of the stack. To read from the stack is said *"to pop"* and to write to the stack is said *"to push"*. A stack is also known as a LIFO [[id:cd10c6fe-8824-4af6-9854-e59de76e219c][queue]] since values are popped from the stack in the reverse order that they are pushed onto it. Popped data disappears from the stack.

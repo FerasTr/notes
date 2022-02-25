@@ -1,0 +1,15 @@
+:PROPERTIES:
+:ID:       8f933838-376b-495f-bb22-dbb8ef1d97c8
+:ROAM_ALIASES: NTFS
+:END:
+#+title: New Technology File System
+
+* Overview
+New Technology File System (NTFS) is known as a journaling file system. In case of a failure, the file system can automatically repair the folders/files on disk using information stored in a log file.
+
+* Advantages of NTFS
+NTFS addresses many of the limitations of the previous file systems, such as:
+- Supports files larger than 4GB.
+- Set specific permissions on folders and files.
+- Folder and file compression.
+- Encryption ([[id:8c0a451b-90b6-40f9-a6b1-a7f24992e7a5][EFS]]).

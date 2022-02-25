@@ -1,0 +1,15 @@
+:PROPERTIES:
+:ID:       d7570ebd-b427-4dca-ab14-c004e5ff1531
+:END:
+#+title: JNDI
+
+* Overview
+#+begin_quote
+The Java Naming and Directory Interface (JNDI) is an application programming interface (API) that provides naming and directory functionality to applications written using the Java programming language. It is defined to be independent of any specific directory service implementation. Thus a variety of directories (new, emerging, and already deployed) can be accessed in a common way.
+#+end_quote
+
+Basically, JNDI allows distributed applications to look up services in an abstract resource-independent way. JNDI allows programmers to look up items using a variety of services and protocols, including LDAP, DNS, Java Remote Method Invocation (RMI), and others.
+* Resources
+- Oracle [[https://docs.oracle.com/javase/jndi/tutorial/getStarted/overview/index.html][docs]] about JNDI
+- stackoverflow [[https://stackoverflow.com/questions/4365621/what-is-jndi-what-is-its-basic-use-when-is-it-used][question]]
+- Wikipedia's [[https://en.wikipedia.org/wiki/Java_Naming_and_Directory_Interface][page]] about JNDI

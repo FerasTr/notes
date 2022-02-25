@@ -1,0 +1,5 @@
+:PROPERTIES:
+:ID:       52ca2e79-c3b9-4c96-8286-45fac01b8d61
+:END:
+#+title: Kali
+#+filetags: :os:linux:Cybersecurity:

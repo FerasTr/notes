@@ -1,0 +1,19 @@
+:PROPERTIES:
+:ID:       8287727d-f2c1-4c29-abd8-b9689c9f7f6b
+:ROAM_ALIASES: WAF
+:END:
+#+title: Web Application Firewall
+#+filetags: :Cybersecurity:firewall:
+
+* Overview
+From Wikipedia:
+#+begin_quote
+A web application firewall (WAF) is a specific form of application firewall that filters, monitors, and blocks HTTP traffic to and from a web service. By inspecting HTTP traffic, it can prevent attacks exploiting a web application's known vulnerabilities, such as SQL injection, cross-site scripting (XSS), file inclusion, and improper system configuration.
+#+end_quote
+
+It is deployed in front of web applications and analyzes bi-directional web-based (HTTP) traffic, detecting and blocking anything malicious.
+
+It also check for an excessive amount of web requests utilising rate-limiting. If a request is deemed a potential attack, it will be dropped and never sent to the webserver.
+* Resources
+- Wikipedia's [[https://en.wikipedia.org/wiki/Web_application_firewall][page]] about WAF
+- Quora [[https://www.quora.com/What-is-the-difference-between-firewall-and-WAF][topic]] about WAF vs Network Firewalls

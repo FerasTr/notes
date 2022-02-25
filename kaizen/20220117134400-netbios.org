@@ -1,0 +1,8 @@
+:PROPERTIES:
+:ID:       f5a57a6e-5990-49ce-8849-1236910c3ead
+:END:
+#+title: NetBIOS
+#+filetags: :Networking:
+
+* Overview
+NetBIOS is an older transport layer that allows Windows computers to talk to each other on the same network. NetBIOS ran on port 139.

@@ -1,0 +1,164 @@
+:PROPERTIES:
+:ID:       abf8ed8e-5b38-4538-8828-6fa065b9e5d6
+:END:
+#+title: python
+
+* Functions
+** Return Type
+The python runtime does not enforce the type annotations, they mainly exist for linters and type checkers.
+#+BEGIN_SRC python
+def fun(arg) -> str:
+    return "String"
+#+END_SRC
+* Data Structures
+** List
+*** List Comprehensions
+A list comprehension consists of brackets containing an expression followed by a ~for~ clause, then zero or more ~for~ or ~if~ clauses. Say we want to create a list of squared numbers, the typical way of doing so is using a for loop:
+#+BEGIN_SRC python
+squares = []
+for x in range(5):
+    squares.append(x**2)
+#+END_SRC
+Instead of using for loops to create a list, thus creating (or overwriting) a ~x~ that still exists after the loop, we can instead build a list inplace:
+#+BEGIN_SRC python
+squares[x**2 for x in range(5)]
+#+END_SRC
+We can apply a function on list in the same way:
+#+BEGIN_SRC python
+nums = [-10, -5, -3, 0, 4, -4, 1, 11, 23, 556, 5]
+nums_pos = [abs(x) for x in nums]
+#+END_SRC
+A complex example would be to nest two list comprehensions to transpose a matrix:
+#+BEGIN_SRC python :results output
+mat = [[1,2,3],
+       [4,5,6],
+       [7,8,9],]
+mat_transposed = [[row[i] for row in mat] for i in range(len(mat[0]))]
+print(mat_transposed)
+#+END_SRC
+
+#+RESULTS:
+: [[1, 4, 7], [2, 5, 8], [3, 6, 9]]
+
+*** Length
+**** 2D Array
+To get the length of rows and columns:
+#+BEGIN_SRC python
+mat = [
+    [1, 2],
+    [3, 4],
+    [5, 6],
+]
+numrows = len(mat)    # 3 rows
+numcols = len(mat[0])    # 2 columns
+#+END_SRC
+** Dictionaries
+To test for existence of a key in ~dict~:
+#+BEGIN_SRC python
+d = {"key1": 10, "key2": 23}
+
+if "key1" in d:
+    print("this will execute")
+
+if "nonexistent key" in d:
+    print("this will not")
+#+END_SRC
+Dictionary in python has a get('key', default) method. So you can just set a default value in case there is no key ~d.get("key3", None)~.
+I feel like consolidating info about Python dictionaries:
+https://docs.python.org/3/library/stdtypes.html?highlight=dictionaries#mapping-types-dict
+## Creating an empty dictionary ###
+
+    data = {}
+    # OR
+    data = dict()
+
+## Creating a dictionary with initial values ###
+
+    data = {'a': 1, 'b': 2, 'c': 3}
+    # OR
+    data = dict(a=1, b=2, c=3)
+    # OR
+    data = {k: v for k, v in (('a', 1), ('b',2), ('c',3))}
+
+## Inserting/Updating a single value ###
+
+    data['a'] = 1  # Updates if 'a' exists, else adds 'a'
+    # OR
+    data.update({'a': 1})
+    # OR
+    data.update(dict(a=1))
+    # OR
+    data.update(a=1)
+
+## Inserting/Updating multiple values ###
+
+    data.update({'c':3,'d':4})  # Updates 'c' and adds 'd'
+
+### Python&nbsp;3.9+:
+The *update operator* `|=` now works for dictionaries:
+
+    data |= {'c':3,'d':4}
+
+## Creating a merged dictionary without modifying originals
+
+    data3 = {}
+    data3.update(data)  # Modifies data3, not data
+    data3.update(data2)  # Modifies data3, not data2
+
+### Python&nbsp;3.5+:
+
+This uses a new feature called *dictionary unpacking*.
+
+    data = {**data1, **data2, **data3}
+
+### Python&nbsp;3.9+:
+
+The *merge operator* `|` now works for dictionaries:
+
+    data = data1 | {'c':3,'d':4}
+
+
+## Deleting items in dictionary ###
+
+    del data[key]  # Removes specific element in a dictionary
+    data.pop(key)  # Removes the key & returns the value
+    data.clear()  # Clears entire dictionary
+
+## Check if a key is already in dictionary
+    key in data
+
+## Iterate through pairs in a dictionary
+    for key in data: # Iterates just through the keys, ignoring the values
+    for key, value in d.items(): # Iterates through the pairs
+    for key in d.keys(): # Iterates just through key, ignoring the values
+    for value in d.values(): # Iterates just through value, ignoring the keys
+
+## Create a dictionary from two lists
+    data = dict(zip(list_with_keys, list_with_values))
+
+
+
+* Tests and Debugging
+** Exceptions
+#+BEGIN_SRC python
+raise Exception("A msg")
+#+END_SRC
+** PyTest
+A test file needs to import ~unittest~ and include a test class that extends ~unittest.TestCase~.
+A test is invoked using ~pytest~.
+* Idiom
+Passing a check to a function can be done as:
+#+BEGIN_SRC python
+fun(x if y is not None else None)
+#+END_SRC
+We can also rewrite it as follows:
+#+BEGIN_SRC python
+fun(x and y)
+#+END_SRC
+
+* Misc
+** Multiple Assignment
+#+BEGIN_SRC python
+a, b = b, a+b
+#+END_SRC
+The right-hand expressions are evaluated first, then the assignment into the variables happens.

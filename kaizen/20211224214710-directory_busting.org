@@ -1,0 +1,12 @@
+:PROPERTIES:
+:ID:       5de9b57f-5feb-4949-b7fa-7adb6661b4cc
+:END:
+#+title: Directory Busting
+
+Directory busting can be done with tools such as ~gobuster~, ~dirbuster~ or ~dirb~.
+
+* Gobuster
+To scan for directories, we use ~dir~ flag. We must provide a wordlist with flag ~-w~ and a url/ip with flag ~-u~. The flag ~-x~ can be used to narrow down the search to a specific file extension.
+#+begin_src bash
+gobuster -e -u http://10.129.148.81/index.htm -w ~/Workspace/SecLists-master/Discovery/Web-Content/common.txt
+#+end_src

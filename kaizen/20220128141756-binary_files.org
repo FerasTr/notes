@@ -1,0 +1,27 @@
+:PROPERTIES:
+:ID:       3dd749e4-c331-4851-8aea-396e112b8e72
+:END:
+#+title: Binary Files
+#+filetags: :binary:
+
+* Overview
+For [[id:6d27fa9e-41fb-487d-946f-ce77f3940374][Linux]]/BSD, executables are stored as [[id:a849be62-1306-4acf-b0b6-31ee531b9238][ELF]] files. For [[id:907eaf13-2a98-4c84-8b75-4ee052d3bf52][Windows]], they are [[id:7b0cc41b-2d26-4bf4-b465-97ee5369036d][PE]]. For [[id:9e46eadf-5587-4c41-98b6-92329a096161][MacOS]], they are [[id:a3e4c9ff-a445-4d8b-9f4b-f11e008cd47f][Mach-O]].
+
+* The Stack
+
+* Tools
+There are many tools for analyzing binary files. Here is a list of the most important tools for recon/analysis.
+- ~file~ helps determine the file type. This is the starting point for binary analysis.
+- ~ldd~ prints shared object dependencies. This is how we find which libraries the executable is dependent on.
+- ~ltrace~ is a library call tracer. This commands displays all the functions that are being called at run time from the library.
+- ~xxd~ and ~hexdump~ display file contents in ASCII, decimal, hexadecimal or octal. We can see the what the file contains using those commands.
+- ~strings~ prints the strings of printable characters in files. We can dump text/ASCII messages that are added to the binary.
+- ~readelf~ displays information about ELF files.
+- ~objdump~ displays information from an object file such as the assembly code.
+- ~strace~ traces system calls and signals. Same as ~ltrace~ but for system calls.
+- ~nm~ lists symbols from object files. When working with a binary that is not stripped, we can retrieve information that was embedded in the binary during compilation.
+- ~gdb~ for a debugger.
+- ~checksec~ for checking what protection is enabled for the current binary, it also shows the designated arch/platform for the binary.
+
+* Resources
+- pwn.college

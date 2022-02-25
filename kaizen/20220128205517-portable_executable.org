@@ -1,0 +1,10 @@
+:PROPERTIES:
+:ID:       7b0cc41b-2d26-4bf4-b465-97ee5369036d
+:ROAM_ALIASES: PE
+:END:
+#+title: Portable Executable
+#+filetags: :binary:
+
+* Overview
+* Resources
+- Microsoft's [[https://docs.microsoft.com/en-us/windows/win32/debug/pe-format][docs]] about PE Format

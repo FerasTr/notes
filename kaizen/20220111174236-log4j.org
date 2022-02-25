@@ -1,0 +1,56 @@
+:PROPERTIES:
+:ID:       149c73de-c5b0-4a9b-b79f-61834b011309
+:END:
+#+title: Log4j
+#+filetags: :java:apache:
+
+* Overview
+* Basic Example
+A simple logger can be built with Log4j:
+#+begin_src java
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.Level;
+
+public class HelloLog {
+    private static final Logger logger = LogManager.getLogger();
+    public static void main(String[] args) {
+        logger.info("Hello World");
+    }
+}
+#+end_src
+* Configuration
+Log4j is heavily customizable, we can set the output format, location, output level (severity) and many more.
+
+A simple configuraton like the following, writes to stdout (console) with a simple pattern (thread name followed by the message).
+#+begin_src xml
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+  <Appenders>
+    <Console name="Console" target="SYSTEM_OUT">
+      <PatternLayout pattern="[%t] %m %n/>
+    </Console>
+  </Appenders>
+  <Loggers>
+    <Root level="info">
+      <AppenderRef ref="Console"/>
+    </Root>
+  </Loggers>
+</Configuration>
+#+end_src
+
+* Lookups
+#+begin_quote
+Lookups provide a way to add values to the Log4j configuration at arbitrary places. They are a particular type of Plugin that implements the StrLookup interface.
+#+end_quote
+
+For example, to use the enviornment lookup, we can use:
+#+begin_src java
+String userInput = "${env:HOME}";
+#+end_src
+Log4j will replace the output with the correct value.
+
+** JNDI
+Just like enviornment variables, JNDI lookup allows variables to be retrived via JNDI.
+* Resources
+-LiveOverflow first part about [[id:7f20270f-cd0c-4412-8fe7-ad3da4ccfba6][Log4Shell]]

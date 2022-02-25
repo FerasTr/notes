@@ -1,0 +1,5 @@
+:PROPERTIES:
+:ID:       36e9e0fb-cd77-48ba-bcb8-85ab28c593a2
+:ROAM_ALIASES: FAT
+:END:
+#+title: File Allocation Table

@@ -1,0 +1,7 @@
+:PROPERTIES:
+:ID:       76477463-ee4f-4790-9a8d-6b10cad3a4c2
+:END:
+#+title: Substitution Cipher
+
+* Overview
+Similar to [[id:0d8e6135-7853-4f71-9d54-605322886881][Caesar Cipher]], but you can choose which letters substitute the alphabet.

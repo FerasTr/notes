@@ -1,0 +1,12 @@
+:PROPERTIES:
+:ID:       7765310c-bb24-4a4a-9fd5-02d8ceabac9d
+:END:
+#+title: Virtual Hosting
+
+#+begin_quote
+Virtual hosting is a method for hosting multiple domain names (with separate handling of each name) on a single server (or pool of servers). This allows one server to share its resources, such as memory and processor cycles, without requiring all services provided to use the same host name. The term virtual hosting is usually used.
+#+end_quote
+
+Multiple websites can share the same IP address, allowing users to access them separately by visiting the specific *hostname* of each website instead of the hosting serve's IP address.
+
+The target's hostname must be included in the request to access a name-based virtual host. Sometimes, we can't access virtually hosted websites even if we know the IP address. This is because the DNS will fall back to using the IP address to contact the system, and the web browser will send the IP address as the host name. This will cause the server to respond with a default website that might not be the one we expected.

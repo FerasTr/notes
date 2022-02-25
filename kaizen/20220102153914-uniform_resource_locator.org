@@ -1,0 +1,24 @@
+:PROPERTIES:
+:ID:       1ec5d57d-b0df-4429-bc7e-aa6dfe97b381
+:ROAM_ALIASES: URL
+:END:
+#+title: Uniform Resource Locator
+#+filetags: :Networking:
+
+* What is a URL?
+A Uniform Resource Locator (URL) is an instruction on how to access a resource on the internet. A URL can has different features.
+#+begin_example
+http://user:password@example.com:80/view-room?id=1#task3
+#+end_example
+We discuss each feature using the above example:
+- Scheme (~http://~) - This instrucs on what protocol to use for accessing the resource such as HTTP, HTTPS, FTP.
+- User (~user:password~) - Some services require authentication to log in.
+- Host (~example.com~) - The domain name or IP address of the server.
+- Port (~80~) - The port that we want to connect to, usually 80 for HTTP and 443 for HTTPS.
+- Path (~view-room~) - The file name or location of the resource we are trying to access.
+- Query String (~?id=1~) - Extra information about the requested path.
+- Fragment (~#task3~) - A reference to a location on the requested page (path).
+
+
+* Resources
+- TryHackMe's room on HTTP.

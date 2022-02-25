@@ -1,0 +1,241 @@
+:PROPERTIES:
+:ID:       b52b44e8-d225-4619-9b2b-6a2900a753f7
+:ROAM_ALIASES: asm "Machine Code"
+:END:
+#+title: Assembly
+#+filetags: :binaryexp:prog-lag:reversing:binary:
+
+* Overview
+#+begin_quote
+In computer programming, assembly language (or assembler language), sometimes abbreviated asm, is any low-level programming language in which there is a very strong correspondence between the instructions in the language and the architecture's machine code instructions.
+#+end_quote
+
+On the otherhand, we have machine code:
+#+begin_quote
+In computer programming, machine code is any low-level programming language, consisting of machine language instructions, which are used to control a computer's CPU.
+#+end_quote
+
+* x86-64
+x86-64 (amd64, i64) is a 64-bit Complex Instruction Set Computing (CISC) architecture. This means that the registers used for this architecture extend an extra 32-bits on Intel's x86 architecture.
+
+** Registers
+A key component of x86-64 registers is multi-sized access which means the register ~RAX~ can have its lower 32 bits accessed with ~EAX~. The next lower 16 bits can be accessed with ~AX~ and the lowest 9 bits can be accessed with ~AL~.
+
+There are three special registers:
+1. ~RIP~ is the instruction pointer.
+2. ~RSP~ is the stack pointer.
+3. ~RBP~ is the base pointer.
+
+The x64 architecture extends x86's 8 general-purpose registers to be 64-bit, and adds 8 new 64-bit registers. The 64-bit registers have names beginning with "r", so for example, the 64-bit extension of ~EAX~ is called ~RAX~. The new registers are named ~R8~ through ~R15~.
+
+| 8-byte | Bytes 0-3 | Bytes 0-1 | Byte 0 |
+|--------+-----------+-----------+--------|
+| rax    | eax       | ax        | al     |
+| rcx    | ecx       | cx        | cl     |
+| rdx    | edx       | dx        | dl     |
+| rbx    | ebx       | bx        | bl     |
+| rsi    | esi       | si        | sil    |
+| rdi    | edi       | di        | dil    |
+| rsp    | esp       | sp        | spl    |
+| rbp    | ebp       | bp        | bpl    |
+| r8     | r8d       | r8w       | r8b    |
+| r9     | r9d       | r9w       | r9b    |
+| r10    | r10d      | r10w      | r10b   |
+| r11    | r11d      | r11w      | r11b   |
+| r12    | r12d      | r12w      | r12b   |
+| r13    | r13d      | r13w      | r13b   |
+| r14    | r14d      | r14w      | r14b   |
+| r15    | r15d      | r15w      | r15b   |
+
+** Instructions
+An instruction represents a single operation for the CPU to perform. There are different types of instructions including:
+- Data Movement Instructions
+- Arithmetic and Logic Instructions
+- Control Flow Instructions
+
+Since this is a CISC architecture, instructions can be complex. An example of a complex instruction is the ~repne scasb~ which repeats up to ~ECX~ times over memory at ~EDI~ looking for NULL byte, decrementing ~ECX~ each byte (strlen()).
+
+*** Moving Data
+**** mov
+~mov~ is the most fundamental movement instruction. It takes two operands of the /same size/, and moves the data (copies it) from the source operand to the destination.
+#+begin_src asm
+mov dest,src
+#+end_src
+
+~mov~ doesn't change the Flags register. If both operands are the same register, it acts as a ~nop~.
+#+begin_src asm
+mov al,al ; 2 bytes nop
+mov eax,eax ; 2 bytes nop
+mov ax,ax ; 3 bytes nop
+mov rax,rax ; 3 bytes nop
+#+end_src
+
+**** lea
+The ~lea~ instruction loads an address. If we have some variable, we can load the address of it into a register and manipulate the data indirectly with the register as a pointer. ~lea~ doesn't change any flags.
+#+begin_src asm
+lea dest,src
+#+end_src
+
+~lea~ is actually an arithmetic instruction, it computers an ~SIB~ address.
+
+**** push
+The ~push~ instruction decrements the stack pointer and then stores the source operand on the top of the stack.
+#+begin_src asm
+push eax
+#+end_src
+
+~push~ is a shorthand instruction for the following two instructions:
+#+begin_src asm
+sub esp,4
+mov DWORD PTR SS:[esp], eax
+#+end_src
+
+**** pop
+The ~pop~ instruction loads the value from the top of the stack to the location specified with the destination operand and then increments the stack pointer.
+#+begin_src asm
+pop eax
+#+end_src
+
+~pop~ is a shorthand instruction for the following two instructions:
+#+begin_src asm
+mov eax, DWORD PTR SS:[esp]
+sub esp,4
+#+end_src
+
+*** Control Flow
+**** call
+The ~call~ instruction first pushes the current code location onto the hardware supported stack in memory, and the performs an unconditional jump to the code location indicated by the label operand. Unlike the simple jump instructions, the call instruction saves the location to return to when the subroutine completes.
+#+begin_src asm
+call label
+#+end_src
+
+~call~ is a shorthand instruction for the following two instructions:
+#+begin_src asm
+push eip + 2
+jmp label
+#+end_src
+
+Note that the return address is current address + size of two instructions.
+
+
+** The Stack
+In x86, the stack is simply an area in RAM that was chosen to be the stack - there is no special hardware to store stack contents. When the ~push~ instruction is used, ~ESP~ decrements by 4 (or 8 on 64-bit x86), and the value is stored there. When the ~pop~ instruction is used, ~ESP~ is dereferenced (hence, the value is retrieved), and then incremented by 4 (or 8).
+
+/Keep in mind that the stack "grows" down to lower memory addresses./
+
+ All x86 architectures use a [[id:98e6ed1f-3131-479e-955f-afaf73ed0e42][stack]] as a temporary storage area in RAM that allows the processor to quickly store and retrieve data in memory. The current top of the stack is pointed to by the ~ESP~ register. The stack "grows" downward, from high to low memory addresses, so new values pushed to the stack are located in memory addresses above the ~ESP~ pointer.
+
+*** Functions and Stack Frames
+While executing a program, functions are frequently setup with a "stack frame" to allow access to function arguments and variables. Each subroutine can act independently of its location on the stack.
+
+When a subroutine is called, a new stack frame is created at the current stack pointer ~ESP~. All items from previous subroutines are *higher up on the stack*, and should not be modified. The current function always has access to the top of the stack.
+
+**** Entry Sequence
+The first thing a function must do when called is to save the previous ~EBP~ (so it can be restored by copying into the ~EIP~ at function exit later). For many compilers, the following snippet of assembly code is the function entry sequence:
+#+begin_src asm
+push ebp
+mov ebp, esp
+sub esp, X
+#+end_src
+Note that ~X~ is the size, in bytes, of all automatic variables used in the function.
+
+The space allocated on the stack for the local variables can be accessed by referencing ~EBP~.
+
+If the callee requires function parameters, then the caller will push them onto the stack (x86 not x64) and then call the function.
+#+begin_src c
+void func(int x, int y, int z){...}
+#+end_src
+
+The caller must push onto the stack the arguments:
+#+begin_src asm
+push 2
+push 5
+push 10
+call func
+#+end_src
+
+This means that first, the return address and the old value of ~EBP~ are put on the stack. ~[EBP + 4]~ points to the return address and ~[EBP + 8]~ points to the first function argument.
+#+begin_example
+:    :
+|  2 | [ebp + 16] (3rd function argument)
+|  5 | [ebp + 12] (2nd argument)
+| 10 | [ebp + 8]  (1st argument)
+| RA | [ebp + 4]  (return address)
+| FP | [ebp]      (old ebp value)
+|    | [ebp - 4]  (1st local variable)
+:    :
+:    :
+|    | [ebp - X]  (esp - the current stack pointer)
+#+end_example
+
+**** Exit Sequence
+The exist sequence must undo the things that the entry sequence did. Therefore the exit sequence must perform the following tasks, in the following order:
+1. Remove space for the local variables, by reverting ~ESP~ to its old value.
+2. Restore the old value of ~EBP~ to its old value, which is on top of the stack.
+3. Return to the calling function with a ~ret~ command.
+
+** The Heap
+The heap is a place in memory where a program creates dynamic objects.
+
+** Calling Conventions :ATTACH:
+C declaration (cdecl) is a calling convention that originates from Microsoft's compiler for the C programming language and is used by many C compilers for the x86 architecture.
+
+
+For 64-bit binaries, function arguments are first passed in certain registers:
+1. ~RDI~
+2. ~RSI~
+3. ~RDX~
+4. ~RCX~
+5. ~R8~
+6. ~R9~
+
+Anything else will be place into the stack.
+
+Consider the following function, which takes as input 8 parameters:
+#+begin_src c
+long myfunc(long a, long b, long c, long d,
+            long e, long f, long g, long h)
+{
+    long xx = a * b * c * d * e * f * g * h;
+    long yy = a + b + c + d + e + f + g + h;
+    long zz = utilfunc(xx, yy, xx % yy);
+    return zz + 20;
+}
+#+end_src
+The stack frame will be as follows:
+
+[[attachment:_20220205_195609stack-frame.png]]
+
+Since we have a total of 8 parameters, we start from the last one "g" which is pushed to the stack, followed by "h" aswell. The next 6 starting from "f" are pushed to the registers.
+
+Intel and AMD documentation says that for 64-bit mode, only 48 bits are actually available for virtual addresses, and bits from 48 to 63 must replicate bit 47 (sign-extension).
+
+** Global Offset Table
+The Global Offset Table (GOT) is a section inside of a programs that holds addresses of functions that are dynamically linked. Most programs don't include every function they use to reduce binary size. Instead, common functions (like those in libc) are "linked" into the program so they can be saved on disk and reused by every program.
+
+Unless a program is marked full [[id:07ad4d4c-8df2-4e17-8785-a622eb0712e9][RELRO]], the resolution of function to address in dynamic library is done lazily. All dynamic libraries are loaded into memory along with the main program at launch, however functions are not mapped to their actual code until they're first called. For example, in the following C snippet ~puts~ won't be resolved to an address in libc until after it has been called once:
+#+begin_src c
+int main() {
+    puts("Hi");
+    puts("Bye");
+    return 0;
+}
+#+end_src
+
+To avoid searching through shared libraries each time a function is called, the result of the lookup is saved into the GOT so future functions calls "short circuit" straight to their implementaion bypassing the dynamic resolver.
+
+There are two important properties of the GOT:
+1. The GOT contains pointers to libraries which move around due to [[id:ac15d008-6b6f-4636-9d3f-9c8d976d5963][ASLR]].
+2. The GOT is writable.
+
+** Procedure Linkage Table
+Before a function address has been resolved, the GOT points to an entry in the Procedure Linkage Table (PLT). This is a small "stub" function which is responsible for calling the dynamic linker with (effectively) the name of the function that should be resolved.
+
+* Resources
+- ctf101
+- Creel's [[https://www.youtube.com/playlist?list=PLKK11Ligqitg9MOX3-0tFT1Rmh3uJp7kA][series]] about Modern x64 Assembly
+- Eli Bendersky's [[https://eli.thegreenplace.net/2011/09/06/stack-frame-layout-on-x86-64][article]] about "Stack frame layout on x86-64"
+- +ChOpin's series of articles about x64 Binary Exploitation ([[https://valsamaras.medium.com/introduction-to-x64-linux-binary-exploitation-part-1-14ad4a27aeef][1]],[[https://valsamaras.medium.com/introduction-to-x64-binary-exploitation-part-2-return-into-libc-c325017f465][2]],[[https://valsamaras.medium.com/introduction-to-x64-linux-binary-exploitation-part-3-rop-chains-3cdcf17e8826][3]],[[https://valsamaras.medium.com/introduction-to-x64-linux-binary-exploitation-part-4-stack-canaries-e9b6dd2c3127][4]])
+- "x86 Dissassembly" [[https://en.wikibooks.org/wiki/X86_Disassembly][articles]] on WikiBooks
+- "x86 Assembly Guide" [[https://www.cs.virginia.edu/~evans/cs216/guides/x86.html][article]] from CS216
+- tenouk's [[https://www.tenouk.com/Bufferoverflowc/Bufferoverflow2a.html][article]] about "Buffer Overflow 6: The Function Stack"

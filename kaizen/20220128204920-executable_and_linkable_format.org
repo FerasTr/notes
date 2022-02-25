@@ -1,0 +1,54 @@
+:PROPERTIES:
+:ID:       a849be62-1306-4acf-b0b6-31ee531b9238
+:ROAM_ALIASES: ELF
+:END:
+#+title: Executable and Linkable Format
+#+filetags: :binary:
+
+* Overview
+Executable and linkable format (ELF) defines a program as it is loaded and executed in memory. It defines it at rest, in disk and in execution. ELF is a binary file format.
+
+ELF files contain the program and its data. They also describe how the program should be loaded (program/segment headers). ELF also contains metadata describing program components (section headers)
+
+* Program Headers
+Program headers specify information needed to prepare the program for execution. Most important entry types:
+- INTERP: defines the library that should be used to load this ELF into memory.
+- LOAD: defines a part of the file that should be loaded into memory.
+
+To display information about ELF files, we can use the ~readelf~ tool. A few things to note:
+- All ELF files start with the bytes `7f 45 4c 46`.
+- The entry point address is where execution begins.
+- Looking at the sixth byte, we can determine if the executable is using LSB or MSB.
+
+Program headers are enough to define an ELF file, anything that comes after that is a bonus (although it will be a broken file).
+
+* Section Headers
+A different view of the ELF with useful information for introspection, debugging, etc.
+
+Important sections:
+- .text: the executable code of your program (the binary or compiled assembly code).
+- .plt and .got: used to resolve and dispatch library calls.
+- .data: used for pre-initialized global writable data (such as global arrays with initial values).
+- .rodata: used for global read-only data (such as string constants).
+- .bss: used for uninitialized global writable data (such as global arrays without initial values).
+
+Section headers are not necessary part of the ELF: only segments (defined via program headers) are needed for loading and operation, section headers are just metadata.
+
+* 64-bit vs 32-bit
+The deference between the two is the addressing, registers and stack word size; for example, in 64-bit binaries, we have usually an address and word size of 8 byte. For 32-bit binaries, we have 4 byte.
+
+
+* Tools
+We have several tools for interacting with ELF files:
+- ~gcc~ to make ELF files.
+- ~readelf~ to parse the ELF header.
+- ~objdump~ to parse the ELF header and disassemble the source code.
+- ~nm~ to view your ELF's symbols.
+- ~patchelf~ to change some ELF properties.
+- ~objcopy~ to swap out ELF sections.
+- ~strip~ to remove otherwise helpful information (such as symbols).
+- ~kaitai~ to look through the ELF interactively ([[id:ed95b5a1-25d6-4c63-91f8-11a818a96416][Ghidra]] is also an option).
+
+* Resources
+- INTEZER's articles about ELFs ([[https://www.intezer.com/blog/research/executable-linkable-format-101-part1-sections-segments/][1]],[[https://www.intezer.com/blog/malware-analysis/executable-linkable-format-101-part-2-symbols/][2]],[[https://www.intezer.com/blog/malware-analysis/executable-and-linkable-format-101-part-3-relocations/][3]],[[https://www.intezer.com/blog/malware-analysis/executable-linkable-format-101-part-4-dynamic-linking/][4]])
+- romanh [[https://www.romanh.de/article/binary-exploitation][article]] about binary exploitation

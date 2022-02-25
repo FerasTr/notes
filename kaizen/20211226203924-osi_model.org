@@ -1,0 +1,62 @@
+:PROPERTIES:
+:ID:       b741e7dd-a3cd-49aa-8cd4-a6633340adcf
+:END:
+#+title: OSI Model
+
+The Open Systems Interconnection Model (OSI Model) provides a framework dictating how all networked devices will send, recieve nad interpert data. The OSI Model consists of seven layers, each layer has a different set of responsibilities and is arranged from 1 to 7.
+
+The seven layers are:
+1) Application layer
+2) Presentation layer
+3) Session layer
+4) Transport layer
+5) Network layer
+6) Data link layer
+7) Physical layer
+
+At every individual layer that data travels through, specific process take place, and pieces of information are added to this data. This process is called encapsulation. The term /Protocol Data Unit/ is a generic term used to refer to the packets in different layers of the OSI model:
+
+- Data: PDU of application, presentation and session layers.
+- Segment: PDU of transport layer.
+- Packet: PDU of network layer.
+- Frame: PDU of data-link layer.
+- Bit: PDU of physical layer.
+
+** Application Layer
+The application layer is the layer in which protocols and rules are in place to determine how the user should interact with data sent or recieved.
+
+** Presentation Layer
+Software is developed differently even for the same purpose (such as an email client). Data, however, still needs to be handled in the smae way - no matter how the software works.
+
+The presentation layer acts as a translator for data to and from the application layer.
+
+Security features such as data encryption (HTTPS) occur at this layer
+** Session Layer
+The session layer creats a connection to the other computer that the data is desined for. When a connection is established, a session is created. Whilst this connection is active, so is the session.
+
+The session layer synchronises the two computers to ensure that they are on the same page before data is sent and recived. Once these checks are in place the session layer will begin to divide up the data sent into smaller chuncks of data (packets) and begin to send them one at a time. This means that the session layer doesn't send the whole data once the connection is interrupted, it sends packet still not sent.
+
+Sessions are unique, meaning that data cannot travel over different sessions.
+** Transport Layer
+The transport layer provides the functional and procedural means of transferring variabl length data sequences (packets) from a source to a destination host, while maintaining the quality of service functions.
+
+When dat is send between devices, it follows one of two differenet protocols:
+- TCP
+  The Transmission Control Protocol (TCP) is designed with reliability and guarantee in mind. This protocol reserves a constant connection between the two devices for the amount of time it takes for the data to be sent and received.
+
+  TCP incorporates error checking into its design. Error checking is how TCP can guarantee that data sent in form of packets in the session layer has then been received and reassembled in the same order.
+
+  TCP is used in tasks where data integrity is important such as file sharing, sending emails, etc...
+- UDP
+  The User Datagram Protocol (UDP) is designed with speed and simplicity in mind. UDP uses a connectionless communecation model. UDP provides checksums for data integrity but not much beyond that. It has no handshaking dialogues, exposing the program to any unreliability of the underlying network.
+** Network Layer
+In the network layer, routing and reassembly of data in the form of packets takes place where packets are sent from one node to another connected in different networks (not necessarily). A message is sent on the network by providing the message and the destination address. Routing determines the most optimal path in which these packets of data should be sent.
+
+The factors that decide what route is take is decided by the following:
+- What path is the shortest? (least amount of devices that packets needs to travel across)
+- What path is the most reliable?
+- Which path has the faster physical connection?
+** Data Link Layer
+The data link layer focuses on the physical addressing of the transmission. It receives a packet from the network layer with the IP address of the destination. The MAC address of the destination is added to the packet.
+** Physical Layer
+The physical layer references the physical components of the hardware used in networking. Devices use electrical signals to trasfer data between each other in a binary numbering system.

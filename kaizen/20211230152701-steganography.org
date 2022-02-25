@@ -1,0 +1,14 @@
+:PROPERTIES:
+:ID:       893e696e-ddbd-4012-8abb-2ebc8877a8a7
+:END:
+#+title: Steganography
+
+* Overview
+Stegonagraphy (Stego for short) is the practice of hiding data in plain sight. Stego is often embedded in images or files.
+
+* LSB Stego
+By changing the least significant bit is some data, we don't change it by much, but when correctly constructed, one can hide image and text inside other images (or any other data). The reason its hard to detect for humans is because one bit changing is hard to notice when looking at pixel intensities.
+
+* Tools
+* Resources
+- ctf101

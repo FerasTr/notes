@@ -1,0 +1,36 @@
+:PROPERTIES:
+:ID:       b0ac680f-8676-427e-aac5-5455da75ab75
+:END:
+#+title: SMB
+#+filetags: :Networking:Protocol:
+
+* Overview
+Server Message Block (SMB) enables "inter-process communication", it allows applications and services, such as print, file/device sharing, on networked computers to talk to each other.
+
+* Ports
+SMB uses either IP port 139 or 445.
+- Port 139 - SMB originally ran on top of [[id:f5a57a6e-5990-49ce-8849-1236910c3ead][NetBIOS]] using port 139.
+- Port 445 - Later versions of SMB began to use port 445 on top of a TCP stack.
+
+* Implementations
+- Common Internet File System (CIFS) is a specific implementation of SMB that enables file sharing.
+- Samb is an implementation of Microsoft Active Directory that allows non-Windows machines to communicate with a Windows network.
+- NQ is a file sharing implementation.
+
+* Tools
+** ~smbclient~
+~smbclient~ can be used to access SMB/CIFS resources on servers.
+
+By default, SMB exposes several adminstrative and hidden shares. The ~C$~ share allows one to access the C Drive on the remove machine. The ~Admin$~ share allows one to access the Windows installation directory. The ~IPC$~ is to faciliate inter-process communicate (allows services to talk to one another).
+
+- To list the available services
+  #+begin_src sh
+smbclient -N -L \\\\IP\\
+  #+end_src
+
+** ~smbmap~
+~smbmap~ is an enumeration tool. For example, it can be used to list shares that require anonymous login to use.
+
+* Resources
+- [[https://www.varonis.com/blog/smb-port][What is an SMB Port + Ports 445 and 139 Explained]]
+- [[https://bestestredteam.com/2019/03/15/using-smbclient-to-enumerate-shares/][Using SMBClient to Enumerate Shares]]

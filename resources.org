@@ -1,0 +1,128 @@
+#+TITLE: Resources
+#+DESCRIPTION: Links to online courses, articles, books and videos to aid in the never ending journey of learning. Visit the links for an updated version, this is only meant to be an archive.
+
+* Courses
+** Roadmaps
+Most of the courses below were taken from one or all of the roadmaps below.
++ [[https://github.com/jwasham/coding-interview-university][A complete computer science study plan to become a software engineer]]
++ [[https://github.com/ossu/computer-science][Path to a free self-taught education in Computer Science]]
++ [[https://teachyourselfcs.com/][Teach yourself CS]]
++ [[https://github.com/academic/awesome-datascience][An awesome Data Science repository to learn and apply for real world problems]]
++ [[https://github.com/freeCodeCamp/freeCodeCamp][freeCodeCamp.org's open-source codebase and curriculum]]
++ [[https://github.com/kamranahmedse/developer-roadmap][Roadmap to becoming a web developer in 2021]]
++ https://www.theodinproject.com/
+
+** Core CS Subjects
+These courses and books provide a complete understanding over the fundamentals of computer science.
+
+| Subjects                       | Best Book                                                 | Best Videos                                         |
+|--------------------------------+-----------------------------------------------------------+-----------------------------------------------------|
+| Programming                    | Structure and Interpretation of Computer Programs         | [[https://www.youtube.com/watch?v=4leZ1Ca4f0g&list=PLhMnuBfGeCDNgVzLPxF9o5UNKG1b-LFY9][Brian Harvey’s Berkeley CS 61A]]                      |
+| Computer Architecture          | Computer Systems: A Programmer's Perspective              | [[https://inst.eecs.berkeley.edu/~cs61c/sp15/][Berkeley CS 61C]]                                     |
+| Algorithms and Data Structures | The Algorithm Design Manual                               | [[https://www.youtube.com/watch?v=A2bFN3MyNDA&list=PLOtl7M3yp-DX32N0fVIyvn7ipWKNGmwpp][Steven Skiena’s lectures]]                            |
+| Math for CS                    | Mathematics for Computer Science                          | [[https://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-042j-mathematics-for-computer-science-fall-2010/video-lectures/][Tom Leighton’s MIT 6.042J]]                           |
+| Operating Systems              | Operating Systems: Three Easy Pieces                      | [[https://www.youtube.com/watch?v=qcyXohw1H00&list=PL--jIyXjDXf6Q4XA6q8RYnyChYzJ0K0F2][Berkeley CS 162]]                                     |
+| Computer Networking            | Computer Networking: A Top-Down Approach                  | [[https://www.youtube.com/watch?v=-nciJGUPyAM&list=PLvFG2xYBrYAQCyz4Wx3NPoYJOFjvU7g2Z&index=1][Stanford CS 144]] ([[https://github.com/PrincetonUniversity/COS461-Public/tree/master/assignments][Assignments]], [[https://gaia.cs.umass.edu/kurose_ross/interactive/index.php][Interactive Problems]]) |
+| Databases                      | Readings in Database Systems                              | [[https://www.youtube.com/watch?v=y5IShB9ihds&list=PLhMnuBfGeCDPtyC9kUf_hG_QwjYzZ0Am1][Joe Hellerstein’s Berkeley CS 186]]                   |
+| Languages and Compilers        | Crafting Interpreters                                     | [[https://www.edx.org/course/compilers][Alex Aiken’s course on edX]]                          |
+| Distributed Systems            | Designing Data-Intensive Applications by Martin Kleppmann | [[https://www.youtube.com/watch?v=cQP8WApzIQQ&list=PLrw6a1wE39_tb2fErI4-WkMbsvGQk9_UB][MIT 6.824]]                                           |
+
+** Intro to CS
++ [[https://cs50.harvard.edu/college/2020/fall/][Introduction to Computer Science - CS50]]
++ [[https://missing.csail.mit.edu/][The Missing Semester of Your CS Education]]
+** Math
++ [[https://www.edx.org/course/calculus-1a-differentiation][Calculus 1A: Differentiation]]
++ [[https://www.edx.org/course/calculus-1b-integration][Calculus 1B: Integration]]
++ [[https://www.edx.org/course/calculus-1c-coordinate-systems-infinite-series][Calculus 1C: Coordinate Systems & Infinite Series]]
++ [[https://ocw.mit.edu/courses/mathematics/18-01sc-single-variable-calculus-fall-2010/index.htm][Single Variable Calculus]]
++ [[https://ocw.mit.edu/courses/mathematics/18-02sc-multivariable-calculus-fall-2010/][Multivariable Calculus]]
++ [[https://ocw.mit.edu/courses/mathematics/18-06sc-linear-algebra-fall-2011/][Linear Algebra]]
++ [[https://ocw.mit.edu/courses/mathematics/18-065-matrix-methods-in-data-analysis-signal-processing-and-machine-learning-spring-2018/][Matrix Methods in Data Analysis, Signal Processing, and Machine Learning]]
++ [[https://projects.iq.harvard.edu/stat110/home][Probability]]
+  - [[https://seeing-theory.brown.edu/index.html#firstPage][A visualization of probability and statistics]]
++ [[https://www.coursera.org/learn/logic-introduction][Introduction to Logic]]
+** Algorithms
++ [[https://algs4.cs.princeton.edu/home/][Algorithms 4th Edition]]
+** Systems
++ [[https://www.coursera.org/learn/build-a-computer][Build a Modern Computer from First Principles: From Nand to Tetris]]
++ [[https://www.coursera.org/learn/nand2tetris2][Build a Modern Computer from First Principles: Nand to Tetris Part II]]
++ [[https://www.grymoire.com/Unix/][Unix shell programming]]
++ [[https://www.cs.cornell.edu/courses/cs6120/2020fa/self-guided/][CS 6120: Advanced Compilers: The Self-Guided Online Course]]
+** Networking
++ [[https://www.cs.princeton.edu/courses/archive/spring19/cos461/][Computer Networks: COS 461, Princeton University Spring 2019]]
+** Programming
++ [[https://cmu-313.github.io/][Foundations of Software Engineering]]
++ [[https://raytracing.github.io/books/RayTracingInOneWeekend.html][Ray Tracing in One Weekend]]
++ [[https://nsa.sfo2.digitaloceanspaces.com/comp3321.pdf][NSA’s Python Programming Training Course]] ([[https://archive.org/details/comp3321/page/n89/mode/2up?q=device][alternative link]])
++ [[https://www.theodinproject.com/][Full Stack Web Development]]
+** Security
++ [[https://www.coursera.org/learn/information-security-data][Information Security: Context and Introduction]]
++ [[https://www.coursera.org/learn/secure-coding-principles][Principles of Secure Coding]]
++ [[https://www.coursera.org/learn/identifying-security-vulnerabilities][Identifying Security Vulnerabilities]]
++ [[Identifying Security Vulnerabilities in C/C++Programming][Identifying Security Vulnerabilities in C/C++Programming]]
++ [[https://www.coursera.org/learn/exploiting-securing-vulnerabilities-java-applications][Exploiting and Securing Vulnerabilities in Java Applications]]
++ [[https://www.hoppersroppers.org/index.html][Guided CTF]]
++ [[https://guyinatuxedo.github.io/index.html][Intro to binary explotation and reverse engineering]]
+** Machine Learning
++ [[https://www.coursera.org/learn/machine-learning][Machine Learning]] ([[https://github.com/dibgerge/ml-coursera-python-assignments][Python Assignments]])
+  - [[https://www.youtube.com/playlist?list=PLoROMvodv4rMiGQp3WXShtMGgzqpfVfbU][CS229 Machine Learning Lectures]] ([[http://cs229.stanford.edu/syllabus-fall2020.html][Syllabus]])
++ [[https://work.caltech.edu/lectures.html][Learning from Data]]
++ [[https://cs.nyu.edu/~mohri/ml13/][Foundations of Machine Learning]]
++ [[https://www.cs.cmu.edu/~avrim/ML14/][Machine Learning Theory]]
++ [[http://cs231n.stanford.edu/][CS231n]] ([[https://www.youtube.com/playlist?list=PLC1qU-LWwrF64f4QKQT-Vg5Wr4qEE1Zxk][Lecture videos]])
+** Advanced Topics
++ [[https://www.coursera.org/learn/game-theory-1][Game Theory]]
++ [[https://www.edx.org/course/compilers][Compilers]]
++ [[https://www.cs.cmu.edu/~odonnell/15455-s17/][Undergrad Complexity Theory]] ([[https://www.youtube.com/playlist?list=PLm3J0oaFux3YL5vLXpzOyJiLtqLp6dCW2][Lectures]])
++ [[https://www.cs.cmu.edu/~odonnell/complexity17/][Graduate Complexity Theory]] ([[https://www.youtube.com/playlist?list=PLm3J0oaFux3b8Gg1DdaJOzYNsaXYLAOKH][Lectures]])
+** Computer Vision and Image Processing
++ [[https://www.youtube.com/playlist?list=PLjMXczUzEYcHvw5YYSU92WrY8IwhTuq7p][The Ancient Secrets of Computer Vision]]
++ [[https://www.udacity.com/course/introduction-to-computer-vision--ud810][Introduction to Computer Vision]]
++ [[https://www.youtube.com/watch?v=UhDlL-tLT2U&list=PLuh62Q4Sv7BUf60vkjePfcOQc8sHxmnDX][Intro to Digital Image Processing]]
++ [[https://github.com/llSourcell/Learn_Computer_Vision][Computer Vision]]
++ [[https://www.cc.gatech.edu/~afb/classes/CS4495-Spring2015-OMS/][Computer Vision – CS4495]]
+
+* Articles
++ [[https://www.cs.helsinki.fi/u/tpkarkka/alglib/k06/lectures/iterators.html][STL iterators]]
++ [[https://www.codeproject.com/Articles/5425/An-In-Depth-Study-of-the-STL-Deque-Container][In-Depth study of the STL Deque Container]]
++ [[https://randomascii.wordpress.com/2013/07/16/floating-point-determinism/][Floating Point Determinism]]
++ [[https://www.firsttimersonly.com/][Contributing to open source projects]]
++ [[https://www.secjuice.com/guide-to-x86-assembly/][A Guide To x86 Assembly]]
++ [[https://www.cs.yale.edu/flint/cs421/papers/x86-asm/asm.html][x86 Assembly Guide]]
++ [[https://cs.lmu.edu/~ray/notes/nasmtutorial/][NASM Tutorial]]
++ [[https://jgthms.com/web-design-in-4-minutes/][Web Design in 4 minutes]]
++ [[https://noodulz.me/_posts/hackguide][noodulz's hack guide]]
++ [[https://github.com/alex/what-happens-when][An attempt to answer the age old interview question "What happens when you type google.com into your browser and press enter?"]]
+
+* Books
++ [[https://github.com/EbookFoundation/free-programming-books][Programming Books in Many Languages]]
++ [[http://neuralnetworksanddeeplearning.com/index.html][Neural Networks and Deep Learning]]
++ [[https://opendsa-server.cs.vt.edu/ODSA/Books/Everything/html/index.html#][OpenDSA Data Structures and Algorithms Modules Collection]]
++ [[https://www.gabrielgambetta.com/computer-graphics-from-scratch/00-introduction.html][Computer Graphics from scratch]]
++ [[https://hpbn.co/][High Performance Browser Networking]]
++ [[https://web.engr.oregonstate.edu/~rosulekm/crypto/][The Joy of Cryptography]]
++ [[https://docs.python-guide.org/][The Hitchhiker’s Guide to Python]]
++ [[https://wildlyinaccurate.com/a-hackers-guide-to-git][A Hacker's Guide to Git]]
+
+* Programming Resources and Tools
++ [[https://github.com/sindresorhus/awesome][Awesome lists about all kinds of interesting topics]]
++ [[https://github.com/TheAlgorithms/C-Plus-Plus][Collection of various algorithms in mathematics, machine learning, computer science and physics implemented in C++]]
++ [[https://github.com/TheAlgorithms/C][Collection of various algorithms in mathematics, machine learning, computer science, physics, etc implemented in C]]
++ [[https://github.com/TheAlgorithms/Python][Collection of various algorithms in mathematics, machine learning, computer science, physics, etc implemented in Python]]
++ [[https://github.com/TheAlgorithms/Java][Collection of various algorithms in mathematics, machine learning, computer science, physics, etc implemented in Java]]
++ [[https://github.com/tuvtran/project-based-learning][Curated list of project-based tutorials]]
++ [[https://github.com/vinta/awesome-python][A curated list of awesome Python frameworks, libraries, software and resources]]
++ [[https://github.com/trimstray/the-book-of-secret-knowledge][A collection of inspiring lists, manuals, cheatsheets, blogs, hacks, one-liners, cli/web tools, and more]]
++ [[https://github.com/DovAmir/awesome-design-patterns][Awesome Software and Architectural Design Patterns]]
+
+* Websites
+| Website                      | Description                                                                           |
+|------------------------------+---------------------------------------------------------------------------------------|
+| [[https://deeplizard.com/][deeplizard]]                   | Contains courses about deep learning frameworks such as python and keras.             |
+| [[https://linuxjourney.com/][linuxjourney]]                 | Basic linux crash course.                                                             |
+| [[https://www.learncpp.com/][learncpp]]                     | Zero-to-hero C++ tutorials.                                                           |
+| [[https://datacarpentry.org/image-processing/][Image Processing with Python]] | This lesson shows how to use Python and skimage to do basic image processing.         |
+| [[https://learngitbranching.js.org/][Learn Git Branching]]          | "Learn Git Branching" is the most visual and interactive way to learn Git on the web. |
+| [[https://setosa.io/#/][Setosa]]                       | Data visualization and visual explanations.                                           |
+* Misc
++ [[https://github.com/watson/awesome-computer-history][A curated list of computer history videos, documentaries and related folklore]]

@@ -1,0 +1,85 @@
+:PROPERTIES:
+:ID:       64aedabb-2b15-4499-b97e-cf271301e2e2
+:END:
+#+title: Shellcode
+#+filetags: :Binary-Exploitation:Buffer-Overflow:Cybersecurity:
+
+* Overview
+A shellcode is basically a piece of code that launches a shell. Its a set of instructions injected and then executed by an exploited program. Shellcode is used to directly manipulate registers and the functionality of an exploited program. A shellcode payload is usually delivered as user input or exploited using [[id:b7ae8541-0256-4fb4-b1a3-5fa0c85c0ccb][buffer overflow attacks]].
+
+One way to manipulate the program is to force it to make a system call, or *syscall*. System calls in Linux are accomplished via software interrupts and are called with the int 0x80 instruction. When int 0x80 is executed by a user mode program, the CPU switches into kernel mode and executes the syscall function.
+
+* Basic Shellcode
+Lets say we want to construct an ~exit~ syscall. The process would be the following:
+1. The specific syscall number is loaded into EAX (based on the Linux kernel command number).
+   In our case, `movl $1,%eax`.
+2. Arguments to the syscall function are places in other registers, for information status number, we place it inside the EBX register.
+   In our case, `movl $0,%ebx`.
+3. To wake up the kernel, the instruction int 0x80 is executed.
+4. The CPU switches to kernel mode.
+5. The syscall is executed.
+
+The most basic syscall is ~exit~, which can be written in C simply as:
+#+begin_src c
+main() {exit(0);}
+#+end_src
+
+In assembly, the same program can be written as:
+#+begin_src asm
+    Section .text
+    global _start
+    _start:
+    mov $0x0,%ebx
+    mov $0x1,%eax
+    int $0x80
+#+end_src
+
+Since we want the opcode, we disassemble the object file using objdum.
+| Opcode         | instruction   |
+|----------------+---------------|
+| bb 00 00 00 00 | mov $0x0,%ebx |
+| b8 01 00 00 00 | mov $0x1,%ebx |
+| cd 80          | int $0x80     |
+
+To test the shellcode, we can use the following toy example:
+#+begin_src c
+char exitshell[] = = "\xbb\x00\x00\x00\x00\xb8\x01\x00\x00\x00\xcd\x80";
+main()
+{
+    int *ret;
+    ret = (int *)&ret + 2;
+    (*ret) = (int)exitshell;
+}
+#+end_src
+
+The above shellcode will not work, this is because of the null bytes. Since null bytes are used to terminate the string, the shellcode will not be executed fully. We need to change the assembly code such that no null bytes are present in its opcode.
+
+We can store 0 in EBX without explicitly changing its value. We do so by abusing the XOR command. The XOR command will store 0 both its arguemnt have the same value. The first instruction becomes `xor %ebx,%ebx`.
+
+We need to store 1 into EAX, we can do so by writing 1 to AL which is the lower 8 bits of EAX. The second instruction becomes `mov $0x1,%al`.
+
+The new assembly code is:
+#+begin_src asm
+    Section .text
+    global _start
+    _start:
+    xor $ebx,%ebx
+    mov $0x1,%al
+    int $0x80
+#+end_src
+
+And the new opcode is:
+| Opcode | instruction   |
+|--------+---------------|
+| 31 db  | xor $ebx,%ebx |
+| b0 01  | mov $0x1,%al  |
+| cd 80  | int $0x80     |
+
+And lastly, the ~exitshell~ from above should be changed to accommodate the new opcode:
+#+begin_src c
+char exitshell[] = = "\x31\xdb\xb0\x01\xcd\x80";
+#+end_src
+
+* Resources
+- exploit-db documentations
+- SEED labs

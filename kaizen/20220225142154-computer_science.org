@@ -1,0 +1,30 @@
+:PROPERTIES:
+:ID:       853a800e-6f32-4607-8b24-0932a28ecd86
+:END:
+#+title: Computer Science
+* Complexity
+** Time Complexity
+Big O time is the metric we use to describe the efficiency of algorithms. Say we want to trasfer a file, the data trasfer algorithm runtime is one of:
+- ~O(n)~ where ~n~ is the size of the file. As the size of the file increases, the time to transfer the file increases linearly.
+- ~O(1)~ with respect to the size of the file. As the size of the file increases, it won't take any longer to get the file transfered. We say /time is constant/.
+At some point, the linear runtime will surpass the constant runtime, no matter how slow the linear increase is, or how big the constant is.
+
+*** Big O, Big Θ, Big Ω
+- ~O~: ~O()~ describes an *upper bound* on the time. The algorithm is /at least as fast/ as ~O()~. Equivalent to /less-than-or-equal/.
+- ~Θ~: ~Θ()~ describes a *lower bound* on the time. The algorithm is /at most as slow/ as ~Θ()~. Equivalent to /greater-than-or-equal/.
+- ~Ω~: ~Ω()~ describes both, a lower and upper bound. An algorithm is ~Ω(x)~ if its both ~O(x)~ and ~Θ(x)~. Equivalent to /equals/.
+
+*** Best, Worst and Expected Case
+For example, quick sort algorithm:
+- Best Case: How the algrithm will perform on the best possible input (sorted array).
+- Worst Case: How the algorithm will perform on the worst possible input (pivot is repeatedly the largest number).
+- Expected Case: How the algorithm will perform on any other input (not sorted and pivot is middle pf the pack).
+
+
+** Space Complexity
+
+* Networking
+** Addresses
+
+- IP address: 4 octets, each of range 0-255
+- MAC address

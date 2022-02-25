@@ -1,0 +1,78 @@
+:PROPERTIES:
+:ID:       5c8dcd33-cf51-4de9-96bc-0ea8e01c98a7
+:END:
+#+title: Cybersecurity
+#+DESCRIPTION: Learning Cyber Security
+
+* Overview
+#+begin_quote
+System security means the security of the system with respect to a specified property ... A chain is as weak as its weakest link.
+#+end_quote
+In cybersecurity, our goal is to protect/exploit systems (complex or simpler) that have certain goals/functionality/method to maintain.
+
+An example of such system is a vending machine. A vending machine's goal is simple: give goods in exchange of money. An attacker might come up with certain attacks to circumvent the system and skip paying. The system's developer must keep this in mind, and design such systems with protections against possible attack vectors.
+
+* General Steps
+To perform any hack, we need to do some research first. All hacks have some steps in common:
+1. Reconnaissance
+2. Gaining a foothold
+3. Internal reconnaissance
+4. Gaining influence internally
+
+** Big and Little Endian
+Big Endian (BE) and Little Endian (LE) are ways to store data in memory addresses. Say we want to save the 2 bytes word ~0xfeed~ starting at location ~0x4000~. In BE we store the most significant byte first; this means that we store ~0xfe~ at location ~0x4000~ and ~0xed~ at location ~0x4001~. In LE we first store the least significant byte; this means that we store ~0xed~ at location ~0x4000~ and ~0xfe~ at location ~0x4001~.
+
+* Forensics
+This category revolves around data recovery and [[id:eb9e789f-6763-485c-b367-79d977e80bf0][forensics]]. You will have to nitpick at small details in recovery data batches to try to get to the bottom of what happened.
+
+* Cryptography
+Revolving around cryptographic functions. In [[id:ef2280e9-6fce-4bcc-8aef-19a478791f9a][cryptography]], we try to decrypt objects which were locked away with cryptological processes.
+* Web Exploitation
+Revolving around web-based applications. In [[id:ac70eab4-252a-4d8e-806e-20f39008ec4a][web exploitation]], we detect, exploit and search through different vulnerable web applications.
+** SQL Injection
+*** Attack
+A simple example of authentication with PHP and SQL:
+#+begin_src php
+<?php
+mysql_connect("localhost", "db_username", "db_password"); # Connection to the SQL Database.
+mysql_select_db("users"); # Database table where user information is stored.
+$username=$_POST['username']; # User-specified username.
+$password=$_POST['password']; #User-specified password.
+$sql="SELECT * FROM users WHERE username='$username' AND password='$password'"; # Query for user/pass retrieval from the DB.
+$result=mysql_query($sql); # Performs query stored in $sql and stores it in $result.
+$count=mysql_num_rows($result); # Sets the $count variable to the number of rows stored in $result.
+if ($count==1) {
+    # Checks if there's at least 1 result, and if yes:
+    $_SESSION['username'] = $username; # Creates a session with the specified $username.
+    $_SESSION['password'] = $password; # Creates a session with the specified $password.
+}
+else { # If there's no singular result of a user/pass combination:
+    header("location:login.php");
+    # No redirection, as the login failed in the case the $count variable is not equal to 1, HTTP Response code 200 OK.
+}
+?>
+#+end_src
+In the code above, input sanitization is not done (checking if the input is valid). Giving ~admin'#~ as a username will comment the rest of the query and the server will only look for the admin username. If ~admin~ exist as a username then the return code is 200 OK, and we will get logged in with a valid session.
+*** Protection
+There are many different techniques of protecting from SQL injections, here are some:
+- Input validation
+- Parameterized queries
+- Stored Procedures
+- Implementing a WAF (Web Application Firewall) on the perimeter of the server's network.
+** Cookies Attacks
+*** Modifiying JWT Algorithm to None
+We can modify the algorithm in the header of a [[id:8b76eb72-ae21-4e36-97fe-5ccf308a27d9][JWT]] to be ~none~ to bypass
+
+* Binary Exploitation
+In [[id:25e5e55d-9a9a-43d1-b8a3-ea599665f644][binary exploitation]], we mainly deal with exploiting binary and memory corruption without having the source code at hand.
+* Reversing
+Revolving around the art of reverse-engineerin. In [[id:00735b6f-708a-487c-a13b-e9fbfbb7a4e3][reversing]], we use reversing tools to find out what certain script or program does.
+* Steganography
+Revolving around the art of finding or embedding hidden messages in plain-looking objects. In [[id:893e696e-ddbd-4012-8abb-2ebc8877a8a7][steganography]], we use tools and intuition to search for hidden flag.
+* Mobile Exploitation
+Revolving around multiple types of handheld devices. In [[id:301d33d4-028e-4e73-a896-c1a595bd11f5][mobile exploitation]], we investigate different mobile applications to find hidden embedded functionalities and vulnerabilities.
+* Hardware Exploitation
+Revolving around penetrating different hardware systems.
+
+* Resources
+- pwn.college course

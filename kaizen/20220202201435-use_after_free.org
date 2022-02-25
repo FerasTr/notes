@@ -1,0 +1,9 @@
+:PROPERTIES:
+:ID:       51b226d2-6a54-4725-ac1b-8a76f1541b8e
+:ROAM_ALIASES: UAF
+:END:
+#+title: Use After Free
+#+filetags: :heap:binaryexp:binary:
+
+* Overview
+After calling ~free~ on an allocation, we are free to use that chunk for a future call to ~malloc~. If we forget and then use the freed object, then it might cause unwanted behavior such as crashing or leaking data.

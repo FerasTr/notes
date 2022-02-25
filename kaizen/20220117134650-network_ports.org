@@ -1,0 +1,14 @@
+:PROPERTIES:
+:ID:       2fff15b6-e247-4a0d-b22c-de7e54a22048
+:END:
+#+title: Network Ports
+#+filetags: :Networking:
+
+* Overview
+* How To Keep Ports Secure
+1. Enable a firewall or endpoint protection to protect these ports from attackers. Use a blacklist to prevent connections from known attacker's IP addresses or use a whitelist to only allow specified IP addresses.
+2. Use a [[id:d37868e3-3220-4acc-b4a4-d3f6996238c3][VPN]] to encrypt and protect network traffic.
+3. Implement VLANs to isolate internal network traffic.
+4. Use MAC address filtering to keep unkown systems from accessing the network.
+* Resources
+- [[https://www.varonis.com/blog/smb-port][What is an SMB Port + Ports 445 and 139 Explained]]

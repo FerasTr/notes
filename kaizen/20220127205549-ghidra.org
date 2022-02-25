@@ -1,0 +1,10 @@
+:PROPERTIES:
+:ID:       ed95b5a1-25d6-4c63-91f8-11a818a96416
+:END:
+#+title: Ghidra
+#+filetags: :reversing:binary:tool:
+
+* Overview
+* GUI
+* Resources
+- stacksmashing's [[https://www.youtube.com/watch?v=fTGTnrgjuGA&list=WL&index=4][video]] about ghidra

@@ -1,0 +1,56 @@
+:PROPERTIES:
+:ID:       eb9e789f-6763-485c-b367-79d977e80bf0
+:END:
+#+title: Forensics
+#+roam_tags: ctf cybersecurity
+
+* Overview
+#+begin_quote
+Forensics is the art of recovering the digital trail left on a computer. There are plenty of methods to find data which is seemingly deleted, not stored, or worse, covertly recorded.
+#+end_quote
+
+To succeed in this matter, you need to know what tool to use when needed. Some topics you need to be familiar with are:
+- File Formats
+- EXIF data
+- Wireshark and PCAPs
+- Stegonagraphy
+- Disk Imaging
+
+* Files and the File System
+A file system is like an index for all files on a computer. The important part of a file system is: Files, Directores/Folders, Metadata.
+- Files are for storing data, refrenced by a filename and an extension.
+- Directores are a collection of files.
+- Metadata is the data about the file itself like its length, time created, author, last edit, etc...
+
+When a file is created, the data is stored at some location in the memory and the filename is the reference to that data. When (sometimes) deleting a file, the computer doesn't delete the content of the file, it just "forgets" the index to where the file is stored in memory, its probably still there until something over writes at that location, file carving is a technique for extracting data from a disk drive without having the file system to easily recover the files.
+
+A file consists of Blocks, which is the smallest part of the data that is stored in memory. The header block contains the starting point of the file whereas the footer block contains the end point of the file.
+
+** File Formats
+File Extensions are not the sole way to identify the type of a file. Files sometimes include additional "hidden" data, known as /metadata/, which can give information about the context of a file's data.
+
+*** File Signatures
+Files have certain leading bytes called file signatures which allow programs to parse the data in a consistent manner. Also known as File Magic Numbers, they are bytes within a file used to identify the type/format of the file. Usually they are found at the beginning of the file, and are 2-4 bytes long.
+
+File signatures are helpful when a certain file is missing its extension, or is given a wrong one. Programs can detect what files its using in order to parse it correctly.
+
+Viewing the binary representation of the file is needed when inspecting file signatures. To identify the file, compare the signature of that file against known file signatures, see the resources for a popular repository.
+** Metadata
+Metadata is data about data. Different type of files have different metadata. For example, the metadata of images include things such as dates, camera information, GPS location, comments, etc. For music, it could include the title, author, track number and album.
+
+*** Timestamps
+Timestamps are data that indicate the time of certain events - MAC:
+- Modification - when the file was modified
+- Access - When the file was read or accessed
+- Creation - When a file was created
+
+Some other types of timestamps: Date Changed (MFT), Filename Date Created (MFT), Filename Date Modified (MFT), Filename Date Accessed (MFT), INDX Entry Date Created, INDX Entry Date Modified, INDX Entry Date Accessed, INDX Entry Date Changed.
+
+Timestamps can be used to create a timeline of events for a particular user.
+
+* Tools
+- ~exiftool~
+
+* Resources
+ - ctf101
+ - [[https://www.garykessler.net/library/file_sigs.html][GCK's File Signature Table]]

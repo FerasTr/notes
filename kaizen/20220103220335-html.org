@@ -1,0 +1,36 @@
+:PROPERTIES:
+:ID:       c11dfdff-dac6-40ba-b8a0-f37e30abe8fc
+:END:
+#+title: HTML
+#+filetags: :webdev:programming:
+
+* Overview
+HyperText Markup Language (HTML) is the language websites are written in. Elements (known as tags) which tell the browser hot to display content.
+
+** Simple Example
+An example of a simple HTML document looks like this:
+#+begin_src html
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Page Title</title>
+  </head>
+  <body>
+    <h1>Example Heading</h1>
+    <p>Example paragraph</p>
+  </body>
+</html>
+#+end_src
+
+The HTML structure has the following components:
+- ~<!DOCTYPE html>~ defines that the page is HTML5 document. This helps with standardisation across different browsers and tells the browser to interpret the page.
+- ~<html>~ element is the root element of the HTML page, all other elements come after this element.
+- ~<head>~ element contains information about the page.
+- ~<body>~ element defines the HTML document's body; only content inside of the body is shown in the browser.
+- ~<h1>~ element defines a large heading.
+- ~<p>~ element defines a paragraph.
+
+Tags can contain attributes such as the class attribute which can be used to style an element.
+
+* Resources
+- TryHackMe's "How Websites Work" room

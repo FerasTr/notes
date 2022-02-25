@@ -1,0 +1,18 @@
+:PROPERTIES:
+:ID:       ba5fd3f5-1275-4232-9512-7b1967b4fba5
+:END:
+#+title: Backtracking
+#+filetags: :problem-solving:algorithms:
+* Overview
+In some problems, as we search for a solution we may reach a dead end and have to go back and try something else. A real life analogy is traversing a maze; during such traversal, we make a decision to go down a certain path. If the path is a dead end, we go back to the last position and make a new decision.
+
+[[id:2aa5cbd3-5a8e-4a6f-b641-5471957dd67a][Recursive]] solutions are a natural fit for backtracking, but it's tricky to see the backtracking in recursive solutions. A classic example of backtracking is [[id:e988e9b8-27b7-4f55-9ca0-c35b72731354][DFS]].
+* Algorithm
+The backtracking algorithms consists of the following steps:
+1. Choose: Choose the potential candidate.
+2. Constraint: Define a constraint that must be satisfied by the chosen candidate.
+3. Goal: We must define the goal that determines if have found the required solution and we must backtrack.
+
+* Resources
+- LeetCode Solutions
+- [[https://www.youtube.com/watch?v=gBC_Fd8EE8A][Backtracking (Think Like a Programmer)]]

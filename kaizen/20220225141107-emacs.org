@@ -1,0 +1,30 @@
+:PROPERTIES:
+:ID:       7833c012-9133-445b-b163-00c0c209d027
+:END:
+#+title: emacs
+
+A cheatsheet of basic dired commands for evil users:
+
+- D to delete the file at point, R to rename, C to copy
+- + to create a directory. C-x C-f / SPC . to create a new file.
+- Z to compress
+- = to diff them.
+- m to mark files, or %m to mark files by regexp. Then ! to run a shell command on the marked files.
+- d to flag files for deletion and x to delete flagged files.
+- u to unmark a file, U to unmark all marked files.
+- gr to refresh a dired buffer.
+- RET to visit the file/directory and - to go up one directory
+- q to kill all dired buffers
+- C-c C-e to activate wgrep, then modify/delete the files like you're editing plain text. Commit your changes with C-c C-c or abort with C-c C-k
+
+
+
+:%al/; or glig; to align all the semicolons in the buffer
+
+
+- gzm to create cursors at all matches for the word at point (possibly narrowing the buffer first);
+- gzd to create a cursor at point and move to the next match (and gzD to create and move to the previous match);
+- gzj to create a cursor at point and move to the next line (and gzk to create and move to the previous line); or
+- gzz to create a cursor at point.
+
+  Add package to latex preview: (add-to-list 'org-latex-packages-alist '("options" "package" t))

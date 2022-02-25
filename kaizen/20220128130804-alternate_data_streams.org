@@ -1,0 +1,8 @@
+:PROPERTIES:
+:ID:       99fb3ff6-5ce6-4d4a-81c7-cee17931e0fd
+:ROAM_ALIASES: ADS
+:END:
+#+title: Alternate Data Streams
+
+* Resources
+- Malwarebytes's [[https://blog.malwarebytes.com/101/2015/07/introduction-to-alternate-data-streams/][article]] about ADS

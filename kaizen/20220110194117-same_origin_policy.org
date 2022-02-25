@@ -1,0 +1,30 @@
+:PROPERTIES:
+:ID:       a0dac5f6-cdae-41ff-b2ea-abe9ebd6f860
+:ROAM_ALIASES: SOP
+:END:
+#+title: Same Origin Policy
+#+filetags: :webexp:
+
+* Overview
+Same Origin Policy (SOP), is a browser-level security control which dictates how a document or script serverd by one origin can interact with resources from some other origin. It prevents scripts running under one origin to read data from another origin.
+
+From Wikipedia:
+#+begin_quote
+The same-origin policy is an important concept in the web application security model. Under the policy, a web browser permits scripts contained in a first web page to access data in a second web page, but only if both web pages have the same origin. An origin is defined as a combination of URI scheme, host name, and port number. This policy prevents a malicious script on one page from obtaining access to sensitive data on another web page through that page's Document Object Model.
+#+end_quote
+
+In [[id:c11dfdff-dac6-40ba-b8a0-f37e30abe8fc][HTML]], we can use the ~<iframe>~ tag which allows us to embed different websites inside each other. The communication between embedded websites cannot be made.
+
+* Correlation with CSRF
+Cross-domain requests and form submissions are still permitted but reading data from another origin is not permitted. For instance, if an attacker performs a CSRF attack on some vulnerable webiste to change/delete/update some parameter, the attack will be successful but the attacker will not be able to /read/ the response.
+
+* Cross Origin Resource Sharing
+Cross Origin Resource Sharing (CORS) allows different origins to communicate and share data in a controlled way. A CORS misconfiguration may also result in security vulnerabilites.
+
+* Disabling SOP
+SOP can be disabled using one of the following techniques:
+- ~clientaccesspolicy.xml~ file granting unintended access to Sliverlight controls.
+- ~crossdomain.xml~ file granting unintended access to Flash movies.
+
+* Resources
+- stackoverflow [[https://stackoverflow.com/questions/33261244/why-same-origin-policy-isnt-enough-to-prevent-csrf-attacks][answer]] about csrf and sop

@@ -1,0 +1,5 @@
+:PROPERTIES:
+:ID:       9e46eadf-5587-4c41-98b6-92329a096161
+:END:
+#+title: MacOS
+#+filetags: :os:

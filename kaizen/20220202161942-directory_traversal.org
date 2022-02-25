@@ -1,0 +1,20 @@
+:PROPERTIES:
+:ID:       a2346487-0fb1-42ed-93df-bbe61f3d5d45
+:END:
+#+title: Directory Traversal
+#+filetags: :webexp:
+
+* Overview
+Directory Traversal is a vulnerability where an application takes in user input and uses it in a directory path. If the input isn't properly sanitized or properly sandboxed, then the application could be vulnerable to such an attack.
+
+* Example
+#+begin_src php
+<?php
+    $page = $_GET['page']; // index.php
+    include("/var/www/html/" . $page);
+?>
+#+end_src
+If the application is designed such as the user can pass input to the GET parameter and then its loaded, then we can exploit it as follows:
+#+begin_example
+../../../../../../../../etc/passwd
+#+end_example

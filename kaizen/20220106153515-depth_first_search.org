@@ -1,0 +1,6 @@
+:PROPERTIES:
+:ID:       e988e9b8-27b7-4f55-9ca0-c35b72731354
+:ROAM_ALIASES: DFS
+:END:
+#+title: Depth First Search
+#+filetags: :graph:problem-solving:algorithms:

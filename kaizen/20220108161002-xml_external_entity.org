@@ -1,0 +1,8 @@
+:PROPERTIES:
+:ID:       62776026-d6aa-4a17-b4c9-5aabd020b4f0
+:ROAM_ALIASES: XXE
+:END:
+#+title: XML External Entity
+
+* Resources
+- [[https://www.indusface.com/blog/how-to-identify-and-mitigate-xxe-vulnerability/][How to identify and Mitigate XEE Vulnerabilites]]

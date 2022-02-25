@@ -1,0 +1,5 @@
+:PROPERTIES:
+:ID:       69828775-0125-4e2a-9a00-5861fab08373
+:END:
+#+title: Block Ciphers
+#+filetags: :math:cryptography:

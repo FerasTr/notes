@@ -1,0 +1,9 @@
+:PROPERTIES:
+:ID:       c74d9562-79ff-4da4-81f7-661db5eac260
+:END:
+#+title: Content Management System
+
+* Overview
+* Resources
+- exploit-db [[https://www.exploit-db.com/docs/49947][paper]]: CMS made Simple
+- agility's [[https://agilitycms.com/resources/posts/cms-security-vulnerabilities][article]]: List of Top CMS Security Vulnerabilities

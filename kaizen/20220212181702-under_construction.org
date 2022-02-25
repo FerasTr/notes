@@ -1,0 +1,19 @@
+:PROPERTIES:
+:ID:       53114056-fd0d-482e-84c2-9aa6eb379789
+:END:
+#+title: Under Construction
+#+filetags: :hackthebox:webexp:writeup:
+
+* Description
+#+begin_quote
+A company that specialises in web development is creating a new site that is currently under construction. Can you obtain the flag?
+#+end_quote
+
+** Extras
+A zip file is provided which includes an express project files.
+
+* Recon
+* Foothold
+* Flag
+* Notes
+* Resources

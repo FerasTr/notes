@@ -1,0 +1,122 @@
+:PROPERTIES:
+:ID:       fe12f27d-e774-4b27-bd0f-ec8932a9c2cc
+:END:
+#+title: vim
+
+* VIM basics
+** Movement
+*** To move the cursor, press 'h' 'j' 'k' 'l'
+**** left h
+**** right l
+**** up k
+**** down j
+*** Motions
+Many commands are made from an operator and a motion. Typing a number before a
+motion repeats it that many times.
+**** w
+Move to the start of the next word, excluding its first character.
+**** e
+Move to the end of the current word, including the last character.
+**** $
+Move to the end of the line, including the last character.
+**** 0
+Move to the start of the line.
+*** Moving in file
+**** G
+Move to the last line of the file. If a number was typed before G, jump to line.
+**** gg
+Move the first line of the file.
+** Exiting VIM
+*** q!
+Exit and discard any changes.
+*** wq
+To save a file and exit.
+*** w
+Save changes made to a file.
+** Insert (Editing)
+*** i
+To enter insert mode before the cursor
+*** a
+To enter insert mode after the cursor
+*** A
+To enter insert mode (appending) at the end of the line.
+*** o
+Open a new line below the cursor and enter insert mode.
+*** O
+Open a new line above the cursor and enter insert mode.
+** Visual (Select)
+*** v
+Enter visual mode
+**** <,>
+Increase/decrease indentation of the selected text.
+**** operator
+Like d for example will delete the selected text.
+*** V
+Enter visual mode for selecting lines.
+** Deleting
+*** x
+delete character under the cursor
+*** dw
+Delete a word, cursor must be at the beginning of a word that needs to be
+deleted.
+*** d$
+Delete to the end of the line, from the current cursor point.
+*** de
+Delete from the cursor to the end of the word.
+*** dd
+Delete a whole line.
+** Undo & Redo
+*** u
+Undo last command.
+*** C-r
+Redo the last command.
+*** U
+Fix a whole line (Undo all changes).
+** Copy and put
+*** y
+Yank the selected text (can be used as an operator such as yw).
+*** p
+Put previously deleted text after (below) the cursor.
+** Replace
+*** r
+Replace the character at the cursor (rx to replace with x).
+*** R
+Enter replace mode (replacing multiple characters).
+** Change
+*** ce
+To change until the end of the word.
+*** cw
+To change word (similar to ce).
+*** c$
+Change till end of the line.
+** Search
+*** /
+Type / followed by a phrase to search forward for the phrase.
+*** ?
+Type ? followed by a phrase to search backwards for the phrase.
+*** N
+Search again in the opposite direction for the same phrase.
+*** n
+Search again in the same direction for the same phrase.
+*** Matching parentheses
+**** %
+While placing the cursor on any (, [, { (or the opposite), find the other match.
+*** /text\c
+Ignore case for one search.
+** Substitute
+*** s/old/new
+Change the first occurrence of old in the line.
+*** s/old/new/g
+Change all occurrences of old in the line.
+*** #,#s/old/new/g
+Change all occurrences of old between lines #,#.
+*** %s/old/new/g
+Change every occurrence of old in all lines.
+*** %s/old/new/gc
+Change every occurrence of old in all lines, with a prompt whether to substitute
+or not.
+* VIM regex
+** Replace all whitespaces with only one whitespace
+#+BEGIN_SRC
+:%s/ {2,}/ /g
+#+END_SRC

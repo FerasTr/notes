@@ -1,0 +1,6 @@
+:PROPERTIES:
+:ID:       a077fbe4-31ef-4e40-a0bb-56a759204ae4
+:ROAM_ALIASES: ROP
+:END:
+#+title: Return Oriented Programming
+#+filetags: :binaryexp:binary:

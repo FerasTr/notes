@@ -1,0 +1,29 @@
+:PROPERTIES:
+:ID:       ef2280e9-6fce-4bcc-8aef-19a478791f9a
+:END:
+#+title: Cryptography
+#+roam_tags: math ctf cybersecurity
+
+* Overview
+* Encryptions
+- [[file:20220123193722-xor_encryption.org][XOR Encryption]]
+- [[file:20220123194326-ceaser_cipher.org][Ceaser Cipher and ROT 13]]
+- [[file:20220123194751-substitution_cipher.org][Substitution Cipher]]
+- [[file:20220123195016-vigenere_cipher.org][Vigenere Cipher]]
+- [[file:20220123200107-block_ciphers.org][Block Ciphers]]
+- [[file:20220123200238-stream_ciphers.org][Stream Ciphers]]
+- [[file:20220123200346-rsa.org][RSA]]
+
+* Hashing
+Hashing functions are one way functions which theoretically provide a unique output for every input.
+
+** Hashing Algorithms
+When creating a hashing algorithm, it is important to check for collision resistance. If a collision is found, two different inputs can have the same hash which results in a security threat.
+
+- SHA-1
+- SHA-2
+- MD5
+- CRC32
+
+* Resources
+ - ctf101

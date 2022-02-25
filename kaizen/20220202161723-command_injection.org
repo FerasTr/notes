@@ -1,0 +1,12 @@
+:PROPERTIES:
+:ID:       3010f50b-31ee-42dc-a04c-14b270b80e3b
+:END:
+#+title: Command Injection
+#+filetags: :webexp:
+
+* Overview
+Command Injection is a vulnerability that allows an attacker to submit system commands to a computer running a website. This happens when the application fails to encode user input that goes into a system shell.
+* Example Payloads
+- ~;ls~
+- ~$(ls)~
+- ~`ls`~

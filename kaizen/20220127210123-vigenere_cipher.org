@@ -1,0 +1,7 @@
+:PROPERTIES:
+:ID:       4c0ac99a-3154-4976-8ee7-690bb6ca4cce
+:END:
+#+title: Vigenere Cipher
+
+* Overview
+A Vigenere Cipher is an extended [[id:0d8e6135-7853-4f71-9d54-605322886881][Caesar Cipher]] where message is encrypted using various Caesar shifted alphabets.

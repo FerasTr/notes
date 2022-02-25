@@ -1,0 +1,43 @@
+:PROPERTIES:
+:ID:       e909cba2-5146-48ef-b0f3-d4101f37581b
+:ROAM_ALIASES: CTF
+:END:
+#+title: Capture The Flag
+#+tags: ctf networking cybersecurity pen-testing
+
+* Overview
+Capture The Flag (CTF), are a computer security competition.
+* Enumeration
+The first step should always be /enumeration/. In enumeration, we try to get as much information about the target, this includes:
+- Internet connectivity (should be yes unless its hardware).
+- Open TCP/UDP Ports (using ~nmap~ with ~sU~ for UDP).
+- What services are running behined each port and what version.
+* Local File Inclusion
+* Passwords
+** Cracking
+Using ~john~ (john the ripper), we can generate password hashes until we get a match to the correct hash for a specific file.
+
+~hashcat~ can be used to attack specific hashing algorithms such as MD5 and many more.
+
+Zip files need to be hashed first before using ~john~.
+** Identify Hashes
+Hashes can be identified using ~hashid~. This will output the type of the hash that we provide.
+
+* Injection
+#+begin_quote
+The general rule is never to trust user input. To prevent malicious input, the developer should sanitise everything the user enters before using it.
+#+end_quote
+
+** SQL Injection
+[[id:5b33d78a-58bb-4df4-af2d-ac8eced7fe2e][SQL]] can be vulnerable to injection attack. ~sqlmap~ can be used to automate such attacks. To provide the cookie we can use burp suite to intercept the cookie or by using the cookie-editor firefox extension.
+** HTML Injection
+When researching for a vulnerability on a website, you can provide input wrapped in simple header tags to see if the website does any input sanitization. If the returned text is formatted, then an [[id:c11dfdff-dac6-40ba-b8a0-f37e30abe8fc][HTML]] injection is a possibility.
+* Tricks
+- Make the shell fully interactive:
+  #+begin_src sh
+    python3 -c 'import pty;pty.spawn("/bin/bash")'
+    CTRL+Z
+    stty raw -echo
+    fg
+    export TERM=xterm
+  #+end_src

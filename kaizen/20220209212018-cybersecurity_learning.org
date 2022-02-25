@@ -1,0 +1,99 @@
+:PROPERTIES:
+:ID:       6cb873a2-f0db-428b-8768-322340335884
+:END:
+#+title: Cybersecurity Learning
+#+filetags: :learning:Cybersecurity:Studying:Interview-Prep:
+
+* Overview
+In here, we dive into cybersecurity specific [[id:f9546923-3a8e-4e43-94f7-5ec6a338b40e][interview preparation]] methods including:
+- A roadmap that covers all resources available to me as of writing.
+- Definition of terms that are related to cybersecurity.
+- A brief introduction to popular certificates.
+- A brief introduction to popular software and technologies.
+- Job descriptions and difference between them.
+- Popular questions used in interviews.
+- Resources.
+* Learning
+Some people worry about spoilers and robbing themselves of a potential learning experience (reading writeups for example), ignoring these resources can slow down your success.
+
+When learning to hack vulnerable machines, there are three skills that are necessary to master:
+1. Technical Foundation
+   Understanding how services work internally as well as concepts like networking. Having a strong foundation allows people to quickly perform enumeration which aids in turning a simple proof of concept into a weaponized exploit or efficiently pivoting throughout a network once an initial foothold is gained.
+2. Hacking Techniques
+   Identifying services and knowing the attack paths of this service. This is the easiest to learn as it isn't hard to know what tools or payloads to try out on a service. Having a strong foundation will help catching the small things.
+3. Persistence and Endurance
+   Knowing how to keep driving into a problem looking for creative ways to get information out of it. This is a combination of creative thinking and stick-to-it that takes a long time to develop
+
+After gaining root on a box, it is /critical/, or even more important, to read writeups of other hackers. This will help you catch anything you miss and give you another perspective that you didn't know otherwise.
+
+The best way to improve is to grind-it-out. [[id:4273fcdf-58e9-409b-b196-19860eb9478c][Repetition]] is the name of the game, the more boxes/targets/vulnerabilities you expose yourself to, the more you learn about the inner-workings and techniques required to tackle such tasks.
+
+
+* Roadmap
+My current roadmap as of <2022-01-02 Sun>.
+
+The following is an ordered list of some resources that I need to go through. They are ordered in order of difficulity and urgency (what topic I need to learn). The roadmap will be continually updated and changed. My current goal is to finish the first half by mid 2022 to help with future research position jobs.
+
+Somethings will be omitted from the list such as: TryHackMe, HackTheBox, HackerOne, Bugcrowd and CTF competitions as I believe that those resources are to be visited and studied daily/weekly in no particular order/schedule. The idea is, if im done for the day with the current learning resource, then I should be spending the rest of my time on one of the above.
+
+** Study Plan
+*** DONE ctf101
+*** TODO pwn college
+*** TODO websec
+*** TODO webhacking.kr
+*** TODO hacker101 CTFs
+*** TODO cryptohack
+*** TODO cryptopals
+*** TODO exploit.education
+*** TODO ROP Emporium
+*** TODO pwnable.kr
+*** TODO pwnable.tw
+*** TODO Malwareunicorn
+*** TODO HackThisSite
+*** TODO Overthewire
+*** TODO google-gruyere
+*** TODO PortSwigger Web Labs
+*** TODO This [[https://emaragkos.gr/recommended-machines/][list]] of boxes to pwn
+
+* Certificates
+- SANS GIAC/GCIA/GCIH
+- CISSP
+- CASP
+- SIEM specific training
+* Terms
+- SEIM
+- DOD Information Assurance Vulnerability Management program.
+- HIPS
+- ID/PS
+- Full Packet Capture
+- Host Based Forensics
+- Netowrk Forensics
+- RSA Security
+- YARA
+- Snort
+- Suricata
+- IPS
+- EDR
+- FW
+- AV
+* Things to Learn
+- Operating systems internals: PE, ELF, kernel, processes, networking, hypervisors.
+* Tools and Technologies
+- Enterprise SIEM platform:
+  - Nitro/McAfee Enterprise Security Manager
+  - ArcSight
+  - QRadar
+  - LogLogic
+  - Splunk
+
+* Resources
+- [[https://github.com/rezaduty/cybersecurity-career-path][Cybersecurity Career Path]] GitHub repo
+- [[https://emaragkos.gr/recommended-machines/][Recommended Boot2Root Machines]]
+- [[https://www.edureka.co/blog/interview-questions/cybersecurity-interview-questions/][50 Cybersecurity Interview Questions]]
+- Web Security Interview Questions GitHub [[https://github.com/aershov24/web-security-interview-questions][repo]]
+- Security Engineer Interveiw Questions GitHub [[https://github.com/security-prince/Application-Security-Engineer-Interview-Questions][repo]]
+- Security Engineering at Google GitHub [[https://github.com/gracenolan/Notes/blob/master/interview-study-notes-for-security-engineering.md][repo]]
+- Cyber Security Interview Questions and Answers GitHub [[https://github.com/s-kustm/interview][repo]]
+- [[https://www.interviewbit.com/rest-api-interview-questions/][REST API Interview Questions]]
+- [[https://lambdageeks.com/application-security-interview-questions/][41 Application Security Interview Questions]]
+- HTB [[https://www.hackthebox.com/blog/It-is-Okay-to-Use-Writeups][blog]] topic about "It is okay to read writeups"

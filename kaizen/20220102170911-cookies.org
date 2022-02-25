@@ -1,0 +1,10 @@
+:PROPERTIES:
+:ID:       885c5ae9-0dd2-4c1c-a6bc-4290e01b55e0
+:END:
+#+title: Cookies
+#+filetags: :HTTP:Networking:
+
+* What is a Cookie?
+Since [[id:2a8da6c9-ff7d-45a2-b0fd-9fe91fefd738][HTTP]] is a stateless protocol, cookies can be used to remind the web server who you are. Cookies are saved when you receive a ~Set-Cookie~ header from a web server. Then every furthur request you make, the browser will send the cookie data back to the web server.
+
+Cookies are mostly used or website authentication. The value of a token is usually hashed using a secret token.

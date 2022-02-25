@@ -1,0 +1,38 @@
+:PROPERTIES:
+:ID:       6d27fa9e-41fb-487d-946f-ce77f3940374
+:END:
+#+title: Linux
+#+filetags: :os:
+
+* Processes
+Each process is a running program, a program is a file on the computer. Each process has a "current working directory".
+
+* Environment Variables
+"Environment variables" are a set of key/value pairs passed into every process when it is launched. Critical variables:
+- PATH: a list of directories to search for programs in.
+- PWD: the current working directory.
+- HOME: the path to your home directory.
+- HOSTNAME: the name of your system.
+
+We can print environment variables with the ~evn~ command, and set them with shell syntax.
+
+* Files
+There are many different types of files. We can use ~ls -ld~ to check.
+#+begin_example
+-rw-r--r-- 1 user group 19 Aug 19 06:30 /home/user/flags/TOPSECRET
+#+end_example
+
+Types:
+- "-" is a regular file
+- "d" is a directory
+- "l" is a symbolic link (shortcut)
+- "p" is a named pipe (FIFO)
+- "c" is a character device file (backend by a hardware device, which produces or receives data streams, such as a mic)
+- "b" is a block device file (backend by a hardware device that stores and loads bocks of data, such as a hard drive)
+- "s" is a unix socket (local network connection)
+
+Hard links reference the original file directly. A hard link is an equally "valid" reference to the original file as the original file itself (it looks at the same binary data).
+
+* Resources
+- pwn.college
+- tutorialLinux's [[https://www.youtube.com/playlist?list=PLtK75qxsQaMLZSo7KL-PmiRarU7hrpnwK][series]] on Linux

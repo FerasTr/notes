@@ -1,0 +1,5 @@
+:PROPERTIES:
+:ID:       4c1bef71-2cde-4e74-a474-e4e311e056fd
+:END:
+#+title: XOR
+#+filetags: :math:

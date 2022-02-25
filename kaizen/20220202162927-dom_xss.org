@@ -1,0 +1,5 @@
+:PROPERTIES:
+:ID:       7084f6a8-bb11-42c3-b570-c77fc6fa2560
+:END:
+#+title: DOM XSS
+#+filetags: :xss:webexp:

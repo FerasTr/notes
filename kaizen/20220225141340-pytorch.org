@@ -1,0 +1,1306 @@
+:PROPERTIES:
+:ID:       fd1df0db-9500-4a54-bd19-632fc33f9d10
+:END:
+#+title: PyTorch
+Primary PyTorch packages:
+
+| Package                | Description                                                                                  |
+|------------------------+----------------------------------------------------------------------------------------------|
+| torch                  | Top level PyTorch package and tensor library                                                 |
+| torch.nn               | Contains modules and extensible classes for building neural networks                         |
+| torch.autograd         | Handles derivative calculations needed to optimize weights                                   |
+| torch.nn.functional    | Typical functions used in building networks (loss, activation, convolution operations)       |
+| torch.optim            | Contains optimization operations                                                             |
+| torch.utils            | Contains utility classes like data sets and data loaders that make data preprocessing easier |
+| torchvision            | Contains popular datasets (MNIST), model (VGG16), image transformations and utilities for CV |
+| torchvision.transforms | An interface that contains common transforms for image processing                            |
+
+PyTorch uses a computational graph (see ML notes) that is called dynamic computational graph (the graph is generated as the operations are created)
+* Table of Content :TOC:
+- [[#installation][Installation]]
+  - [[#verify-the-install-and-cuda-support][Verify the install and Cuda support]]
+- [[#tensors][Tensors]]
+  - [[#properties-of-a-tensor][Properties of a Tensor]]
+  - [[#pytorchs-syntax][PyTorch's syntax]]
+- [[#cuda][Cuda]]
+- [[#numpy-bridge][NumPy Bridge]]
+- [[#autograd][Autograd]]
+- [[#neural-networks][Neural Networks]]
+  - [[#data-and-data-processing][Data and Data Processing]]
+  - [[#building-neural-networks][Building Neural Networks]]
+  - [[#training-neural-networks][Training Neural Networks]]
+  - [[#analyzing-models][Analyzing Models]]
+  - [[#blitz][blitz]]
+- [[#misc][Misc]]
+- [[#resources][Resources]]
+
+* Installation
+To install via ~conda~ (you need ~Anaconda~ installed):
+#+BEGIN_SRC bash
+conda install pytorch torchvision cudatoolkit=10.2 -c pytorch
+#+END_SRC
+or via ~pip~:
+#+BEGIN_SRC bash
+pip install torch torchvision
+#+END_SRC
+** Verify the install and Cuda support
+#+BEGIN_SRC python :results output
+import torch
+print(torch.__version__)
+if torch.cuda.is_available():
+    print(torch.version.cuda)
+#+END_SRC
+
+#+RESULTS:
+: 1.5.0
+: 10.2
+
+* Tensors
+A tensor is an n-dimensional array (ndarrays) where the n can also be 0 (thus a 0-dimensional tensor is a scalar). In short, a tensor is:
+- number or scalar
+- array or vector
+- 2d-array or matrix (we are not restricted to 2d)
+
+
+** Properties of a Tensor
+There are 3 properties of tensors that interest us:
+- Rank: The number of dimensions (how many indexes are required to access an element inside the tensor) present within a tensor.
+- Axes: A specific dimension of a tensor where the length of each axis tells us how many indexes are available along each one.
+- Shape: The length of each axis of the tensor.
+*** Practical Example
+Consider a tensor as an input to a CNN (an image), we show the use of each property of a tensor.
+The typical shape of the tensor is 4: [B,C,H,W].
+- W axis is the width of the image.
+- H axis is the height of the image.
+- C axis is the number of color channels of the image.
+- B axis is the batch size, i.e. how many images are in the input.
+
+Suppose we have an input of [1,1,28,28], when passed through the network, the underlying data (pixel values) and shape of the tensor will be changed. For example, the number of output channels changes based on the number of filters being used in the convolutional layer, if we have three filters, then we will have three (1x3) output channels, these are called the feature maps, where the word feature is used since each output channel represent a feature of the image (like edges)
+#+begin_quote
+ Feature maps are the output channels created from the convolutions.
+#+end_quote
+
+** PyTorch's syntax
+
+We need to import ~torch~ to work with tensors.
+
+#+BEGIN_SRC python :session tensor
+import torch
+import numpy as np # PyTorch's tensors mirrors numpy's ndarrays in functionality.
+#+END_SRC
+
+Each tensor contains three important attributes:
+1. torch.dtype
+   The type of data that is contained within the tensor.
+2. torch.device
+   What device is the tensor's data allocated on, this determines where tensor computations for the given tensor will be performed.
+   Note that the type of the tensor differs between CPU and GPU, for example:
+   | Data type               | dtype         | CPU               | GPU                    |
+   |-------------------------+---------------+-------------------+------------------------|
+   | 32-bit floating point   | torch.float32 | torch.FloatTensor | torch.cuda.FloatTensor |
+   | 32-bit integer (signed) | torch.int32   | torch.IntTensor   | torch.cuda.IntTensor   |
+3. torch.layout
+   The layout specifies how the tensor is stored in memory, the default is strided.
+
+Tensor operations between tensors must happen on the same device, regarding the type, since version ~1.3~ PyTorch can promote tensors to a common ~dtype~ inorder to perform an operation.
+
+
+#+BEGIN_SRC python :results output :session tensor
+t = torch.Tensor()
+
+print(type(t))
+print(t.dtype)
+print(t.device)
+print(t.layout)
+#+END_SRC
+
+#+RESULTS:
+: <class 'torch.Tensor'>
+: torch.float32
+: cpu
+: torch.strided
+
+*** Creating tensors
+These are the main ways of creating tensor objects.
+#+BEGIN_SRC python :results output :session tensor
+d = np.array([1,2,3])
+print("nparray " + str(d))
+print(type(d))
+
+o1 = torch.Tensor(d)
+o2 = torch.tensor(d)
+o3 = torch.as_tensor(d)
+o4 = torch.from_numpy(d)
+
+print("Tensor " + str(o1))
+print(type(o1))
+print("tensor " + str(o2))
+print(type(o2))
+print("as_tensor " + str(o3))
+print(type(o3))
+print("from_numpy " + str(o4))
+print(type(o4))
+#+END_SRC
+
+#+RESULTS:
+#+begin_example
+nparray [1 2 3]
+<class 'numpy.ndarray'>
+Tensor tensor([1., 2., 3.])
+<class 'torch.Tensor'>
+tensor tensor([1, 2, 3])
+<class 'torch.Tensor'>
+as_tensor tensor([1, 2, 3])
+<class 'torch.Tensor'>
+from_numpy tensor([1, 2, 3])
+<class 'torch.Tensor'>
+#+end_example
+
+~torch.Tensor~ is a direct constructor call which uses the default ~dtype~ of PyTorch which is ~float32~ (use ~torch.get_default_dtype()~) while ~torch.tensor~ infers the ~dtype~ from the object.
+~torch.as_tensor~ and ~torch.from_numpy~ build a tensor that has its memory shared to the passed numpy object (sharing doesn't work with built-in Python data structures), hence changing the underlying object changes the tensor. On the other hand, ~torch.Tensor~ and ~torch.tensor~ copies the data of the object for the tensor, thus changing the object doesn't change the tensor.
+
+**** Creating with data
+#+BEGIN_SRC python :results output :session tensor
+x = torch.eye(3) # Identity matrix
+print(x)
+x = torch.empty(5,3) # Construct 5x3 matrix, uninit
+print(x)
+x = torch.rand(5,3) # Construct 5x3 matrix, random values
+print(x)
+x = torch.zeros(5,3) # Construct 5x3 matrix, zero values
+print(x)
+x = torch.tensor([3,3]) # Construct 1x2 matrix, custom values
+print(x)
+x = torch.randn(1)
+print(x)
+#+END_SRC
+
+#+RESULTS:
+#+begin_example
+tensor([[1., 0., 0.],
+        [0., 1., 0.],
+        [0., 0., 1.]])
+tensor([[-4.3719e+33,  4.5609e-41,  2.6254e-37],
+        [ 0.0000e+00,  0.0000e+00,  0.0000e+00],
+        [ 0.0000e+00,  0.0000e+00,  0.0000e+00],
+        [ 0.0000e+00,  0.0000e+00,  0.0000e+00],
+        [ 2.6387e-37,  0.0000e+00,  0.0000e+00]])
+tensor([[0.0759, 0.1604, 0.3751],
+        [0.2714, 0.0247, 0.5899],
+        [0.0463, 0.4062, 0.9208],
+        [0.7127, 0.3025, 0.6447],
+        [0.2246, 0.9159, 0.8106]])
+tensor([[0., 0., 0.],
+        [0., 0., 0.],
+        [0., 0., 0.],
+        [0., 0., 0.],
+        [0., 0., 0.]])
+tensor([3, 3])
+tensor([0.3904])
+#+end_example
+
+We can create tensors from already existing tensors, reusing properties of the input tensor (unless new values are provided).
+#+BEGIN_SRC python :results output :session tensor
+x = x.new_ones(5,3, dtype = torch.double) # new_* methods take in size
+print(x)
+x = torch.rand_like(x, dtype = torch.float) # override dtype, same size
+print(x)
+#+END_SRC
+
+#+RESULTS:
+#+begin_example
+tensor([[1., 1., 1.],
+        [1., 1., 1.],
+        [1., 1., 1.],
+        [1., 1., 1.],
+        [1., 1., 1.]], dtype=torch.float64)
+tensor([[0.3750, 0.5783, 0.6354],
+        [0.6253, 0.0212, 0.6444],
+        [0.8517, 0.7677, 0.7218],
+        [0.2490, 0.2961, 0.6878],
+        [0.5720, 0.2322, 0.1070]])
+#+end_example
+
+*** Reshaping
+To get the size (shape) of a tensor we can use ~size()~ or ~shape~. To get the number of elements in a tensor one can use ~numel()~
+#+BEGIN_SRC python :results output :session tensor
+t = torch.tensor([
+  [1,1,1,1],
+  [2,2,2,2],
+  [3,3,3,3]
+], dtype=torch.float32)
+
+print(t.size())
+print(t.shape)
+print(len(t.shape))
+print(t.numel())
+#+END_SRC
+
+#+RESULTS:
+: torch.Size([3, 4])
+: torch.Size([3, 4])
+: 2
+: 12
+
+The rank of the tensor is equal to the length of the tensor's shape.
+
+We can reshape tensors using ~reshape()~, note that the component given to ~reshape~ must have their product equal to the total number of elements in the tensor. For an example, here are all the possible ways to reshape ~t~ from above:
+#+BEGIN_SRC python :results output :session tensor
+t = torch.tensor([
+  [1,1,1,1],
+  [2,2,2,2],
+  [3,3,3,3]
+], dtype=torch.float32)
+
+print(t.reshape([1,12]))
+print(t.reshape([1,-1])) # Same as above, -1 tells PyTorch to figure out the second argument based on the number of elements
+print(t.reshape([2,6]))
+print(t.reshape([3,4]))
+print(t.reshape([4,3]))
+print(t.reshape([6,2]))
+print(t.reshape([12,1]))
+#+END_SRC
+
+#+RESULTS:
+#+begin_example
+tensor([[1., 1., 1., 1., 2., 2., 2., 2., 3., 3., 3., 3.]])
+tensor([[1., 1., 1., 1., 2., 2., 2., 2., 3., 3., 3., 3.]])
+tensor([[1., 1., 1., 1., 2., 2.],
+        [2., 2., 3., 3., 3., 3.]])
+tensor([[1., 1., 1., 1.],
+        [2., 2., 2., 2.],
+        [3., 3., 3., 3.]])
+tensor([[1., 1., 1.],
+        [1., 2., 2.],
+        [2., 2., 3.],
+        [3., 3., 3.]])
+tensor([[1., 1.],
+        [1., 1.],
+        [2., 2.],
+        [2., 2.],
+        [3., 3.],
+        [3., 3.]])
+tensor([[1.],
+        [1.],
+        [1.],
+        [1.],
+        [2.],
+        [2.],
+        [2.],
+        [2.],
+        [3.],
+        [3.],
+        [3.],
+        [3.]])
+#+end_example
+
+We can increase the number of dimensions by following the rule of =rows * columns = num_of_elements=
+#+BEGIN_SRC python :results output :session tensor
+t = torch.tensor([
+  [1,1,1,1],
+  [2,2,2,2],
+  [3,3,3,3]
+], dtype=torch.float32)
+
+print(t.reshape([2,2,3]))
+#+END_SRC
+
+#+RESULTS:
+: tensor([[[1., 1., 1.],
+:          [1., 2., 2.]],
+:
+:         [[2., 2., 3.],
+:          [3., 3., 3.]]])
+
+Note that ~view()~ can be used instead of ~reshape()~, the difference is that the first will return a tensor that shares the underlying data to the original tensor, while the later might return a view or a copy.
+
+We can also combine tensors together using ~cat()~ or ~stack()~ (along a new axis).
+
+#+BEGIN_SRC python :results output :session tensor
+t1 = torch.tensor([
+  [1,2],
+  [3,4]
+])
+
+t2 = torch.tensor([
+  [5,6],
+  [7,8]
+])
+
+t3 = torch.cat((t1, t2), dim=0) # Combine row-wise
+print(t3)
+t4 = torch.cat((t1, t2), dim=1) # Combine column-wise
+print(t4)
+t5 = torch.stack((t1,t2))
+print(t5)
+#+END_SRC
+
+#+RESULTS:
+#+begin_example
+tensor([[1, 2],
+        [3, 4],
+        [5, 6],
+        [7, 8]])
+tensor([[1, 2, 5, 6],
+        [3, 4, 7, 8]])
+tensor([[[1, 2],
+         [3, 4]],
+
+        [[5, 6],
+         [7, 8]]])
+#+end_example
+
+**** Squeezing
+Squeezing a tensor removes the axes (dimensions) of length one, unsqueezing a tensor adds an axis of length one.
+
+#+BEGIN_SRC python :results output :session tensor
+t = torch.tensor([
+  [1,1,1,1],
+  [2,2,2,2],
+  [3,3,3,3]
+], dtype=torch.float32)
+
+print(t.reshape([1,12]))
+print(t.reshape([1,12]).shape)
+
+print(t.reshape([1,12]).squeeze())
+print(t.reshape([1,12]).squeeze().shape)
+
+print(t.reshape([1,12]).squeeze().unsqueeze(dim=0))
+print(t.reshape([1,12]).squeeze().unsqueeze(dim=0).shape)
+#+END_SRC
+
+#+RESULTS:
+: tensor([[1., 1., 1., 1., 2., 2., 2., 2., 3., 3., 3., 3.]])
+: torch.Size([1, 12])
+: tensor([1., 1., 1., 1., 2., 2., 2., 2., 3., 3., 3., 3.])
+: torch.Size([12])
+: tensor([[1., 1., 1., 1., 2., 2., 2., 2., 3., 3., 3., 3.]])
+: torch.Size([1, 12])
+**** Flattening
+Using squeezing we can implement a naive approach to flattening.
+#+BEGIN_SRC python :results output :session tensor
+t = torch.tensor([
+  [1,1,1,1],
+  [2,2,2,2],
+  [3,3,3,3]
+], dtype=torch.float32)
+
+def flatten(t):
+    t = t.reshape(1,-1) # Make shure that one of the axes is 1 and the rest of elemnts are in another axes
+    t = t.squeeze() # Remove the axis with length 1
+    return t
+
+print(flatten(t))
+#+END_SRC
+
+#+RESULTS:
+: tensor([1., 1., 1., 1., 2., 2., 2., 2., 3., 3., 3., 3.])
+
+We can also flatten a tensor using only ~reshape()~ and ~view()~ or use PyTorch's built-in method ~flatten()~.
+#+BEGIN_SRC python :results output :session tensor
+t = torch.tensor([
+    [[1, 1, 1, 1],
+     [1, 1, 1, 1],
+     [1, 1, 1, 1],
+     [1, 1, 1, 1]],
+
+    [[2, 2, 2, 2],
+     [2, 2, 2, 2],
+     [2, 2, 2, 2],
+     [2, 2, 2, 2]],
+
+    [[3, 3, 3, 3],
+     [3, 3, 3, 3],
+     [3, 3, 3, 3],
+     [3, 3, 3, 3]]], dtype=torch.float32)
+
+print(t.flatten()) # PyTorch
+print(t.reshape(-1))
+print(t.reshape(1,-1)[0])
+print(t.view(-1)) # Same as t.view(t.numel())
+#+END_SRC
+
+#+RESULTS:
+#+begin_example
+tensor([1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 2., 2.,
+        2., 2., 2., 2., 2., 2., 2., 2., 2., 2., 2., 2., 2., 2., 3., 3., 3., 3.,
+        3., 3., 3., 3., 3., 3., 3., 3., 3., 3., 3., 3.])
+tensor([1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 2., 2.,
+        2., 2., 2., 2., 2., 2., 2., 2., 2., 2., 2., 2., 2., 2., 3., 3., 3., 3.,
+        3., 3., 3., 3., 3., 3., 3., 3., 3., 3., 3., 3.])
+tensor([1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 2., 2.,
+        2., 2., 2., 2., 2., 2., 2., 2., 2., 2., 2., 2., 2., 2., 3., 3., 3., 3.,
+        3., 3., 3., 3., 3., 3., 3., 3., 3., 3., 3., 3.])
+tensor([1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 2., 2.,
+        2., 2., 2., 2., 2., 2., 2., 2., 2., 2., 2., 2., 2., 2., 3., 3., 3., 3.,
+        3., 3., 3., 3., 3., 3., 3., 3., 3., 3., 3., 3.])
+#+end_example
+
+CNNs need the batch axis to work on each image, hence we only need to flatten starting from the color channel axis.
+
+#+BEGIN_SRC python :results output :session tensor
+t = torch.tensor([
+    [[1, 1, 1, 1],
+     [1, 1, 1, 1],
+     [1, 1, 1, 1],
+     [1, 1, 1, 1]],
+
+    [[2, 2, 2, 2],
+     [2, 2, 2, 2],
+     [2, 2, 2, 2],
+     [2, 2, 2, 2]],
+
+    [[3, 3, 3, 3],
+     [3, 3, 3, 3],
+     [3, 3, 3, 3],
+     [3, 3, 3, 3]]], dtype=torch.float32)
+
+print(t.flatten(start_dim=1).shape)
+print(t.flatten(start_dim=1))
+#+END_SRC
+
+#+RESULTS:
+: torch.Size([3, 16])
+: tensor([[1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1.],
+:         [2., 2., 2., 2., 2., 2., 2., 2., 2., 2., 2., 2., 2., 2., 2., 2.],
+:         [3., 3., 3., 3., 3., 3., 3., 3., 3., 3., 3., 3., 3., 3., 3., 3.]])
+
+*** Element-wise operations
+An element-wise operation operates on corresponding elements between tensors. Tensors must have the same shape in order to perform element-wise operations. For more operations and methods visit [[https://pytorch.org/docs/stable/torch.html][here]].
+**** Arithmetic operations
+These operations return a new tensor of the same shape where each element is of the common type between the tensors.
+#+BEGIN_SRC python :results output :session tensor
+t1 = torch.tensor([
+  [1,2],
+  [3,4]
+], dtype=torch.float32)
+
+t2 = torch.tensor([
+  [9,8],
+  [7,6]
+], dtype=torch.float32)
+
+print(t1.shape)
+print(t2.shape)
+
+print(t1 + t2) # Any arith operation
+#+END_SRC
+
+#+RESULTS:
+: torch.Size([2, 2])
+: torch.Size([2, 2])
+: tensor([[10., 10.],
+:         [10., 10.]])
+
+Note that one can use the built in object methods ~add()~, ~mul()~, ~sub()~ and ~div()~.  Any operation that mutates a tensor in place (change the calling tensor) is post-fixed with an ~_~.
+#+BEGIN_SRC python :results output :session tensor
+t = torch.tensor([
+  [1,2],
+  [3,4]
+], dtype=torch.float32)
+
+print(t)
+t.add_(4)
+print(t)
+#+END_SRC
+
+#+RESULTS:
+: tensor([[1., 2.],
+:         [3., 4.]])
+: tensor([[5., 6.],
+:         [7., 8.]])
+
+**** Comparison operations
+These operations return a new tensor of the same shape where each element is ~torch.bool~ (~True~ or ~False~).
+#+BEGIN_SRC python :results output :session tensor
+t1 = torch.tensor([
+  [1,2],
+  [3,4]
+], dtype=torch.float32)
+
+t2 = torch.tensor([
+  [9,8],
+  [7,6]
+], dtype=torch.float32)
+
+print(t1.shape)
+print(t2.shape)
+
+print(t1 < t2) # Any compare operation
+#+END_SRC
+
+#+RESULTS:
+: torch.Size([2, 2])
+: torch.Size([2, 2])
+: tensor([[True, True],
+:         [True, True]])
+
+Note that one can use the built in object methods ~eq()~, ~ge()~, ~gt()~, ~le()~ and ~lt()~.
+**** Functions
+Functions are applied to each element in the tensor.
+#+BEGIN_SRC python :results output :session tensor
+t1 = torch.tensor([
+  [1,2],
+  [3,4]
+], dtype=torch.float32)
+
+print(t1.shape)
+
+print(t1.sqrt())
+#+END_SRC
+
+#+RESULTS:
+: torch.Size([2, 2])
+: tensor([[1.0000, 1.4142],
+:         [1.7321, 2.0000]])
+
+Note that one can use some of the built in object methods ~abs()~, ~sqrt()~ and ~neg()~.
+**** Broadcasting
+Operations between two tensors with different shapes are also valid using broadcasting.
+#+BEGIN_SRC python :results output :session tensor
+t1 = torch.tensor([
+  [1,2],
+  [3,4]
+], dtype=torch.float32)
+
+print(t1.shape)
+
+print(t1 + 2)
+#+END_SRC
+
+#+RESULTS:
+: torch.Size([2, 2])
+: tensor([[3., 4.],
+:         [5., 6.]])
+
+What is really happening is that ~2~ is transformed into a tensor, we can use NumPy's function ~broadcast_to()~ to see what is happening.
+#+BEGIN_SRC python :results output :session tensor
+t1 = torch.tensor([
+  [1,2],
+  [3,4]
+], dtype=torch.float32)
+
+print(np.broadcast_to(2, t1.shape))
+
+t2 = torch.tensor(np.broadcast_to(2, t1.shape), dtype=torch.float32)
+
+print(t1.shape)
+print(t2.shape)
+
+print(t1 + t2)
+#+END_SRC
+
+#+RESULTS:
+: [[2 2]
+:  [2 2]]
+: torch.Size([2, 2])
+: torch.Size([2, 2])
+: tensor([[3., 4.],
+:         [5., 6.]])
+
+This is also applicable to tensors, say we want to add ~[2,4]~ to ~t1~.
+#+BEGIN_SRC python :results output :session tensor
+t1 = torch.tensor([
+  [1,2],
+  [3,4]
+], dtype=torch.float32)
+
+t2 = torch.tensor([2,4], dtype=torch.float32)
+
+t3 = torch.tensor(np.broadcast_to([2,4], t1.shape), dtype=torch.float32)
+
+print(t3)
+print(t1 + t2)
+print(t1 + t3)
+#+END_SRC
+
+#+RESULTS:
+: tensor([[2., 4.],
+:         [2., 4.]])
+: tensor([[3., 6.],
+:         [5., 8.]])
+: tensor([[3., 6.],
+:         [5., 8.]])
+*** Tensor Reduction Operations
+A reduction operation on a tensor is an operation that reduces the number of elements contained within the tensor. Reduction operations are on a single tensor (between its elements).
+#+BEGIN_SRC python :results output :session tensor
+t = torch.tensor([
+  [0,1,0],
+  [2,0,2],
+  [0,3,0]
+], dtype=torch.float32)
+
+
+print(t.sum())
+#+END_SRC
+
+#+RESULTS:
+: tensor(8.)
+
+Since ~sum()~ returned a tensor with less (reduced) number of elements than what we started with, it counts as a /reduction operation/. Some other built in reduction operations are ~prod()~, ~mean()~ and ~std()~.
+
+We can reduce any specific axes at a time instead of everyone at the same time.
+#+BEGIN_SRC python :results output :session tensor
+t = torch.tensor([
+  [1,1,1,1],
+  [2,2,2,2],
+  [3,3,3,3]
+], dtype=torch.float32)
+
+print(t.sum(dim=0)) # Same as t[0] + t[1] + t[2]
+print(t.sum(dim=1)) # Same as t[0].sum(), t[1].sum(), t[2].sum()
+#+END_SRC
+
+#+RESULTS:
+: tensor([6., 6., 6., 6.])
+: tensor([ 4.,  8., 12.])
+
+For the first ~sum()~, we did an element-wise operation on the first axis. For the second ~sum()~ we summed the first axis separately.
+
+One of the important reduction operations is the ~argmax()~ operation. ~argmax()~ returns the /index/ location of the maximum value in a tensor (~max()~ returns the actual value).
+#+BEGIN_SRC python :results output :session tensor
+t = torch.tensor([
+  [1,0,0,2],
+  [0,3,3,0],
+  [4,0,0,5]
+], dtype=torch.float32)
+
+print(t.max())
+print(t.argmax())
+print(t.max(dim=0))
+print(t.argmax(dim=0))
+print(t.max(dim=1))
+print(t.argmax(dim=1))
+#+END_SRC
+
+#+RESULTS:
+#+begin_example
+tensor(5.)
+tensor(11)
+torch.return_types.max(
+values=tensor([4., 3., 3., 5.]),
+indices=tensor([2, 1, 1, 2]))
+tensor([2, 1, 1, 2])
+torch.return_types.max(
+values=tensor([2., 3., 5.]),
+indices=tensor([3, 2, 3]))
+tensor([3, 2, 3])
+#+end_example
+
+The reason we got 11 in the first ~argmax()~ is because we didn't provide an axis to the function, hence it treated the tensor as a flattened one and returned the index from there. As for the second ~argmax()~, the maximum values across the first axis are ~4~, ~3~, ~3~ and ~5~ (element-wise maximum for each array on the first axis). The same thing is applied for the third ~argmax()~ but across the second axis, note that in both axes, the index returned is relative to that specific axis.
+*** Accessing Elements
+We already used list-like accessing for tensors. PyTorch provides ~item()~ that returns the value as a number (for scalar valued tensors).
+#+BEGIN_SRC python :results output :session tensor
+t1 = torch.tensor([
+  [1,2],
+  [3,4]
+], dtype=torch.float32)
+
+t2 = torch.tensor(2, dtype=torch.float32)
+
+print(t1.shape)
+print(t2.shape)
+
+print(t1.mean().item())
+print(t2.item())
+#+END_SRC
+
+#+RESULTS:
+: torch.Size([2, 2])
+: torch.Size([])
+: 2.5
+: 2.0
+
+If we have multiple values, we can transform the output to NumPy array or Python list to access the values.
+#+BEGIN_SRC python :results output :session tensor
+t1 = torch.tensor([
+   [1,2,3],
+   [4,5,6],
+   [7,8,9]
+], dtype=torch.float32)
+
+print(t1.mean(dim=0).tolist())
+print(t1.mean(dim=1).numpy())
+#+END_SRC
+
+#+RESULTS:
+: [4.0, 5.0, 6.0]
+: [2. 5. 8.]
+
+* Cuda
+Tensors can be created on either CPU or GPU (CPU by default), if we want to move the tensor to the GPU we call the ~cuda~ method. Any future operation on the tensor is carried by the GPU.
+
+#+BEGIN_SRC python :results output :session tensor
+t = torch.tensor([1,2,3])
+print(t)
+t = t.cuda()
+print(t)
+#+END_SRC
+
+#+RESULTS:
+: tensor([1, 2, 3])
+: tensor([1, 2, 3], device='cuda:0')
+
+Note the ~cuda:0~ line, this refers to the current GPU that is used. To change between GPUs, use ~t.cuda('cuda:1')~.
+
+* NumPy Bridge
+The Torch tensor and NumPy array share the memory location (if the first is on CPU), thus changing one changes the other.
+#+BEGIN_SRC python
+a = torch.ones(5)
+print(a)
+b = a.numpy()
+print(b)
+a.add_(1) # will change both values
+print(a)
+print(b)
+#+END_SRC
+Or we can do it from the other side:
+#+BEGIN_SRC python
+a = np.ones(5)
+b = torch.from_numpy(a)
+np.add(a, 1, out=a)
+print(a)
+print(b)
+#+END_SRC
+* Autograd
+For an in-depth look: https://www.youtube.com/watch?v=MswxJw-8PvE and https://www.youtube.com/watch?v=DbeIqrwb_dE
+#+BEGIN_QUOTE
+~torch.Tensor~ is the central class of the package. If you set its attribute ~.requires_grad~ as True, it starts to track all operations on it. When you finish your computation you can call ~.backward()~ and have all the gradients computed automatically. The gradient for this tensor will be accumulated into ~.grad~ attribute.
+
+To stop a tensor from tracking history, you can call ~.detach()~ to detach it from the computation history, and to prevent future computation from being tracked.
+
+To prevent tracking history (and using memory), you can also wrap the code block in with ~torch.no_grad():~. This can be particularly helpful when evaluating a model because the model may have trainable parameters with ~requires_grad=True~, but for which we don’t need the gradients.
+
+There’s one more class which is very important for autograd implementation - a ~Function~.
+
+Tensor and Function are interconnected and build up an acyclic graph, that encodes a complete history of computation. Each tensor has a ~.grad_fn~ attribute that references a Function that has created the Tensor (except for Tensors created by the user - their ~grad_fn~ is None).
+
+If you want to compute the derivatives, you can call ~.backward()~ on a Tensor. If Tensor is a scalar (i.e. it holds a one element data), you don’t need to specify any arguments to ~backward()~, however if it has more elements, you need to specify a gradient argument that is a tensor of matching shape.
+#+END_QUOTE
+
+#+BEGIN_SRC python
+x = torch.ones(2, 2, requires_grad=True)
+print(x)
+y = x + 2
+print(y)
+print(y.grad_fn)
+z = y * y * 3
+out = z.mean()
+print(z, out)
+out.backward()
+print(x.grad)
+#+END_SRC
+* Neural Networks
+We will build a CNN for the ~Fashion-MNIST~ dataset as an example of constructing models in PyTorch.
+First, we import all of the libraries that are required for building a network.
+
+#+BEGIN_SRC python :session nn
+import torch
+import torch.nn as nn
+import torch.optim as optim
+import torch.nn.functional as F
+
+import torchvision
+import torchvision.transforms as transforms
+
+import matplotlib.pyplot as plt # for visualizing the data
+#+END_SRC
+
+** Data and Data Processing
+To prepare the data, we follow the /ETL process/:
+1. Extract data from a data source.
+   For our example, this means getting ~Fashion-MNIST~ dataset from the source.
+2. Transform data into desirable format.
+   The format we will be using is ~tensors~.
+3. Load data into a suitable structure.
+
+For these purposes, we will use the following PyTorch classes:
+
+| Class                       | Description                                                  |
+|-----------------------------+--------------------------------------------------------------|
+| torch.utils.data.Dataset    | An abstract class for representing a dataset                 |
+| torch.utils.data.DataLoader | Wraps the dataset and provides access to the underlying data |
+
+*Note*: If we wish to create a custom dataset, we must extend ~Dataset~ class that implements the two required methods: ~__len__~ (returns the length of the dataset) and ~__getitem__~ (returns an element from the dataset at a specific index location within the dataset).
+
+*** Getting the Dataset
+Using ~torchvision~, we can download and transform ~Fashion-MNIST~ by passing certain parameters into the constructor.
+- root
+  The location on disk where the data is located.
+- train
+  Set the instance to be for training.
+- download
+  Download the data.
+- transform
+  The transformations that should be performed on the dataset elements.
+
+#+BEGIN_SRC python :results output :session nn
+train_set = torchvision.datasets.FashionMNIST(
+    root='/tmp/data-ex'
+    ,train=True
+    ,download=True
+    ,transform=transforms.Compose([
+        transforms.ToTensor()
+    ])
+)
+#+END_SRC
+
+Since we want to transform our images into tensors, we use the ~ToTensor()~ method to do so. Thus far we have completed the first two parts of /ETL/, we /downloaded/ the data and /extracted/ it, then we transformed it into tensor format.
+*** Loading the Dataset
+We can pass the ~train_set~ to the ~DataLoader~ class which gives us access to some important functions and properties that will aid us through the data processing like ~batch_size~, ~shuffle~ and ~num_workers~ properties.
+#+BEGIN_SRC python :results output :session nn
+train_loader = torch.utils.data.DataLoader(train_set
+                                           ,batch_size=10
+                                           ,shuffle=True
+)
+#+END_SRC
+
+We have completed the /loading/ of the data, giving us access to the underlying data.
+
+*** Visualizing the Dataset
+There are some important properties of the training set that are useful to know:
+- To check how many images are in the training set, we can use Python's ~len()~ function.
+- To see the label of images in the training set, we can use torch's ~targets~  function.
+- To check how many of each label exists in the dataset (class balance), we can use PyTorch's ~bincount()~ function.
+
+#+begin_src python :results output :session nn
+print(len(train_set))
+print(train_set.targets)
+print(train_set.targets.bincount())
+#+end_src
+
+#+RESULTS:
+: 60000
+: tensor([9, 0, 0,  ..., 3, 0, 5])
+: tensor([6000, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 6000])
+
+**** Accessing the Data
+Using Python's ~iter()~ and ~next()~ functions, we can access the stream of data from ~train_set~. Each object is a pair of image and its label. The image is a tensor while the label is a number (0-9) representing the label.
+
+#+begin_src python :results output :session nn
+sample = next(iter(train_set))
+image, label = sample
+print(len(sample))
+print(type(label))
+#+end_src
+
+#+RESULTS:
+: 2
+: <class 'int'>
+
+The size of image indicates that its a one color-channel image of size 28 by 28. We can visualize the image using ~matplotlib~.
+
+#+begin_src python :results output :session nn
+print(image.shape)
+print(plt.imshow(image.squeeze(), cmap='gray'))
+print(torch.tensor(label))
+#+end_src
+
+#+RESULTS:
+: torch.Size([1, 28, 28])
+: AxesImage(80,52.8;496x369.6)
+: tensor(9)
+
+We can also see batches of images by iterating over the ~DataLoader~ object.
+
+#+begin_src python :results output :session nn
+batch = next(iter(train_loader))
+images, labels = batch
+print(images.shape)
+print(labels.shape)
+#+end_src
+
+#+RESULTS:
+: torch.Size([10, 1, 28, 28])
+: torch.Size([10])
+
+To visualize a batch, we can use ~torchvision.utils.make_grid()~ function, and plot using ~matplotlib~.
+
+#+begin_src python :results output :session nn
+grid = torchvision.utils.make_grid(images, nrow=10)
+plt.figure(figsize=(15,15))
+plt.imshow(grid.permute((1,2,0)))
+print(labels)
+#+end_src
+
+** Building Neural Networks
+For building a neural network in ~Pytorch~, we extend the class ~torch.nn.Module~ class.
+Each layer in the network has two main components:
+- Transformation
+- Collection of weights
+
+*** Implementation
+Each class that extends ~torch.nn.Module~ must have a ~forward()~ method. Since each layer has its own transformation and since each tensor passes forward through each layer then the composition of all the individual layer forward passes defines the overall forward pass transformation for the network.
+
+/One can use functions from ~nn.functional~ package. This package provides many neural network operations for building layers./
+
+The steps to building a network are as follows:
+1. Create a neural network class that extends ~nn.Module~.
+2. In the class constructor, define the network's layers as class attributes.
+3. Implement the ~forward()~ function using the network's attributes (use ~nn.functional~ if needed).
+
+A toy example of a neural network in ~Pytorch~:
+#+BEGIN_SRC python
+import torch.nn
+
+class Network(nn.Module):
+    def __init__(self):
+        super().__init__()
+        self.layer = None
+
+    def forward(self, t):
+        t = self.layer(t)
+        return t
+#+END_SRC
+
+For each layer there are two primary items encapsulated inside, a forward function definition and a weight tensor. The weight tensor is updated for each layer during the training process. The ~Module~ base class is responsible for registering these weights as the learnable parameters of the network.
+
+*** Building a network
+Using ~nn.Conv2d~ and ~nn.Linear~, we can build a simple neural network for the ~Fashion-MNIST~ dataset.
+
+#+BEGIN_SRC python :session nn
+class Network(nn.Module):
+    def __init__(self):
+        super().__init__()
+        self.conv1 = nn.Conv2d(in_channels=1, out_channels=6, kernel_size=5)
+        self.conv2 = nn.Conv2d(in_channels=6, out_channels=12, kernel_size=5)
+
+        self.fc1 = nn.Linear(in_features=12*4*4, out_features=120)
+        self.fc2 = nn.Linear(in_features=120, out_features=60)
+        self.out = nn.Linear(in_features=60, out_features=10)
+
+    def forward(self, t):
+        # (2) hidden conv layer
+        t = self.conv1(t)
+        t = F.relu(t)
+        t = F.max_pool2d(t, kernel_size=2, stride=2)
+
+        # (3) hidden conv layer
+        t = self.conv2(t)
+        t = F.relu(t)
+        t = F.max_pool2d(t, kernel_size=2, stride=2)
+
+        # (4) hidden linear layer
+        t = t.reshape(-1, 12 * 4 * 4)
+        t = self.fc1(t)
+        t = F.relu(t)
+
+        # (5) hidden linear layer
+        t = self.fc2(t)
+        t = F.relu(t)
+
+        # (6) output layer
+        t = self.out(t)
+        #t = F.softmax(t, dim=1)
+        return t
+#+END_SRC
+
+**** Layers
+The way to look at these weights is simple, take for example the first layer ~conv1~, we have one color channel that should be convovled by 6 filters of size ~5x5~ to produce 6 output channels.
+
+An overview of the parameters and the layers:
+| Layer | Param name   | Param value | The value is                                           |
+|-------+--------------+-------------+--------------------------------------------------------|
+| conv1 | in_channels  |           1 | the number of color channels in the input image        |
+| conv1 | kernel_size  |           5 | a hyperparameter                                       |
+| conv1 | out_channels |           6 | a hyperparameter                                       |
+| conv2 | in_channels  |           6 | the number of out_channels in previous layer           |
+| conv2 | kernel_size  |           5 | a hyperparameter                                       |
+| conv2 | out_channels |          12 | a hyperparameter                                       |
+| fc1   | in_features  |      12*4*4 | the length of the flattened output from previous layer |
+| fc1   | out_features |         120 | a hyperparameter                                       |
+| fc2   | in_features  |         120 | the number of out_features of previous layer           |
+| fc2   | out_features |          60 | a hyperparameter                                       |
+| out   | in_features  |          60 | the number of out_channels of previous layer           |
+| out   | out_features |          10 | the number of prediction classes                       |
+
+Getting an instance of the network is easy,
+#+BEGIN_SRC python :session nn
+network = Network()
+#+END_SRC
+
+printing the instance gives us an overview of the whole network. We can access a layer just like any python object, ~network.layer~, weights are accessed in the same way ~network.layer.weight~. Going back to the first layer,
+#+BEGIN_SRC python :session nn :results output
+print(network.conv1)
+print(network.conv1.weight.shape)
+print(network.conv1.weight[0].shape)
+#+END_SRC
+
+#+RESULTS:
+: Conv2d(1, 6, kernel_size=(5, 5), stride=(1, 1))
+: torch.Size([6, 1, 5, 5])
+: torch.Size([1, 5, 5])
+
+The weights of each layer are initialized randomly, therefore we expect the prediction of the network to be close to ~10%~ since there are 10 labels in the dataset.
+
+A weight tensor is called ~Parameter~, this class extends the tensor class and can be used to access the network's parameters
+#+BEGIN_SRC python :session nn :results output
+for param in network.parameters():
+    print(param.shape)
+#+END_SRC
+
+#+RESULTS:
+#+begin_example
+torch.Size([6, 1, 5, 5])
+torch.Size([6])
+torch.Size([12, 6, 5, 5])
+torch.Size([12])
+torch.Size([120, 192])
+torch.Size([120])
+torch.Size([60, 120])
+torch.Size([60])
+torch.Size([10, 60])
+torch.Size([10])
+#+end_example
+**** Forward Method
+The forward method is comprised of functions that make up the whole network, /forward propagation/, the tensor must be passed through the layers defined in the network, as well as passed through activation functions and/or pooling layers. The size of the output tensor must match the input of the next layer, for example, the tensor must be flattened before passing it through the linear layer.
+
+***** Forward Propagation
+Passing a single image to the network and getting a prediction is easy, one must pay attention at the passed shape of the tensor, the network expects a four dimensional tensor and not three, this can be fixed by using the ~unsqueeze~ method.
+
+#+BEGIN_SRC python :session nn :results output
+sample = next(iter(train_set))
+image, label = sample
+print(image.shape)
+image = image.unsqueeze(0)
+print(image.shape)
+pred = network(image)
+print(pred)
+print(label)
+print(pred.argmax(dim=1))
+#+END_SRC
+
+#+RESULTS:
+: torch.Size([1, 28, 28])
+: torch.Size([1, 1, 28, 28])
+: tensor([[ 0.0130,  0.0647, -0.0997, -0.0146, -0.1216, -0.0980, -0.0525,  0.1067,
+:          -0.0186, -0.0455]], grad_fn=<AddmmBackward>)
+: 9
+: tensor([7], grad_fn=<NotImplemented>)
+
+If we were to use the loaded data from above, we would get a four-dimensional array from the network.
+#+BEGIN_SRC python :session nn :results output
+batch = next(iter(train_loader))
+image, label = batch
+print(image.shape)
+print(label.shape)
+pred = network(image)
+print(pred)
+print(label)
+print(pred.argmax(dim=1))
+#+END_SRC
+
+#+RESULTS:
+#+begin_example
+torch.Size([10, 1, 28, 28])
+torch.Size([10])
+tensor([[ 0.0143,  0.0657, -0.1032, -0.0140, -0.1125, -0.1037, -0.0474,  0.1092,
+         -0.0194, -0.0466],
+        [ 0.0101,  0.0685, -0.1010, -0.0132, -0.1175, -0.1000, -0.0476,  0.1119,
+         -0.0182, -0.0439],
+        [ 0.0128,  0.0646, -0.1030, -0.0128, -0.1120, -0.1017, -0.0456,  0.1102,
+         -0.0166, -0.0487],
+        [ 0.0155,  0.0679, -0.1023, -0.0129, -0.1125, -0.0975, -0.0454,  0.1050,
+         -0.0195, -0.0484],
+        [ 0.0131,  0.0643, -0.1008, -0.0143, -0.1203, -0.0982, -0.0557,  0.1115,
+         -0.0194, -0.0461],
+        [ 0.0147,  0.0684, -0.0978, -0.0136, -0.1155, -0.0955, -0.0469,  0.1072,
+         -0.0167, -0.0481],
+        [ 0.0153,  0.0682, -0.0961, -0.0139, -0.1164, -0.1041, -0.0551,  0.1071,
+         -0.0164, -0.0431],
+        [ 0.0155,  0.0654, -0.1015, -0.0118, -0.1110, -0.0986, -0.0474,  0.1062,
+         -0.0176, -0.0460],
+        [ 0.0107,  0.0669, -0.1004, -0.0120, -0.1123, -0.0990, -0.0444,  0.1101,
+         -0.0158, -0.0467],
+        [ 0.0110,  0.0648, -0.1045, -0.0169, -0.1166, -0.0995, -0.0507,  0.1116,
+         -0.0167, -0.0450]], grad_fn=<AddmmBackward>)
+tensor([6, 1, 3, 6, 9, 8, 5, 4, 1, 7])
+tensor([7, 7, 7, 7, 7, 7, 7, 7, 7, 7], grad_fn=<NotImplemented>)
+#+end_example
+
+** Training Neural Networks
+The training process can be summarized in 7 steps:
+1. Get a batch from the training set.
+2. Pass the batch to the network.
+3. Calculate the loss (loss function).
+4. Calculate the gradient of the loss function with respect to the network's weights (backpropagation and optimization algorithm).
+5. Update the weights using the gradients to reduce the loss.
+6. Repeat steps 1-5 to complete one epoch.
+7. Repeat steps 1-6 for as many epochs required to reach the desired accuracy or minimum loss.
+
+Steps 3-5 are done using PyTorch's built in functions for calculating the loss, calculating the gradient step and optimization.
+*** Steps 1-5
++ Since PyTorch uses a dynamic computation graph, the computations are automatically added to the graph as the tensor flowed through the network.
+  The calculation is done using the ~backward()~ method, this is verified by checking the gradient tensor of the weights, before this step it had a value of ~None~.
++ The ~Adam~ class constructor requires the network's parameters, this is because they are updated in realtime once the ~step()~ method is called.
+  The update is done using the gradients that are stored in the network's parameters, ~network.conv1.weight.grad~ for example.
+#+BEGIN_SRC python :session nn :results output
+optimizer = optim.Adam(network.parameters(), lr=0.01)
+
+tbatch = next(iter(train_loader)) # Get Batch
+images, labels = tbatch
+
+preds = network(images) # Pass Batch
+loss = F.cross_entropy(preds, labels) # Calculate Loss
+
+loss.backward() # Calculate Gradients
+optimizer.step() # Update Weights
+
+print('loss1:', loss.item())
+preds = network(images)
+loss = F.cross_entropy(preds, labels)
+print('loss2:', loss.item())
+#+END_SRC
+
+#+RESULTS:
+: loss1: 2.299988269805908
+: loss2: 2.22719144821167
+**** Comparing the prediction with the label
+We can use a simple Python method that returns the number of correct prediction with respect to the label.
+#+BEGIN_SRC python :session nn :results output
+def correct_preds(preds, labels):
+    return preds.argmax(dim=1).eq(labels).sum().item()
+#+END_SRC
+
+#+BEGIN_SRC python :session nn :results output
+print(correct_preds(preds,labels))
+#+END_SRC
+
+#+RESULTS:
+: 3
+
+** Analyzing Models
+** blitz
+~torch.nn~ is a package used for creating NN. ~torch.nn~ depends on ~autograd~ to define models and differentiate them.
+An ~nn.Module~ contains:
+- Layers
+- A method ~forward(input)~ that returns the ~output~
+
+ We cover the following procedures for the NN:
+ - Define the NN (with parameters or weights).
+ - Go over a dataset (input).
+ - Process the input through the network.
+ - Compute the loss.
+ - Propagate the gradients back to the parameters.
+ - Update the weights.
+
+Note that:
+#+BEGIN_QUOTE
+~torch.nn~ only supports mini-batches. The entire ~torch.nn~ package only supports inputs that are a mini-batch of samples, and not a single sample.
+
+For example, ~nn.Conv2d~ will take in a 4D Tensor of nSamples x nChannels x Height x Width.
+
+If you have a single sample, just use ~input.unsqueeze(0)~ to add a fake batch dimension.
+#+END_QUOTE
+
+#+BEGIN_SRC python
+import torch
+import torch.nn as nn
+import torch.nn.functional as F
+
+class Net(nn.Module):
+
+    def __init__(self):
+        super(Net, self).__init__()
+        # 1 input image channel, 6 output channels, 3x3 square convolution
+        # kernel
+        self.conv1 = nn.Conv2d(1, 6, 3)
+        self.conv2 = nn.Conv2d(6, 16, 3)
+        # an affine operation: y = Wx + b
+        self.fc1 = nn.Linear(16 * 6 * 6, 120)  # 6*6 from image dimension
+        self.fc2 = nn.Linear(120, 84)
+        self.fc3 = nn.Linear(84, 10)
+
+    def forward(self, x):
+        # Max pooling over a (2, 2) window
+        x = F.max_pool2d(F.relu(self.conv1(x)), (2, 2))
+        # If the size is a square you can only specify a single number
+        x = F.max_pool2d(F.relu(self.conv2(x)), 2)
+        x = x.view(-1, self.num_flat_features(x))
+        x = F.relu(self.fc1(x))
+        x = F.relu(self.fc2(x))
+        x = self.fc3(x)
+        return x
+
+    def num_flat_features(self, x):
+        size = x.size()[1:]  # all dimensions except the batch dimension
+        num_features = 1
+        for s in size:
+            num_features *= s
+        return num_features
+
+net = Net()
+print(net)
+params = list(net.parameters()) # print the learnable parameters of the model.
+print(len(params))
+print(params[0].size())  # conv1's .weight
+#+END_SRC
+We can try any dataset (MNIST) of size 32*32, we try a random input:
+#+BEGIN_SRC python
+input = torch.randn(1, 1, 32, 32)
+out = net(input)
+print(out)
+#+END_SRC
+We still need to compute the loss. A loss function will take two inputs: input and target, the function will estimate how far away was the output from the target.
+#+BEGIN_SRC python
+output = net(input)
+target = torch.randn(10)  # a dummy target, for example
+target = target.view(1, -1)  # make it the same shape as output
+criterion = nn.MSELoss() # computes the mean-squared error between the input and the target.
+
+loss = criterion(output, target)
+print(loss)
+#+END_SRC
+We can see the graph of computation for ~loss~:
+#+BEGIN_QUOTE
+input -> conv2d -> relu -> maxpool2d -> conv2d -> relu -> maxpool2d
+      -> view -> linear -> relu -> linear -> relu -> linear
+      -> MSELoss
+      -> loss
+
+So, when we call loss.backward(), the whole graph is differentiated w.r.t. the loss, and all Tensors in the graph that has ~requires_grad=True~ will have their ~.grad~ Tensor accumulated with the gradient.
+#+END_QUOTE
+
+#+BEGIN_SRC python
+print(loss.grad_fn)  # MSELoss
+print(loss.grad_fn.next_functions[0][0])  # Linear
+print(loss.grad_fn.next_functions[0][0].next_functions[0][0])  # ReLU
+#+END_SRC
+Now we need to clear the current gradients, otherwise they will be accumulated to existing gradients. To backprop, we use ~loss.backward()~.
+
+#+BEGIN_SRC python
+net.zero_grad()     # zeroes the gradient buffers of all parameters
+
+print('conv1.bias.grad before backward')
+print(net.conv1.bias.grad)
+
+loss.backward()
+
+print('conv1.bias.grad after backward')
+print(net.conv1.bias.grad)
+#+END_SRC
+Lastly, we should update the weights. We will use /SGD/. ~weight = weight - learning_rate * gradient~
+#+BEGIN_SRC python
+# We can implement it in python
+learning_rate = 0.01
+for f in net.parameters():
+    f.data.sub_(f.grad.data * learning_rate)
+# Or we can use torch.optim
+import torch.optim as optim
+
+# create your optimizer
+optimizer = optim.SGD(net.parameters(), lr=0.01)
+
+# in your training loop:
+optimizer.zero_grad()   # zero the gradient buffers
+output = net(input)
+loss = criterion(output, target)
+loss.backward()
+optimizer.step()    # Does the update
+#+END_SRC
+* Misc
+To increase the print output use ~torch.set_printoptions(threshold=10000000000)~.
+* Resources
+- [[https://deeplizard.com/learn/playlist/PLZbbT5o_s2xrfNyHZsM6ufI0iZENK9xgG][Neural Network Programming - Deep Learning with PyTorch]]
+- [[https://pytorch.org/tutorials/index.html][PyTorch Tutorials]]

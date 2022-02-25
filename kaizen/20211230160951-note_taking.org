@@ -1,0 +1,27 @@
+:PROPERTIES:
+:ID:       6f08e73d-1386-487e-bcf4-08e4da39fbaf
+:END:
+#+title: Note Taking
+
+
+#+begin_quote
+    Notes aren’t a record of my thinking process. They are my thinking process. – Richard Feynman
+#+end_quote
+
+The process of writing can be broken down into the following steps:
+
+1. Find topic/research question.
+2. Research/find literature.
+3. Read and take notes.
+4. Draw conclusions and outline text.
+5. Write.
+
+The problem with this apporach is that its linear in its nature. It doesn't take into account how thoughts are formed. Every second there are many thoughst rushing through our mind, some are related to our current work, some are about the paper that we read or the seminar/lecture we took. Thoughts are continuously evolving and our way of note taking should accommodate them.
+
+This means that big ideas form from smaller pieces notes (bottom up approach). This is the driving principle behind the Zettelkasten method. Break writing down into small, reasonable steps.
+
+
+
+* Resources
+- How To Take Smart Notes by Sonke Ahrens
+- Jethro Kuan's blog posts

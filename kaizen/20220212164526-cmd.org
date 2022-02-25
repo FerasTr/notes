@@ -1,0 +1,15 @@
+:PROPERTIES:
+:ID:       fd62ee36-e5e7-48c4-8927-3333eeed09f8
+:END:
+#+title: cmd
+#+filetags: :shell:windows:
+
+* Overview
+* Commands
+A command to retrieve the help manual for a command is ~/?~. For example: ~ipconfig /?~.
+- ~hostname~ outputs the computer name.
+- ~whoami~ outputs the name of the logged-in user.
+- ~ipconfig~ shows the network address settings for the computer.
+- ~cls~ to clear the screen.
+- ~netstat~ displays protocol statistics and current TCP/IP network connections.
+* Resources

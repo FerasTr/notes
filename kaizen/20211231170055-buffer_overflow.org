@@ -1,0 +1,76 @@
+:PROPERTIES:
+:ID:       b7ae8541-0256-4fb4-b1a3-5fa0c85c0ccb
+:ROAM_ALIASES: BOF
+:END:
+#+title: Buffer Overflow
+#+filetags: :Binary-Exploitation:Cybersecurity:
+
+* Overview
+Buffer overflow is defined as the condition in which a program attempts to write data beyond the boundary of a buffer. This vulnerability can be used by malicious users to alter the flow control of the program, leading to gaining access to hidden functions or execution of malicious code.
+
+* Spiking
+When first testing for a BOF vulnerability, we don't know what component is vulnerable and which one is not. Spiking is when we test out commands/components to try and break or cause an unexpected behavior.
+
+* Fuzzing
+After finding what component is vulnerable, we can start attacking that specific component/command. This process is known as fuzzing, we try to understand when does the program break and what caused it to do so. By providing semi-random input, we can start to hone onto the malicious payload more accurately.
+
+* Overwrites
+Since addresses in x64 only use the first 48 bits, an overwrite like ~0x4141414141414141~ will fail when redirecting.
+
+* Example
+We will create a program that has a [[id:03d12a27-19b0-4cf3-a08e-df0c9eafbdb5][SUID]] permission and is owned by the root user. We will use the vulnerable function ~strcpy()~ to exploit a buffer overflow bug.
+#+begin_src c
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+
+void greet_me(char *who) {
+    char name[200];
+    strcpy(name, who);
+    printf("Hi there %s !!\n", name);
+}
+
+int main(int argc, char *argv[]) {
+    if (argc < 1) {
+        exit(1);
+    }
+    greet_me(argv[1]);
+    return 0;
+}
+#+end_src
+
+** Setup
+We need to compile the program without any protection. The following command will disable the [[id:5ce2e7a8-ca40-4af9-a183-deea2cd7df5c][Stack Canaries]], [[id:54d4c71b-b187-4257-8262-01e9fabaf056][NXB]] and FORTIFY_SOURCE (disables buffer overflow error detection for functions that perform operations on memory and strings):
+#+begin_src sh
+gcc -fno-stack-protector vuln.c -o vuln -z execstack -D_FORTIFY_SOURCE=0
+#+end_src
+To disable [[id:ac15d008-6b6f-4636-9d3f-9c8d976d5963][ASLR]]:
+#+begin_src sh
+sudo bash -c 'echo 0 > /proc/sys/kernel/randomize_va_space'
+#+end_src
+Next we use ~chown~ and ~chmod~ to change the owner to root and set the SUID permission:
+#+begin_src sh
+chown root vuln
+chmod +s vuln
+#+end_src
+
+** Smashing the Stack
+Since this program doesn't check for the size when copying strings, we can go over the allowed memory space.
+
+After finding the offset to the instruction pointer, we can overwrite it with 6 bytes for the required address to jump to. The stack pointer will point to this address and, when popped by the ~ret~ instruction, will be pushed to the instruction pointer.
+
+* ret2libc
+ret2libc and ROP relies on overwriting the stack to create a new stack frame that calls the system function.
+
+The stack frame dictates the order the function call and parameters are written:
+1. Function address
+2. Return Address
+3. Arguments
+
+If we write the arguments immediately after the function address, we call the function with junk address arguments.
+
+* Resources
+- SEED Lab
+- TCM [[https://youtu.be/ncBblM920jw][video]] about BOF
+- Eli Bendersky's [[https://eli.thegreenplace.net/2011/09/06/stack-frame-layout-on-x86-64][article]] about "Stack frame layout on x86-64"
+- +ChOpin's series of articles about x64 Binary Exploitation ([[https://valsamaras.medium.com/introduction-to-x64-linux-binary-exploitation-part-1-14ad4a27aeef][1]],[[https://valsamaras.medium.com/introduction-to-x64-binary-exploitation-part-2-return-into-libc-c325017f465][2]],[[https://valsamaras.medium.com/introduction-to-x64-linux-binary-exploitation-part-3-rop-chains-3cdcf17e8826][3]],[[https://valsamaras.medium.com/introduction-to-x64-linux-binary-exploitation-part-4-stack-canaries-e9b6dd2c3127][4]])

@@ -1,0 +1,17 @@
+:PROPERTIES:
+:ID:       e184a7eb-9008-4ef1-952c-f9804c729525
+:END:
+#+title: Endian
+
+To check for endiannes do the following:
+
+#+BEGIN_SRC sh
+echo -n I | od -to2 | head -n1 | cut -f2 -d" " | cut -c6
+#+END_SRC
+
+If the result is 0, then the machine is Big-Endian, 1 otherwise.
+
+You can also use
+#+BEGIN_SRC sh
+lscpu | grep Endian
+#+END_SRC

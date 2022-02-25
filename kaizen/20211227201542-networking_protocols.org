@@ -1,0 +1,96 @@
+:PROPERTIES:
+:ID:       77ebd523-d896-42ca-9177-d0298be306bb
+:END:
+#+title: Networking Protocols
+
+A network protocol is an /established set of rules/ that determine how data is transmitted between hardware or software components of some device and what actions to take when receiveing data. All activity in the Internet that involves two or more communicating remote entities is governed by a protocol.
+
+Examples of protocols:
+- Hardware protocols that control the flow of bits on the wire between two devices
+- Congestion-control protocols in end systems control the rate at which packets are transmitted between sender and recever.
+- Protocols that determine a packet's path from source to destination.
+
+* TCP
+:PROPERTIES:
+:ID:       ca5aa1c6-9074-46d1-aebf-1f7970f6a8f8
+:END:
+** Headers
+A TCP packet contains various sections of information known as headers that are added from encapsulation.
+- SRC Port: The port opened by the sender.
+- DST Port: The port on the host server.
+- SRC IP: IP address of the sending device.
+- DST IP: IP address of the destination device.
+- Sequence Number: The packet transmit number.
+- ACK Number: Acknowledge number of transmitted packet.
+- Checksum: Integrity check for the packet.
+- Data: The data in transmit.
+- Flag: Determines how the packet should be handled by either device during the handshake process.
+
+** Packet Type
+- SYN: The initial packet sent by a client during the handshake. It is used to initiate a connection and synchronize the two devices together.
+- SYN/ACK: This packet is sent by the receiving device to acknowledge the synchronization attempt from the client.
+- ACK: The acknowledgement packet is used by either the clients or server to acknowledge that a series of packets have been successfully received.
+- DATA: Once a connection has been established, bytes of the data is sent via this packet.
+- FIN: This packet indicates a that the connection is complete and should be closed. FIN means that the connection is properly closed.
+- RST: This packet abruptly ends all communication.
+
+** Three-way Handshake
+The process used to establish a connection between two devices is called /three-way handshake/.
+
+Any sent data is given a random number sequence and is reconstructed using this number sequence and incrementing by 1. Both devices must agree on the same number sequence for data to be sent in the correct order.
+1) SYN: The client sends the initial number sequence (ISN) to synchronize with, for example, 0.
+2) SYN/ACK: The server sends its ISN to synchronize with, for example, 5000. It also acknowledges the client's ISN of 0.
+3) ACK: The client acknowledges the server's ISN of 5000, and sends data with ISN + 1 (5001).
+
+** Closing TCP Connection
+A TCP connection is closed once a device has determined that the other device has successfully received all of the data.
+
+The device will send FIN packet to the other device, waiting for an ACK packet.
+
+* UDP
+:PROPERTIES:
+:ID:       9a47d66f-cf42-445c-9685-aa3c17eebc25
+:END:
+UDP is a stateless protocol that doesn't require a constant connection between the two devices for data to be sent.
+
+** Headers
+A UDP packet contains various sections of information known as headers that are added from encapsulation. The number of headers is less than that of a TCP packet.
+- TTL: The time to live for a packet. This is an expiry timer for the packet, so it doesn't clog up the network if it never manages to reach a host or escape.
+- SRC Port: The port opened by the sender.
+- DST Port: The port on the host server.
+- SRC IP: IP address of the sending device.
+- DST IP: IP address of the destination device.
+* ICMP
+Ping uses the Internet Control Message Protocol (ICMP) packets to determine the performance of a connection between devices (if the connections exists or is reliable for example).
+
+The tool, ~ping~, uses ICMP's echo request packets to measure the time taken for packets to travel between devices. The device must reply with ICMP's echo reply.
+
+* ARP
+The address resolution protocol (ARP) allows devices to identify themselves on a network by associating their MAC address with an IP address on the network. When devices with to communicate with another, they will broadcast to the entire network searching for the specific device's MAC address.
+
+Each device on the network keeps a log of the MAC addresses associated with other devices, this log is called a cache. In order to map an IP to a MAC address, the device will send two types of messages:
+1) ARP request
+   A message is broadcasted to every other device found on the network by the device, asking whether or not the device's MAC address matches the requested IP address.
+2) ARP reply
+    If the device does have the requested IP address, a message is sent to the initial device to acknowledge this. The initial device will store this into the log as an ARP entry.
+* DHCP
+When a device connects to a network without a pre-configured IP address, it sends a request to see if any dynamic host configuration protocol (DHCP) servers are on the network. The DHCP server will reply back with an IP address the device could use. The device sends a reply confirming it wants the offered IP address. Lastly, the DHCP server sends a reply to acknowledge that this has been completed and the device can start using the IP address.
+
+The packets sent are in this order:
+1) DHCP Discover
+2) DHCP Offer
+3) DHCP Request
+4) DHCP ACK
+* SMB
+Server Message Block (SMB) is a protocol for transfering files between two hosts on the same network. This communication protocol proviedsd shared access to files, printers and serial ports between endpoints on a network. It is most common on Windows machines.
+
+The protocol typically uses TCP port 445. SMB runs at the Application or Presentation layers of the OSI model. Due to this, it relies on lower-level protocol for transport. The Transport layer protocol that Microsoft SMB uses is NetBIOS over TCP/IP (NBT).
+
+An SMB-enabled storage on the netwrok is called a ~share~, and can be accessed by any client that has the address of the server and the proper credintials.
+* RDP
+Remote Desktop Protocol (RDP) operates on ports ~3389~ TCP and ~3389~ UDP. The difference consists of how the information relayed by this protocol is presented to the end-user.
+* IP
+:PROPERTIES:
+:ID:       c30f9b34-b91d-461b-a67d-99a3f7b26f18
+:END:
+The IP protocol specifies the format of the packets that are sent and received among routers and end systems.

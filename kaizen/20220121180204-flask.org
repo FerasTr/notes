@@ -1,0 +1,11 @@
+:PROPERTIES:
+:ID:       38fe17b4-c530-4d74-9c9b-0f028a40170c
+:END:
+#+title:  Flask
+#+filetags: :webdev:python:
+
+* Overview
+
+* Resources
+- Official [[https://flask.palletsprojects.com/en/2.0.x/][documentation]]
+- John Hammond's [[https://www.youtube.com/playlist?list=PL1H1sBF1VAKVtrhim9EDG7vFarkbo4V0C][series]] on Flask

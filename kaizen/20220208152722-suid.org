@@ -1,0 +1,5 @@
+:PROPERTIES:
+:ID:       03d12a27-19b0-4cf3-a08e-df0c9eafbdb5
+:END:
+#+title: SUID
+#+filetags: :linux:binaryexp:binary:

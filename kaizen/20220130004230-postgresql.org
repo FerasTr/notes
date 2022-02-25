@@ -1,0 +1,6 @@
+:PROPERTIES:
+:ID:       0f4caff7-0472-4b78-925c-7da09ce4a086
+:ROAM_ALIASES: postgresql
+:END:
+#+title: PostgreSQL
+#+filetags: :db:

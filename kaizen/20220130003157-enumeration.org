@@ -1,0 +1,21 @@
+:PROPERTIES:
+:ID:       e213bd49-1c75-4e1e-b248-ff69d3e4393b
+:END:
+#+title: Enumeration
+#+filetags: :networking:webexp:ctf:
+
+* Overview
+#+begin_quote
+Network Enumeration is the discovery of hosts/devices on a network. Network Enumeration tends to use overt discovery protocols such as ICMP and SNMP to gather information. It may also scan various ports on remote hosts for looking for well known services in an attempt to further identify the function of a remote host.
+#+end_quote
+
+* Enumeration with Metasploit
+[[id:4b5fff4e-378c-4a29-93da-c852c5cf79d3][Metasploit]] can be used to help us in the enumeration step.
+
+After connecting Metasploit to [[id:0f4caff7-0472-4b78-925c-7da09ce4a086][postgresql]], ~db_nmap~ can be used to run [[id:604782c0-e86a-424c-a2f8-d19f1b69aa76][nmap]] against the target network and save the results in the database. We can query the database for hosts discovered using the ~hosts~ command. We can also query for the running services using the ~services~ command, or query for a specific service using ~services -s NAME -u -R~, where ~-u~ is for running services and ~-R~ is for the IP address of  target.
+
+To discover devices in a local network, the auxiliary scanner ~arp_sweep~ can be used.
+
+* Resources
+- nephack's [[https://www.nephack.com/metasploit-basic-enumeration][article]] about enumeration with Metasploit
+- Metasploit unleashed by offensive security

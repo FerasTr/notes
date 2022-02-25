@@ -1,0 +1,15 @@
+:PROPERTIES:
+:ID:       0d8e6135-7853-4f71-9d54-605322886881
+:END:
+#+title: Caesar Cipher
+#+filetags: :math:cryptography:
+
+* Overview
+The Caesar Cipher is used by shifting the alphabet in order to encode texts.
+
+ROT13 is the same thing but with a fixed shift of 13 characters.
+
+An example of shifting by 8:
+#+begin_example
+CAESAR -> KIMAIZ
+#+end_example
