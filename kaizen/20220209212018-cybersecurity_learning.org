@@ -13,6 +13,7 @@ In here, we dive into cybersecurity specific [[id:f9546923-3a8e-4e43-94f7-5ec6a3
 - Job descriptions and difference between them.
 - Popular questions used in interviews.
 - Resources.
+
 * Learning
 Some people worry about spoilers and robbing themselves of a potential learning experience (reading writeups for example), ignoring these resources can slow down your success.
 
@@ -28,9 +29,8 @@ After gaining root on a box, it is /critical/, or even more important, to read w
 
 The best way to improve is to grind-it-out. [[id:4273fcdf-58e9-409b-b196-19860eb9478c][Repetition]] is the name of the game, the more boxes/targets/vulnerabilities you expose yourself to, the more you learn about the inner-workings and techniques required to tackle such tasks.
 
-
 * Roadmap
-My current roadmap as of <2022-01-02 Sun>.
+My current roadmap as of <2022-02-26 Sat>.
 
 The following is an ordered list of some resources that I need to go through. They are ordered in order of difficulity and urgency (what topic I need to learn). The roadmap will be continually updated and changed. My current goal is to finish the first half by mid 2022 to help with future research position jobs.
 
@@ -38,10 +38,12 @@ Somethings will be omitted from the list such as: TryHackMe, HackTheBox, HackerO
 
 ** Study Plan
 *** DONE ctf101
-*** TODO pwn college
+*** TODO PortSwigger Web Labs
 *** TODO websec
-*** TODO webhacking.kr
 *** TODO hacker101 CTFs
+*** TODO webhacking.kr
+*** TODO DVWA
+*** TODO pwn college
 *** TODO cryptohack
 *** TODO cryptopals
 *** TODO exploit.education
@@ -52,7 +54,6 @@ Somethings will be omitted from the list such as: TryHackMe, HackTheBox, HackerO
 *** TODO HackThisSite
 *** TODO Overthewire
 *** TODO google-gruyere
-*** TODO PortSwigger Web Labs
 *** TODO This [[https://emaragkos.gr/recommended-machines/][list]] of boxes to pwn
 
 * Certificates

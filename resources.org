@@ -11,6 +11,7 @@ Most of the courses below were taken from one or all of the roadmaps below.
 + [[https://github.com/freeCodeCamp/freeCodeCamp][freeCodeCamp.org's open-source codebase and curriculum]]
 + [[https://github.com/kamranahmedse/developer-roadmap][Roadmap to becoming a web developer in 2021]]
 + https://www.theodinproject.com/
++ [[https://cloudresumechallenge.dev/docs/faq/][Cloud Resume Challenge]]
 
 ** Core CS Subjects
 These courses and books provide a complete understanding over the fundamentals of computer science.
