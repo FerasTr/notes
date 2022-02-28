@@ -1,0 +1,117 @@
+:PROPERTIES:
+:ID:       28e515a8-da03-432a-9e59-08c8dc406bd5
+:END:
+#+title: Spring Framework
+#+filetags: :framework:java:
+
+* Overview
+#+begin_quote
+The Spring Framework is an application framework and inversion of control container for the Java platform. The framework's core features can be used by any Java application, but there are extensions for building web applications on top of the Java EE platform.
+#+end_quote
+
+* Inversion of Control
+#+begin_quote
+Inversion of Control (IoC) is a principle in software engineering which transfers the control of objects or portions of a program to a container or framework. We most often use it in the context of object-oriented programming ... IoC enables a framework to take control of the flow of a program and make calls to our custom code.
+#+end_quote
+
+IoC can be achived through various mechanisms such as:
+- Design Patterns, specificaly the Factory, Strategy and Service Locator Patterns.
+- Dependency Injection
+
+* Spring IoC Container
+The Spring container is responsible for instantiating, configuring and assembling objects known as /Beans/. IoC also manages the life cycle of /Beans/.
+
+In the Spring framework, the interface "ApplicationContext" represents the IoC container. Several implementations of this interface are available in the Spring framework:
+- "ClassPathXmlApplicationContext" can load an XML configuration from a classpath and manage its beans.
+    Files must be in *classes* folder or in a *jar* in the *lib* folder.
+- "FileSystemXmlApplicationContext" can load XML configuration from anywhere on the file syste.
+- "WebApplicationContext"
+
+* Dependency Injection
+Called sometimes "Dependency Inversion" (DI), is a way to decouple the conventional relationship between objects. The idea is that we remove dependency of one or multiple objects from one entity while having another entity "inject" any needed object. For example, if we have a "Shape" parent class, and two objects "Circle" and "Triangle", and say we want to write a class that draws any shape. Having the drawing class be responsible of instantiating the class to draw (calling ~new Object~) will make the drawing class dependant on that class. Instead, we can have another class that is responsible for instantating a specific object, and then it will call the draw class getter/drawing methods in order to draw the shape.
+
+#+begin_src java
+public class Draw {
+    private Shape shape;
+
+    public Store() {
+        shape = new shapeImpl1();
+    }
+}
+#+end_src
+
+In the example above, we need to instantiate an implementation of the "Shape" interface within the "Draw" class itself. By using DI, we can write the example without specifiying the implementation of the "Shape" that we want, since the implementation will be provided through metadata or other classes.
+
+In Spring, objects delegate the the job of constructing its dependencies to an IoC container. All we need to do is provide the container with configuration metadata.
+
+#+begin_src java
+public class Draw {
+    private Shape shape;
+    public Store(Shape shape) {
+        this.item = item;
+    }
+}
+#+end_src
+
+** Beans
+#+begin_quote
+In Spring, the objects that form the backbone of your application and that are managed by the Spring IoC container are called beans. A bean is an object that is instantiated, assembled, and otherwise managed by a Spring IoC container.
+#+end_quote
+
+If a class "Company" is dependant on an object of class "Address", we can create a configuration class that is responsible for providing the "Address" object to the "Company" class. We change the "Company" class to have a ~@Component~ decorator.
+
+#+begin_src java
+@Component
+public class Company {
+    // this body is the same as before
+}
+#+end_src
+
+Then we create a configuration class which supplies bean metadata to an IoC container:
+#+begin_src java
+@Configuration
+@ComponentScan(basePackageClasses = Company.class)
+public class Config {
+    @Bean
+    public Address getAddress() {
+        return new Address("High Street", 1000);
+    }
+}
+#+end_src
+
+The "Config" class produces a bean of type "Address". The "Config" class is decorated with ~@ComponentScan~ which instrucs the container to look for beans in the package containing the "Company" class, and inject them.
+
+Now, since we defined beans in a configuration class, we'll need an instance of the ~AnnotationConfigApplicationContext~ class to build up a container.
+
+#+begin_src java
+ApplicationContext context = new AnnotationConfigApplicationContext(Config.class);
+#+end_src
+
+Which then can be used to create objects:
+#+begin_src java
+Company company = context.getBean("company", Company.class);
+assertEquals("High Street", company.getAddress().getStreet());
+assertEquals(1000, company.getAddress().getNumber());
+#+end_src
+* Annotations
+** Component Scanning
+Spring can automatically scan a package for beans. ~@ComponentScan~ configures which packages to scan for classes with annotation configuration.
+
+** Component
+~@Component~ is a class level annotation. Spring automatically detects classes annotated with ~@Component~ during the component scan.
+
+** Repository
+~@Repository~ represents the database access layer in the application.
+
+** Service
+~@Service~ represents the business logic of an application.
+
+** Controller
+~@Controller~ is a class level annotaion, which tells Spring that this class serves as a controller in Spring MVC.
+
+** Configuraion
+~@Configuration~ classes contain bean definition methods annotated with ~@Bean~.
+* Resources
+- Java Brains [[https://www.youtube.com/playlist?list=PLC97BDEFDCDD169D7][series]] on Spring
+- Baeldung articles ([[https://www.baeldung.com/spring-classpathxmlapplicationcontext][1]],)
+- Spring annotation [[https://springframework.guru/spring-framework-annotations/][article]]
