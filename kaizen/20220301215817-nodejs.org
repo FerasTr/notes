@@ -1,0 +1,28 @@
+:PROPERTIES:
+:ID:       6a036a18-76bc-4a56-9c63-7a14af61fb03
+:END:
+#+title: NodeJS
+
+* Overview
+* Middleware
+Middleware refers to any code on the server that runs between getting a request and getting a response. Middleware runs from top to bottom until we exit the process.
+
+A simple middleware can be used for loggin:
+#+begin_src js
+app.use((req, res) => {
+  console.log('host: ', req.hostname);
+});
+#+end_src
+
+** next()
+The problem with the above code is that Express doesn't know how to move on after it executed the middleware code. To indicate that we are done, we add the ~next()~ function, which tells Express to move on to the next middleware.
+#+begin_src js
+app.use((req, res, next) => {
+  console.log('host: ', req.hostname);
+  next();
+});
+#+end_src
+
+
+* Resources
+- The Net Ninja's [[https://www.youtube.com/playlist?list=PL4cUxeGkcC9jsz4LDYc6kv3ymONOKxwBU][series]] on NodeJS
