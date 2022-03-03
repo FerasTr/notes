@@ -68,6 +68,20 @@ admin") or "1"="1"/*
 Some things to note:
 - The comment sequence ~--~ causes the remainder of the query to be ignored.
 - We use ~OR 1=1~ to return all data in the table (always true).
+
+* Union Injection
+Union injection attacks can be used to retrieve data from other tables within the database. To do so, two condition must be met:
+1. Each query must return the same number of columns.
+1. The data type in each column must be the same in each query.
+
+An easy way to check how many columns are being returned from the original query is to use ~ORDER BY X~ where "X" is a number. In this query we order the results by different columns in the result set. This is done by specifying an index, not a column name.
+
+To know what value each column supports, we can issue a ~UNION SELECT~.
+#+begin_src sql
+UNION SELECT ‘a’,NULL,NULL,NULL
+#+end_src
+
 * Resources
 - [[https://pentestlab.blog/2012/12/24/sql-injection-authentication-bypass-cheat-sheet/][SQL Injection Authentication Bypass Cheat Sheet]]
 - Wikipedia's [[https://en.wikipedia.org/wiki/SQL_injection#cite_note-20][page]] about SQL Injection
+- [[https://medium.com/@nyomanpradipta120/sql-injection-union-attack-9c10de1a5635][SQL Injection with UNION]]

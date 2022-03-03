@@ -1,0 +1,4 @@
+:PROPERTIES:
+:ID:       6bd3bf25-2fd7-4c4c-a98a-356e3617cb11
+:END:
+#+title: Key Confusion Attack
