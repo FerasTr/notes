@@ -1,0 +1,34 @@
+:PROPERTIES:
+:ID:       6bec5025-d3b9-4174-be43-0029eb582997
+:ROAM_ALIASES: SSRF ssrf
+:END:
+#+title: Server Side Request Forgery
+#+filetags: :owasp10:webexp:
+
+* Overview
+In a Server Side Request Forgery (SSRF), the attacker can trick server-side applications to make requests to any domain of his choice. Typically, SSRF is used to get the server to make a request to an internal-only service. In other cases, SSRF can be used to trick the server into leaking sensitive information such as authorization credintials.
+
+* SSRF Attacks
+SSRF attacks exploit the trust relationship between the vulnerable server and other services. These services might exist on the server itself or in other back-end systems within the same organization.
+
+SSRF attacks can also result in malicious onward attacks to external third-party systems that appear to originate from the organization hosting vulnerable applications.
+
+** Attacks Against the Server Itself
+In this type of attacks, we induce the application to make an HTTP request back to the server itself, via its loopback network interface. This type of attack can be used to bypass [[id:b1b69d3f-e6be-49bf-83ce-80a16dd58349][access controls]] mechanisms.
+#+begin_src http
+POST /product/stock HTTP/1.0
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 118
+
+stockApi=http://localhost/admin
+#+end_src
+
+There are multiple reasons as to why this request is trusted:
+- The access control check is implemented /in front/ of the web application. Requests coming from the backside are assumed to be safe and not checked.
+- The application allows administrative access without logging in. This is implemented as a fail safe system.
+- The administrative access is listening on another port, reachable only via the application itself.
+
+
+* Resources
+- Portswigger's articles on ssrf
+- OWASP's artciles on ssrf

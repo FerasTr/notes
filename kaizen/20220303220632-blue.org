@@ -1,0 +1,14 @@
+:PROPERTIES:
+:ID:       edfd8d8f-168a-43fd-a624-f5317a3b4b62
+:END:
+#+title: Blue
+#+filetags: :ctf:windows:writeup:hackthebox:
+
+* Description
+No description is provided.
+
+* Recon
+* Foothold
+* Flag
+* Notes
+* Resources

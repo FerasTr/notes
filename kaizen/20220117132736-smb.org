@@ -27,6 +27,14 @@ By default, SMB exposes several adminstrative and hidden shares. The ~C$~ share 
   #+begin_src sh
 smbclient -N -L \\\\IP\\
   #+end_src
+- To login without a password for a particular share
+  #+begin_src sh
+smbclient -N \\\\IP\\{target}
+  #+end_src
+- To login as a user for a particular share
+  #+begin_src sh
+smbclient -N \\\\IP\\{target} -U {user}
+  #+end_src
 
 ** ~smbmap~
 ~smbmap~ is an enumeration tool. For example, it can be used to list shares that require anonymous login to use.

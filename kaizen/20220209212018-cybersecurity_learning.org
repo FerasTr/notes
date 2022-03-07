@@ -43,15 +43,16 @@ Somethings will be omitted from the list such as: TryHackMe, HackTheBox, HackerO
 *** TODO hacker101 CTFs
 *** TODO webhacking.kr
 *** TODO DVWA
-*** TODO pwn college
+*** TODO hackxor
+*** TODO HackThisSite
 *** TODO cryptohack
+*** TODO pwn college
 *** TODO cryptopals
 *** TODO exploit.education
 *** TODO ROP Emporium
 *** TODO pwnable.kr
 *** TODO pwnable.tw
 *** TODO Malwareunicorn
-*** TODO HackThisSite
 *** TODO Overthewire
 *** TODO google-gruyere
 *** TODO This [[https://emaragkos.gr/recommended-machines/][list]] of boxes to pwn
