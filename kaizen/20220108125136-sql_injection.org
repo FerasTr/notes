@@ -83,6 +83,9 @@ UNION SELECT ‘a’,NULL,NULL,NULL
 
 If the return statement is limited, we can use ~group_concat(table)~ to group multiple values together.
 
+* Tips and Tricks
+- In sqlite3, we can use the keyword ~AS~ to give a column a temporary name, this helps when the query is fixed using a certain column name.
+
 * Resources
 - [[https://pentestlab.blog/2012/12/24/sql-injection-authentication-bypass-cheat-sheet/][SQL Injection Authentication Bypass Cheat Sheet]]
 - Wikipedia's [[https://en.wikipedia.org/wiki/SQL_injection#cite_note-20][page]] about SQL Injection
