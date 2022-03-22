@@ -1,0 +1,6 @@
+:PROPERTIES:
+:ID:       ae5068d2-077b-4742-9537-22b00396a7bb
+:END:
+#+title: Programming Black Book
+
+* 16-bit Checksum
