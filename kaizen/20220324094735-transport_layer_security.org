@@ -1,0 +1,9 @@
+:PROPERTIES:
+:ID:       ef15a155-6f8c-4b32-8308-f3a7a538403f
+:ROAM_ALIASES: TLS
+:END:
+#+title: Transport Layer Security
+#+filetags: :networking:cryptography:
+
+* Overview
+* Resources

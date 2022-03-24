@@ -1,0 +1,6 @@
+:PROPERTIES:
+:ID:       2ad51977-e776-4ddf-b7ce-87be4836f5e6
+:ROAM_ALIASES: SSL
+:END:
+#+title: Secure Sockets Layer
+#+filetags: :networking:cryptography:
