@@ -1,0 +1,10 @@
+:PROPERTIES:
+:ID:       7040974d-ad16-40e0-809a-699aa22968ae
+:END:
+#+title: Python
+#+filetags: :programming:
+
+* __mro__ and __subclasses__
+~__mro__~ is a tuple of classes that are considered when looking at the base class during method resolution. This object include an object inheritance map as a tuple up to the object class.
+
+~__subclasses__~ keeps a list of weak references to its immediate subclasses.

@@ -1,0 +1,26 @@
+:PROPERTIES:
+:ID:       d71db659-aa89-4f12-be57-51146c6122a9
+:ROAM_ALIASES: SSTI
+:END:
+#+title: Server Side Template Injection
+
+* Jinja/Flask
+We can see the global flask configuration object ~flask.config~ which is a dictionary that contains all of the configuration values of the application. We can inject and view the config:
+#+begin_src python
+{{config.items()}}
+#+end_src
+
+The config object is a subclass that contains several unique methods such as: ~from_envar~, ~from_config~, ~from_pyfile~ and ~root_path~.
+
+The ~from_config~ method adds all attributes of the injected module whose variable name is all uppercase. The injected attributes maintain their types, which means that functions can be called after being injected.
+
+By abusing ~__mro__~ and ~__subclasses__~ in [[id:7040974d-ad16-40e0-809a-699aa22968ae][Python]], we can go up the inherited object list in the current python enviornment and go down to any object that is a subclass of the Object class.
+
+Using the ~str~ object as our starting point, we can go up to the Object object, then view what subclasses are available to us. Classes such as the subprocess.Popen can lead to a sandbox escape.
+#+begin_src python
+"".__class__.__mro__[1].__subclasses__()
+#+end_src
+
+
+* Resources
+- IndominusByte's [[https://medium.com/@nyomanpradipta120/ssti-in-flask-jinja2-20b068fdaeee][article]] about ssti using jinja
