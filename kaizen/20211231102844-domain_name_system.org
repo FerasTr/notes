@@ -29,8 +29,8 @@ A Second-Level Domain (SLD) is the middle part of a domain name (ignoring ~http:
 
 ** Subdomain
 A subdomain sits on the left-hand side of the SLD using a period to seperate it; for example, in the name ~docs.google.com~, ~docs~ is the subdomain.
+
 * Record Types
-From cloudflare:
 #+begin_quote
 DNS records (aka zone files) are instructions that live in authoritative DNS servers and provide information about a domain including what IP address is associated with that domain and how to handle requests for that domain. These records consist of a series of text files written in what is known as DNS syntax. DNS syntax is just a string of characters used as commands that tell the DNS server what to do.
 #+end_quote
@@ -47,6 +47,7 @@ DNS records (aka zone files) are instructions that live in authoritative DNS ser
   These record resolve to the address of the server that handle the email for the domain you are querying, for example, ~example.com~ MX record could be ~mailhost1.example.com~. These record come with a priority flag. This tells the client in which order to try the servers.
 - ~TXT~ Record
   These records are free text fields where any text-based data can be stored. A common use for TXT records is to list servers that have the authority to send an email on behalf of the domain.
+
 * What Happens When A Making a DNS Request?
 1) A domain request is made. If the address is in the local cache then its served immediately. Otherwise, a request to the recursive DNS server will be made.
 2) A recursive DNS server is usually provided by the ISP. The server also has a local cache of recently looked up domain names. If the domain is cached then its served back to the requesting device. Otherwise a request to the Internet's root DNS server is made.

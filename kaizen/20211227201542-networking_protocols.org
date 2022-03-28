@@ -10,7 +10,6 @@ Examples of protocols:
 - Congestion-control protocols in end systems control the rate at which packets are transmitted between sender and recever.
 - Protocols that determine a packet's path from source to destination.
 
-* Routable vs Unroutable IP Addresses
 
 * TCP
 :PROPERTIES:
@@ -96,3 +95,18 @@ Remote Desktop Protocol (RDP) operates on ports ~3389~ TCP and ~3389~ UDP. The d
 :ID:       c30f9b34-b91d-461b-a67d-99a3f7b26f18
 :END:
 The IP protocol specifies the format of the packets that are sent and received among routers and end systems.
+
+** Routable vs Unroutable IP Addresses
+
+** Special IP Addresses
+The IP address of 127.0.0.1 is reserved for the localhost, which is a hostname that refers to the current device used to access it.
+
+Localhost resolves to 127.0.0.1 in IPv4 and ::1 in IPv6.
+
+Since IP addresses are just /numbers/, we can refer to them in a different way. This can be used to circumvent rules that match specific string representations of said addresses. The following list will resolve to the same address:
+- 127.0.1
+- 127.1
+- 127.000000000000000.00000000000000000.1
+- 2130706433 (integer)
+- 0x7F000001 (hex)
+- 017700000001 (octal)

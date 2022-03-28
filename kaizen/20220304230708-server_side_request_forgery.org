@@ -38,6 +38,20 @@ Content-Length: 118
 stockApi=http://192.168.0.20/admin
 #+end_src
 
+** Circumventing common SSRF Defenses
+*** Blacklist Approach
+Some applications will block specific IP addresses such as 127.0.0.1 and the hostname /localhost/. Such defenses can be bypassed by using an alternative representation of the required IP address.
+
+*** Whitelist Approach
+Instead of blocking values which can be hard to contain all possibilities, one can use a whitelist approach where values are accepted only if they fully match, begin/end with or contain an allowed value. For example, a request to the backend can only be accepted if the address begins with a specific subdomain.
+
+One way we can bypass this defense is by abusing the [[id:1ec5d57d-b0df-4429-bc7e-aa6dfe97b381][URL]] specification which contains many features that are overlooked when creating whitelists. Some bypass methods are:
+- Embedding credintials in a URL using ~@~, http://evilsite@expectedsite.com.
+- Using fragments or get parameters to ignore part of the URL, http://evilsite#expectedsite.com, http://evilsite.com/?r=expectedsite.
+- Leverage [[id:c620b007-1376-4f39-9808-5ff9ff487e93][DNS]] naming hierarchy to place required input into a FQDN that we control, http://evilsite.expectedsite.com.
+- Encode some parts of the URL to confuse the parsing code. This is useful when the code that handles the filtering behaves differently that the code that handles backend requests.
+
 * Resources
 - Portswigger's articles on ssrf
 - OWASP's artciles on ssrf
+- A New Era Of SSRF - Exploiting Url Parsers - Orange Tsai ([[https://www.youtube.com/watch?v=D1S-G8rJrEk][link]])

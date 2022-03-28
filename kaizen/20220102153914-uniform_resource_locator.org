@@ -22,3 +22,5 @@ We discuss each feature using the above example:
 
 * Resources
 - TryHackMe's room on HTTP.
+- The URL specification ([[https://www.w3.org/Addressing/URL/url-spec.txt][link]])
+- Wikipedia's articles about [[https://en.wikipedia.org/wiki/Uniform_Resource_Identifier][URI]] and [[https://en.wikipedia.org/wiki/URL][URL]]
