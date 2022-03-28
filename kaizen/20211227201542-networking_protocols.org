@@ -10,6 +10,8 @@ Examples of protocols:
 - Congestion-control protocols in end systems control the rate at which packets are transmitted between sender and recever.
 - Protocols that determine a packet's path from source to destination.
 
+* Routable vs Unroutable IP Addresses
+
 * TCP
 :PROPERTIES:
 :ID:       ca5aa1c6-9074-46d1-aebf-1f7970f6a8f8

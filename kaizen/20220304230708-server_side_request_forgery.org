@@ -25,9 +25,18 @@ stockApi=http://localhost/admin
 
 There are multiple reasons as to why this request is trusted:
 - The access control check is implemented /in front/ of the web application. Requests coming from the backside are assumed to be safe and not checked.
-- The application allows administrative access without logging in. This is implemented as a fail safe system.
+- The application allows administrative access without logging in from the local machine. This is implemented as a fail safe system.
 - The administrative access is listening on another port, reachable only via the application itself.
 
+** Attacks Against Backend Systems
+A server might need to communicate with other machines in the backend to complete a request. If a server is vulnerable to SSRF, then an attacker can reach otherwise unreachable machines. Those machines have non-routable [[id:c30f9b34-b91d-461b-a67d-99a3f7b26f18][IP]] addresses, such as 169.168.0.20. Since users have no access to such machines, protection is an afterthought, and usually the network's topology is the only defense.
+#+begin_src http
+POST /product/stock HTTP/1.0
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 118
+
+stockApi=http://192.168.0.20/admin
+#+end_src
 
 * Resources
 - Portswigger's articles on ssrf
