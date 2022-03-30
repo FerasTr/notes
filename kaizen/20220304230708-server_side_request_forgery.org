@@ -1,6 +1,6 @@
 :PROPERTIES:
 :ID:       6bec5025-d3b9-4174-be43-0029eb582997
-:ROAM_ALIASES: SSRF ssrf
+:ROAM_ALIASES: SSRF
 :END:
 #+title: Server Side Request Forgery
 #+filetags: :owasp10:webexp:
@@ -40,7 +40,7 @@ stockApi=http://192.168.0.20/admin
 
 ** Circumventing common SSRF Defenses
 *** Blacklist Approach
-Some applications will block specific IP addresses such as 127.0.0.1 and the hostname /localhost/. Such defenses can be bypassed by using an alternative representation of the required IP address.
+Some applications will block specific IP addresses such as 127.0.0.1 and the hostname /localhost/. Such defenses can be bypassed by using an alternative representation of the required IP address. Or by regestering a domain that resolves to 127.0.0.1.
 
 *** Whitelist Approach
 Instead of blocking values which can be hard to contain all possibilities, one can use a whitelist approach where values are accepted only if they fully match, begin/end with or contain an allowed value. For example, a request to the backend can only be accepted if the address begins with a specific subdomain.

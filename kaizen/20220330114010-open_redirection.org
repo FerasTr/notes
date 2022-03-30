@@ -1,0 +1,13 @@
+:PROPERTIES:
+:ID:       47a542e5-3095-4e3d-8b19-ee4ddda8322f
+:END:
+#+title: Open Redirection
+#+filetags: :webexp:
+
+* Overview
+* Reflected
+* Stored
+* DOM
+** Reflected DOM
+** Stored DOM
+* Resources
