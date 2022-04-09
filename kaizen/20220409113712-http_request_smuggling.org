@@ -1,0 +1,10 @@
+:PROPERTIES:
+:ID:       e308ac5c-ddbf-415c-ad84-948f05fd85f2
+:END:
+#+title: HTTP Request Smuggling
+#+filetags: :webexp:
+
+
+* Overview
+* Resources
+- Portswigger's articles about HTTP Request Smuggling
