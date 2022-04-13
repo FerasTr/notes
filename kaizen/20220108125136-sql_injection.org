@@ -83,6 +83,9 @@ UNION SELECT ‘a’,NULL,NULL,NULL
 
 If the return statement is limited, we can use ~group_concat(table)~ to group multiple values together.
 
+* Wildcard Injection
+Some databases accept wildcards such as the asterisk ~*~ which matches all entries in a table. To find credentials in this case, we can write a scirpt that appends ~*~ to the username/password and collect all characters that result in valid requests.
+
 * Tips and Tricks
 - In sqlite3, we can use the keyword ~AS~ to give a column a temporary name, this helps when the query is fixed using a certain column name.
 

@@ -51,8 +51,13 @@ One way we can bypass this defense is by abusing the [[id:1ec5d57d-b0df-4429-bc7
 - Leverage [[id:c620b007-1376-4f39-9808-5ff9ff487e93][DNS]] naming hierarchy to place required input into a FQDN that we control, http://evilsite.expectedsite.com.
 - Encode some parts of the URL to confuse the parsing code. This is useful when the code that handles the filtering behaves differently that the code that handles backend requests.
 
+<<<<<<< HEAD
 *** Open Redirection Approach
 [[id:47a542e5-3095-4e3d-8b19-ee4ddda8322f][Open Redirection]] can be used to bypass some SSRF defenses. If the api call on the backend is vulnerable to open redirection, then the attacker can supply a malicuos url for to be redirected to when it is requested.
+=======
+*** SSRF and Open Redirection
+[[id:47a542e5-3095-4e3d-8b19-ee4ddda8322f][Open Redirection]] can be used to bypass any filter based defense. If the backend api request supports redirection, then a url can be crafted which satisfies the filters but contains a redirection to an attacker controlled site.
+>>>>>>> 855cdb17509ac36885725ed35402feaaced29b8b
 #+begin_src http
 POST /product/stock HTTP/1.0
 Content-Type: application/x-www-form-urlencoded
