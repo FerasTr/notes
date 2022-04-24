@@ -42,6 +42,7 @@ Somethings will be omitted from the list such as: TryHackMe, HackTheBox, HackerO
 *** TODO websec
 *** TODO hacker101 CTFs
 *** TODO webhacking.kr
+*** TODO cicd-goat
 *** TODO DVWA
 *** TODO hackxor
 *** TODO HackThisSite

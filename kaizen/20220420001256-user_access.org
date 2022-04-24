@@ -1,0 +1,28 @@
+:PROPERTIES:
+:ID:       f7f12616-4d03-4f13-92d9-4d67b30b918d
+:END:
+#+title: User Access
+#+filetags: :webexp:webdev:
+
+* Overview
+Any web application needs to control user's access to its data and functionality. Different users have different set of data and functionality. Most web applications handle access using the following interrelated security mechanisms.
+- Authentication
+- Session management
+- Access control
+
+* Authentication
+Authenticating a user involves establishing that the user is in fact who he claims to be. The most basic form of authentication envolves a username and a password to be provided by the user.
+
+* Session Management
+Session management is the process of handling the authenticated user's session. After successfully logging in to the application, the user accesses various pages and functions, making a series of HTTP requests from his browser. At the same time, the application receives countless other requests from different users, some of whom are authenticated and some of whom are anonymous. To enforce effective access control, the application needs a way to identify and process the series of requests that originate from each unique user.
+
+This is typically done by using a token that is given to the user after being authenticated. This token is validated on the server side for each request.
+
+Attackers typically target the token generation method which allows them to identify as other users.
+
+* Access Controls
+If a request comes from a valid authenticated user, it is validated against the user's authorized actions. A normal user should not be authorized to request or access admin functionality. An application might support numerous user roles, each involving different combinations of specific privileges.
+
+
+* Resources
+- WAHH
