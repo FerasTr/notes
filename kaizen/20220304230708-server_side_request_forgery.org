@@ -37,10 +37,14 @@ Content-Length: 118
 
 stockApi=http://192.168.0.20/admin
 #+end_src
+** Blind SSRF
+When the application can be tricked to issue an HTTP request to a supplied URL, but the response of that request is not present in the front-end response of the server, then this is called blind server-side request forgery. Blind SSRF makes it harder to leak sensitive data, since the content of the response is not shown to the attacker.
+
+Detecting blind SSRF can be done by using an external server that the attacker controls. When the vulnerable server makes an HTTP request to the server for the first time, a [[id:c620b007-1376-4f39-9808-5ff9ff487e93][DNS]] lookup is first made. The attacker can monitor the server for any network communication such as HTTP or DNS. In some cases only the DNS lookup is completed since some infrastructures block outgoing HTTP traffic to unknown domains.
 
 ** Circumventing common SSRF Defenses
 *** Blacklist Approach
-Some applications will block specific IP addresses such as 127.0.0.1 and the hostname /localhost/. Such defenses can be bypassed by using an alternative representation of the required IP address. Or by regestering a domain that resolves to 127.0.0.1.
+Some applications will block specific IP addresses such as 127.0.0.1 and the hostname /localhost/. Such defenses can be bypassed by using an alternative representation of the required IP address. Or by registering a domain that resolves to 127.0.0.1.
 
 *** Whitelist Approach
 Instead of blocking values which can be hard to contain all possibilities, one can use a whitelist approach where values are accepted only if they fully match, begin/end with or contain an allowed value. For example, a request to the backend can only be accepted if the address begins with a specific subdomain.
@@ -61,7 +65,8 @@ Content-Length: 118
 stockApi=http://weliketoshop.net/product/nextProduct?currentProductId=6&path=http://192.168.0.68/admin
 #+end_src
 
+
 * Resources
 - Portswigger's articles on ssrf
-- OWASP's artciles on ssrf
+- OWASP's artciles on ssrf ([[https://owasp.org/Top10/A10_2021-Server-Side_Request_Forgery_%28SSRF%29/][1]], [[https://cheatsheetseries.owasp.org/cheatsheets/Server_Side_Request_Forgery_Prevention_Cheat_Sheet.html][2]])
 - A New Era Of SSRF - Exploiting Url Parsers - Orange Tsai ([[https://www.youtube.com/watch?v=D1S-G8rJrEk][link]])
