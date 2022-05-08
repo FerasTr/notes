@@ -1,6 +1,6 @@
 :PROPERTIES:
 :ID:       2a8da6c9-ff7d-45a2-b0fd-9fe91fefd738
-:ROAM_ALIASES: HTTP
+:ROAM_ALIASES: HTTPS HTTP
 :END:
 #+title: HyperText Transfer Protocol
 #+filetags: :Protocol:Networking:

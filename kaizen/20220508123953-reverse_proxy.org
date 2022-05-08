@@ -1,0 +1,9 @@
+:PROPERTIES:
+:ID:       744f083b-bbcb-46f0-9940-9c1898fdd9ab
+:END:
+#+title: Reverse Proxy
+
+* Overview
+A reverse proxy can be useful for things like efficiently serving static files, terminating [[id:2ad51977-e776-4ddf-b7ce-87be4836f5e6][SSL]], using gzip, getting country code headers, setting headers, controlling deny/allow lists, redirecting HTTP to HTTPS ([[id:2a8da6c9-ff7d-45a2-b0fd-9fe91fefd738][HTTP/HTTPS]]), redirecting www to the apex domain (or vice versa) and many more.
+
+* Resources

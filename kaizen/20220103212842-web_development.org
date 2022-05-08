@@ -14,3 +14,6 @@ Websites are primarily created using:
 - [[id:c11dfdff-dac6-40ba-b8a0-f37e30abe8fc][HTML]], to build websites and define their structure.
 - [[id:82b62afc-13a3-4aa1-9fcf-9ac36552a342][CSS]], to make websites look pretty by adding styling options.
 - [[id:50e7f683-acd1-4ceb-994a-d371c7c28be3][Javascript]], implement complex interactive features.
+
+* Resources
+- [[12factor.net][The Twelve-Factor App]]

@@ -3,5 +3,14 @@
 :END:
 #+title: NGINX
 
+* Overview
+When deploying a web application to a production environment, it is a good idea to use a reverse proxy such as nginx.
+
+* NGINX and Docker
+If nginx is installed as a [[id:6396875a-1a4f-48fd-8b47-190176d553dd][docker]] container, then upgrading docker will completely take the server offline. Instead, if we run nginx on the host machine directly then we can serve a maintenance page that doesn't depend on docker or any container running it.
+
+When running multiple independent apps on a single server then we can't publish ports 80/443 from two different copies of nginx running, since this will cause a port conflict. Having each app in its own docker container and nginx installed on the host machine, we can have a separate nginx config for each app.
+
 * Resources
 - [[https://nginx.org/en/docs/beginners_guide.html][Official Beginner's Guide]]
+- [[https://nickjanetakis.com/blog/why-i-prefer-running-nginx-on-my-docker-host-instead-of-in-a-container][Why I Prefer Running nginx on My Docker Host Instead of in a Container]]
