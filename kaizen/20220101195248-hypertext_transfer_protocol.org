@@ -73,6 +73,7 @@ HTTP methods are a way for the client to show their intended action when making 
 - The ~Expires~ header indicates that the response content expired in the past and so shouldn't be cached.
 - The ~Content-Type~ header indicates that the type of data in the body of this message.
 - The ~Content-Length~ header indicates the length of the message body in bytes.
+- The ~Authorization~ header includes an authentication token that is sent with every subsequent request by the browser.
 
 * HTTP Status Code
 When an HTTP server responds, the first line always contains a status code informing the client of the outcome of their request and also potentially how to handle it. These status codes can be broken down into 5 different ranges:
