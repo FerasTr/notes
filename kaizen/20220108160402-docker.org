@@ -4,5 +4,7 @@
 #+title: Docker
 #+filetags: :cloud:devops:linux:
 
+* Overview
 * Resources
 - Docker for beginners ([[https://docker-curriculum.com/][link]])
+- [[https://blogs.cisco.com/developer/container-image-layers-1?ccid=&dtid=devblog&oid=crippa-containerimage3-ww][Understanding Container Images]]
