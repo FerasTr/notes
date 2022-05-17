@@ -16,7 +16,65 @@ Making the rules is easy, the hard part is figuring out how to apply them in the
 
 * Examples
 ** 16-bit Checksum
-*** Know Where
+*** Know Where You're Going
+The purpose of the code is to generate a 16-bit checksum of the bytes in the file. The program will add each byte in the specified file in turn into a 16-bit value.
+
+*** Make a Big Map
+The logic for this task is simple:
+1. Get the file name
+2. Open the file
+3. *Read the bytes out of the file*
+4. *Add the bytes together*
+5. Print the result
+
+Step 3 and 4 are the most important since most of the time is going to be spent there.
+
+*** Make Lots of little Maps
+For every problem we would need a /map/. In this case we only need to focus on reading the bytes and adding them together.
+
+The first approach is to load the entire file into memory then sum the bytes together. The problem with this is that some files are larger in size than the current available memory.
+
+The second approach is to read the file one byte at a time adding it to the current sum. This approach works for every file no matter the size but it is not the fastest or near optimized. This approach uses C's ~read()~ function.
+
+#+begin_src C
+#include <stdio.h>
+#include <stdlib.h>
+#include <fcntl.h> // for the fd
+#include <unistd.h> // for read()
+
+int main(int argc, char *argv[]) {
+    int Handle;
+    unsigned char Byte;
+    unsigned int Checksum;
+    int ReadLength;
+
+    if (argc != 2) {
+        printf("Usage: checksum filename\n");
+        exit(1);
+    }
+
+    if ((Handle = open(argv[1], O_RDONLY)) == -1) {
+        printf("Can't open file: %s\n", argv[1]);
+        exit(1);
+    }
+
+    Checksum = 0;
+
+    // Add each byte into the checksum accumulator
+    while ((ReadLength = read(Handle, &Byte, sizeof(Byte))) > 0) {
+        Checksum += (unsigned int) Byte;
+    }
+    if (ReadLength == -1) {
+        printf("Error reading file: %s\n", argv[1]);
+        exit(1);
+    }
+
+    printf("The checksum is: %u\n", Checksum);
+    exit(0);
+}
+#+end_src
+
+The main idea is that the above /logic/ is slow, not the implementation or the optimization that the compiler will do. Even if we were to use an assembly loop that does the same thing, we will notice a small improvement. To get something much faster, we need to rethink the slow part.
 
 * Resources
 - Michael Abrash's Graphics Programming Black Book Special Edition
