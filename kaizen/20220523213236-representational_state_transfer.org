@@ -1,0 +1,16 @@
+:PROPERTIES:
+:ID:       ba688acb-582a-4f51-b848-387bf6d1c2fb
+:ROAM_ALIASES: REST
+:END:
+#+title: Representational State Transfer
+#+filetags: :webdev:
+
+* Overview
+#+begin_quote
+Representational state transfer (REST) is a style of architecture for distributed systems in which requests and responses contain representations of the current state of the system’s resources. The core technologies employed in the World Wide Web, including the HTTP protocol and the format of URLs, conform to the REST architectural style.
+#+end_quote
+
+
+
+* Resources
+- WAHH

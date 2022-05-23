@@ -1,0 +1,26 @@
+:PROPERTIES:
+:ID:       b67f449b-70e8-4b06-a787-77032eaf1fe6
+:END:
+#+title: Proxy
+
+* Overview
+#+begin_quote
+An HTTP proxy is a server that mediates access between the client browser and the destination web server.
+#+end_quote
+
+When a browser is configured to use a proxy server, all requests will be redirected to that server. Any response directed to the browser is passed through the proxy server which relays it to the browser.
+
+A proxy server behaves differently when [[id:2a8da6c9-ff7d-45a2-b0fd-9fe91fefd738][HTTP and HTTPS]] are used:
+- HTTP
+  When the browser issues a HTTP request which is unecrypted, it places the full [[id:1ec5d57d-b0df-4429-bc7e-aa6dfe97b381][URL]] into the request including protocol (scheme) prefix, the hostname and the server's port. The proxy server extracts the hostname and port and redirects to the target web server.
+- HTTPS
+  When the browser issues a HTTPS request which is encrypted, it can't make the [[id:2ad51977-e776-4ddf-b7ce-87be4836f5e6][SSL]] handshake with the proxy server since that will break the secure tunnel and leave it vulnerable to interception attacks. The browser must use the proxy as a [[id:ca5aa1c6-9074-46d1-aebf-1f7970f6a8f8][TCP]]-level relay, which passes all network data in both directions between the browser and the target server with which the browser performs the SSL handshake.
+
+  This is established first through an unecrypted HTTP request to the proxy server using the ~Connect~ method specifying the target's hostname and port as the URL. If the proxy allows the request, it returns a 200 status code, keeps the TCP connection open, and the browser can then perform the SSL handshake all while the proxy serves as a TCP-relay to the target.
+
+
+* Reverse Proxy
+A reverse proxy can be useful for things like efficiently serving static files, terminating [[id:2ad51977-e776-4ddf-b7ce-87be4836f5e6][SSL]], using gzip, getting country code headers, setting headers, controlling deny/allow lists, redirecting HTTP to HTTPS ([[id:2a8da6c9-ff7d-45a2-b0fd-9fe91fefd738][HTTP/HTTPS]]), redirecting www to the apex domain (or vice versa) and many more.
+
+* Resources
+- Wikipidea's [[https://en.wikipedia.org/wiki/Proxy_server][article]] on proxy servers
