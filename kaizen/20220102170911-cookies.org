@@ -5,6 +5,13 @@
 #+filetags: :HTTP:Networking:
 
 * What is a Cookie?
-Since [[id:2a8da6c9-ff7d-45a2-b0fd-9fe91fefd738][HTTP]] is a stateless protocol, cookies can be used to remind the web server who you are. Cookies are saved when you receive a ~Set-Cookie~ header from a web server. Then every furthur request you make, the browser will send the cookie data back to the web server.
+Since [[id:2a8da6c9-ff7d-45a2-b0fd-9fe91fefd738][HTTP]] is a stateless protocol, cookies can be used to remind the web server who you are. Cookies are saved when you receive a ~Set-Cookie~ header from a web server. Then every further request you make, the browser will send the cookie data back to the web server.
 
 Cookies are mostly used or website authentication. The value of a token is usually hashed using a secret token.
+
+In addition to a cookie's actual value, the ~Set-Cookie~ can include any of the following optional attributes which are used to determine how the browser handles the cookie:
+- ~expires~ is for setting a date for which the cookie is valid. The browser saves the cookie to persistent storage to be used until the date is reached. Otherwise the browser only uses the cookie for the current browsing session.
+- ~domain~ is for setting which domain the cookie is valid for. This must be the same as the current site or a parent of the domain the cookie was sent from.
+- ~path~ specifies for which path the cookie is valid for.
+- ~secure~ instructs the browser to submit the cookie only in HTTPS requests.
+- ~HttpOnly~ is used to block client-side [[id:91bb374f-27a4-49a0-bb6b-5fb77987abc6][JavaScript]] from accessing the cookie.

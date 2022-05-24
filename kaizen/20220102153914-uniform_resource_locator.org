@@ -6,12 +6,18 @@
 #+filetags: :Networking:
 
 * What is a URL?
-A Uniform Resource Locator (URL) is an instruction on how to access a resource on the internet. A URL can has different features.
+A Uniform Resource Locator (URL) is an instruction on how to access a resource on the internet. The format of most URLs is as follows:
+#+begin_example
+[scheme:]//user:password@host:port/[path]/file?param=value#fragment
+#+end_example
+Only the scheme and the path must exist to form a valid URI, anything else is optional.
+
+A simple example using http:
 #+begin_example
 http://user:password@example.com:80/view-room?id=1#task3
 #+end_example
 We discuss each feature using the above example:
-- Scheme (~http://~) - This instrucs on what protocol to use for accessing the resource such as HTTP, HTTPS, FTP.
+- Scheme (~http://~) - This instructs on what protocol to use for accessing the resource such as HTTP, HTTPS, FTP.
 - User (~user:password~) - Some services require authentication to log in.
 - Host (~example.com~) - The domain name or IP address of the server.
 - Port (~80~) - The port that we want to connect to, usually 80 for HTTP and 443 for HTTPS.
@@ -19,6 +25,38 @@ We discuss each feature using the above example:
 - Query String (~?id=1~) - Extra information about the requested path.
 - Fragment (~#task3~) - A reference to a location on the requested page (path).
 
+* Example URIs
+#begin_example
+          userinfo       host      port
+          ┌──┴───┐ ┌──────┴──────┐ ┌┴┐
+  https://john.doe@www.example.com:123/forum/questions/?tag=networking&order=newest#top
+  └─┬─┘   └───────────┬──────────────┘└───────┬───────┘ └───────────┬─────────────┘ └┬┘
+  scheme          authority                  path                 query           fragment
+
+  ldap://[2001:db8::7]/c=GB?objectClass?one
+  └┬─┘   └─────┬─────┘└─┬─┘ └──────┬──────┘
+  scheme   authority   path      query
+
+  mailto:John.Doe@example.com
+  └─┬──┘ └────┬─────────────┘
+  scheme     path
+
+  news:comp.infosystems.www.servers.unix
+  └┬─┘ └─────────────┬─────────────────┘
+  scheme            path
+
+  tel:+1-816-555-1212
+  └┬┘ └──────┬──────┘
+  scheme    path
+
+  telnet://192.0.2.16:80/
+  └─┬──┘   └─────┬─────┘│
+  scheme     authority  path
+
+  urn:oasis:names:specification:docbook:dtd:xml:4.1.2
+  └┬┘ └──────────────────────┬──────────────────────┘
+  scheme                    path
+  #+end_example
 
 * Resources
 - TryHackMe's room on HTTP.

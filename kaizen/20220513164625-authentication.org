@@ -18,7 +18,6 @@ There are three authentication factors:
 - Authentication is making sure that the user is who he claims to be.
 - Authorization is for verifying whether a user is allowed to do something.
 
-
 * Authentication Vulnerabilities
 Most vulnerabilities in authentication arise in one of two ways:
 1. Broken Authentication - [[id:25a1de57-6839-445f-bf84-e20b746d9d82][Business Logic Vulnerabilities]] or poor coding in the implementation might allow an attack to bypass the authentication process.
@@ -41,6 +40,13 @@ The following list of available information can make brute-force attack easier:
 - Status codes - Different status code for correct credentials can be used for enumeration.
 - Error messages - Returned error messages can be different when correct information is provided.
 - Response time - Some applications only check passwords after validating that the user is valid. Time based attacks can be used to guess passwords or usernames if the application checks the provided information in a loop (one charactor at a time).
+* HTTP Authentication
+The HTTP protocol includes its own mechanism for authenticating users using various authentication schemes:
+- *Basic* is a simple authentication mechanism that sends the user's username and password encoded in [[id:8853365a-91be-4264-8101-08e63d3991f3][base64]].
+- *NTLM* is a challenge-response mechanism that uses a version of windows [[id:ae0695e6-1586-4aea-a814-eb4c0cfb5a60][NTLM]] protocol.
+- *Digest* is a challenge-response mechanism that uses [[id:fe1fbf62-c008-486c-aeff-0a0318fe2ec2][MD5]] checksums of a nonce with the user's credentials.
+
+These mechanisms are more common within organizations to access intranet-based services.
 
 * Multi-factor Authentication
 #+begin_quote
@@ -67,3 +73,4 @@ If the program does not check that the same user is completing the second step, 
 
 * Resources
 - Portswigger's articles about authentication ([[https://portswigger.net/web-security/authentication][link]])
+- WAHH

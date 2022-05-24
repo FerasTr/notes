@@ -55,10 +55,13 @@ If we were to use HTTPS, then the GET request would look like this:
 t8Fw6T8UV81pQfyhDkhebbz7+oiwldr1j2gHBB3L3RFTRsQCpaSnSBZ78Vme+DpDVJPvZdZUZHpzbbcqmSW1+3xXGsERHg9YDmpYk0VVDiRvw1H5miNieJeJ/FNUjgH0BmVRWII6+T4MnDwmCMZUI/orxP3HGwYCSIvyzS3MpmmSe4iaWKCOHQ==
 #+end_example
 
-* HTTP methods
+* HTTP Methods
 HTTP methods are a way for the client to show their intended action when making an HTTP request. The most common requests are:
 - *GET* - Used for getting information from the web server.
+- *HEAD* -  functions in the same way as a GET request, except that the server should not return a message body in its response. The server should return the same headers that it would have returned to the corresponding GET request. Hence, this method can be used to check whether a resource is present before making a GET request for it.
 - *POST* - Used for submitting data to the web server and potentially creating new records.
+- *TRACE* - Used for diagnostics. The server should return in the respones body the exact content of the request message it received. This is useful for checking requests sent through a proxy before reaching the server.
+- *OPTION* - Used for asking the server what HTTP methods are available to a resource. The response contains an ~Allow~ header that lists available  methods.
 - *PUT* - Used for submitting data to a web server to update information.
 - *DELETE* Used for deleting information/records from a web server.
 
@@ -74,6 +77,8 @@ HTTP methods are a way for the client to show their intended action when making 
 - The ~Content-Type~ header indicates that the type of data in the body of this message.
 - The ~Content-Length~ header indicates the length of the message body in bytes.
 - The ~Authorization~ header includes an authentication token that is sent with every subsequent request by the browser.
+- The ~Connection~ header instructs a server on whether to keep the TCP connection alive after receiving the request or close it.
+- The ~Accept~ header tells the server what type of content it is willing to accept.
 
 * HTTP Status Code
 When an HTTP server responds, the first line always contains a status code informing the client of the outcome of their request and also potentially how to handle it. These status codes can be broken down into 5 different ranges:
@@ -99,19 +104,12 @@ Some of the most common requests are:
 | 500 - Internal Service Error | The server encountered an error and doesn't know how to handle it        |
 | 503 - Service Unavailable    | Server can't handle the request (overloaded, down)                       |
 
-* Headers
-Common Request Headers:
-- Host - Some web servers host multiple websites, if we don't provide a host header, the defualt website is served.
-- User-Agent - The browser software and version, some elements of HTML, CSS and javascript are only available to certain browsers.
-- Content-Length - How much data the server should expect in the web reqest. This way the server can check if its missing data.
-- Accept-Encoding - Tells the web server what type of compression methods the browser supports so the data can be made smaller for transmitting over the internet.
-- Cookie - Data sent to the server to help remember your information.
+* HTTPS
+#+begin_quote
+The HTTP protocol uses plain TCP as its transport mechanism, which is unencrypted and therefore can be intercepted by an attacker who is suitably positioned on the network. HTTPS is essentially the same application-layer protocol as HTTP but is tunneled over the secure transport mechanism, Secure Sockets Layer (SSL). This protects the privacy and integrity of data passing over the network, reducing the possibilities for noninvasive interception attacks. HTTP requests and responses function in exactly the same way regardless of whether SSL is used for transport.
+#+end_quote
 
-Common Response Headers:
-- Set-Cookie - Information to store which gets sent back to the web server on each request.
-- Cache-Control - How long to store the content of the respone in the browser's cache before it requests it again.
-- Content-Type - Tells the client what type of data is being returned.
-- Content-Encoding - What method has been used to compress the data to make it smaller.
+
 
 * Resources
 - Wikipedia articles on HTTP and HTTPS.

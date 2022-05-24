@@ -1,0 +1,38 @@
+:PROPERTIES:
+:ID:       f2c25d41-361b-44ec-876c-8dd346877c6c
+:END:
+#+title: Securing Applications
+
+* Overview
+#+begin_quote
+Anyone designing an application for which security is remotely important must assume that it will be directly targeted by dedicated and skilled attackers. A key function of the application’s security mechanisms is being able to handle and react to these attacks in a controlled way. These mechanisms often incorporate a mix of defensive and offensive measures designed to frustrate an attacker as much as possible and give the application’s owners appropriate notification and evidence of what has taken place.
+#+end_quote
+
+A programmer must implement the following measures:
+- Handle errors
+- Maintain audit logs
+- Alerting administrators
+- Reacting to attacks
+
+* Handling Errors
+An error message must be generic. No system or application info should be contained within the error. An application must handle errors gracefully, either recover from them or display an error to the user, keeping in mind to keep it clear of any info that might interest an attacker.
+
+* Maintaining Audit Logs
+Logs should helps an application's owner understand exactly what has taken place at any time. This info is especially useful when an intrusion is taking place.
+
+In any application, key events should be logged:
+- All events relating to authentication functionality.
+- Key transactions.
+- Access attempts that are blocked by [[id:b1b69d3f-e6be-49bf-83ce-80a16dd58349][access control mechanisms]].
+- Any request containing known attack strings.
+
+Additional information such as the IP address of the client can be useful when performing forensics.
+
+* Alerting Administrators
+Taking an immediate action like blocking the IP address of the attacker.
+
+* Reacting to Attacks
+Using automatic measures such as slowing down an attacker connection (slower response) and logging him out.
+
+* Resources
+- WAHH
