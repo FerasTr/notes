@@ -1,0 +1,10 @@
+:PROPERTIES:
+:ID:       7a06a766-b669-41b5-b379-e9043a97f9d8
+:END:
+#+title: Web Services
+
+* Overview
+Many applications are a GUI front-end to a set of back-end web services.
+
+* Resources
+- WAHH

@@ -3,3 +3,6 @@
 :END:
 #+title: CSS
 #+filetags: :programming:webdev:
+
+* Overview
+Cascading Style Sheets (CSS) is a language used to describe the presentation of a document written in a markup language.

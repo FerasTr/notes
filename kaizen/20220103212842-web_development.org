@@ -6,7 +6,8 @@
 #+filetags: :Networking:programming:
 
 * Overview
-There are two major components that make up a website:
+Web applications employ numerous technologies to deliver their functionality. An application may employ dozens of distinct technologies within its server and client components.
+There are two major components that make up a web application:
 1. Front End (Client-Side) - The way browsers renders a website.
 2. Back End (Server-Side) - A server that processes your request.
 
@@ -14,6 +15,16 @@ Websites are primarily created using:
 - [[id:c11dfdff-dac6-40ba-b8a0-f37e30abe8fc][HTML]], to build websites and define their structure.
 - [[id:82b62afc-13a3-4aa1-9fcf-9ac36552a342][CSS]], to make websites look pretty by adding styling options.
 - [[id:50e7f683-acd1-4ceb-994a-d371c7c28be3][Javascript]], implement complex interactive features.
+
+* Server-Side Functionality
+Early websites contained /entirely/ static content. Elements such as HTML pages and images were loaded onto a web server and delivered to any user who requested them. The response was the same for all requests.
+
+Today's web applications use static and dynamic content. The response to a request is created on the fly by the server, based on data specific to the current user being served, which is submitted to the server by the browser. This type of content is created by scripts or other code executing on the server.
+
+Server-side applications use [[id:c11dfdff-dac6-40ba-b8a0-f37e30abe8fc][HTML]]/[[id:dea30fc2-f494-4a3f-9160-5dfd4d0a12db][SOAP]] (or non-proprietary protocols) to communicate with various back-end systems.
+
+* Client-Side Functionality
+Server-side applications are not useful for a client by themselves. A client needs something to interact with, and the server-side applications needs a medium between it, and the user. This medium takes user input and action, talks to the server-side, and then presents the result back to the user.
 
 * Resources
 - [[12factor.net][The Twelve-Factor App]]

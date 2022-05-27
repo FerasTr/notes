@@ -1,0 +1,5 @@
+:PROPERTIES:
+:ID:       fc86d2e0-268a-42e0-ad77-03145627c442
+:ROAM_ALIASES: WSDL
+:END:
+#+title: Web Services Description Language

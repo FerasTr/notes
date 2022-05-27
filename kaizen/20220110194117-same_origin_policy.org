@@ -6,7 +6,7 @@
 #+filetags: :webexp:
 
 * Overview
-Same Origin Policy (SOP), is a browser-level security control which dictates how a document or script serverd by one origin can interact with resources from some other origin. It prevents scripts running under one origin to read data from another origin.
+Same Origin Policy (SOP), is a browser-level security control which dictates how a document or script served by one origin can interact with resources from some other origin. It prevents scripts running under one origin to read data from another origin.
 
 From Wikipedia:
 #+begin_quote
@@ -16,10 +16,10 @@ The same-origin policy is an important concept in the web application security m
 In [[id:c11dfdff-dac6-40ba-b8a0-f37e30abe8fc][HTML]], we can use the ~<iframe>~ tag which allows us to embed different websites inside each other. The communication between embedded websites cannot be made.
 
 * Correlation with CSRF
-Cross-domain requests and form submissions are still permitted but reading data from another origin is not permitted. For instance, if an attacker performs a CSRF attack on some vulnerable webiste to change/delete/update some parameter, the attack will be successful but the attacker will not be able to /read/ the response.
+Cross-domain requests and form submissions are still permitted but reading data from another origin is not permitted. For instance, if an attacker performs a CSRF attack on some vulnerable website to change/delete/update some parameter, the attack will be successful but the attacker will not be able to /read/ the response.
 
 * Cross Origin Resource Sharing
-Cross Origin Resource Sharing (CORS) allows different origins to communicate and share data in a controlled way. A CORS misconfiguration may also result in security vulnerabilites.
+Cross Origin Resource Sharing (CORS) allows different origins to communicate and share data in a controlled way. A CORS misconfiguration may also result in security vulnerabilities.
 
 * Disabling SOP
 SOP can be disabled using one of the following techniques:

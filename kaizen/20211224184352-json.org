@@ -4,8 +4,12 @@
 #+title: JSON
 #+description: Learning JSON
 
-
-* JWT
+* Overview
 #+begin_quote
-[[id:8b76eb72-ae21-4e36-97fe-5ccf308a27d9][JWT]] is a standard for creating data with optional signature and/or optional encryption whose payload holds JSON that asserts some number of claims.
+[[id:91bb374f-27a4-49a0-bb6b-5fb77987abc6][JavaScript]] Object Notation (JSON) is a simple data transfer format that can be used to serialize arbitrary data.
 #+end_quote
+
+JSON is an alternative to the [[id:8085e534-6cd0-44b1-854f-1c86add0419e][XML]] format. It is more common to see ~XMLHttpRequest~ use JSON instead of XML for data transmission.
+
+* Resources
+- WAHH

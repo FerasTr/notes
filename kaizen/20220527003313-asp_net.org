@@ -1,0 +1,13 @@
+:PROPERTIES:
+:ID:       73d7e605-8c06-4d04-8735-3b5c39a8d8b9
+:END:
+#+title: ASP.NET
+
+* Overview
+#+begin_quote
+ASP.NET is Microsoft's web application framework and is a direct competitor to the [[id:a42f4bae-13f6-466d-ae66-b75d1774c1e8][Java Platform]] ... ASP.NET uses Microsoft’s .NET Framework, which provides a virtual machine (the Common Language Runtime) and a set of powerful APIs. Hence, ASP.NET
+applications can be written in any .NET language, such as C# or VB.NET.
+#+end_quote
+
+* Resources
+- WAHH

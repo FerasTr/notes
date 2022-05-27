@@ -1,0 +1,45 @@
+:PROPERTIES:
+:ID:       8085e534-6cd0-44b1-854f-1c86add0419e
+:END:
+#+title: XML
+
+* Overview
+Extensible Markup Language (XML) is a specification for encoding data in a machine-readable form. The XML format separates a document into content (which is data) and markup (which annotates the data).
+
+* Syntax
+Markup is primarily represented using tags. Those tags can be start tags, end tags or empty-element tags.
+#+begin_src xml
+<tagname>
+</tagname>
+<tagname />
+#+end_src
+
+Start and end tags are paired into elements and may encapsulate document content or child elements.
+#+begin_src xml
+<pet>tama</pet>
+<pets>
+  <dog>
+    spot
+  </dog>
+  <cat>
+    paws
+  </cat>
+</pets>
+#+end_src
+
+Tags may include attributes, which are name/value pairs.
+#+begin_src xml
+<data version="2.1">
+  <pet>
+    yuki
+  </pet>
+</data>
+#+end_src
+
+* Document Type Definition
+#+begin_quote
+XML is extensible in that it allows arbitrary tag and attribute names. XML documents often include a Document Type Definition (DTD), which defines the tags and attributes used in the document and the ways in which they can be combined.
+#+end_quote
+
+* Resources
+- WAHH

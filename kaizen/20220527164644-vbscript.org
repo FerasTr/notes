@@ -1,0 +1,7 @@
+:PROPERTIES:
+:ID:       18d28ef6-aaae-4ac1-bbca-a318f3eece72
+:END:
+#+title: VBScript
+
+* Overview
+VBScript is an alternative to [[id:91bb374f-27a4-49a0-bb6b-5fb77987abc6][JavaScript]] that is supported only in the Internet Explorer browser. It is modeled on [[id:354c60b7-ffa5-43f4-a949-d8b37fac2540][Visual Basic]] and allows interation with the browser [[id:ca4b97ce-fbfd-44b7-b0ac-3068f280955a][DOM]]
