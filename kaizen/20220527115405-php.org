@@ -1,0 +1,15 @@
+:PROPERTIES:
+:ID:       b60fd13c-8841-4e36-bb32-a7dbf2693bbb
+:END:
+#+title: PHP
+#+filetags: :prog-lag:programming:
+
+
+* Overview
+PHP is often used in conjunction with other technologies in what is known as the LAMP stack:
+- Linux
+- Apache
+- MySQL
+- PHP
+
+* Resources

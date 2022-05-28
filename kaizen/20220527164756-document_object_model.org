@@ -1,0 +1,15 @@
+:PROPERTIES:
+:ID:       ca4b97ce-fbfd-44b7-b0ac-3068f280955a
+:ROAM_ALIASES: DOM
+:END:
+#+title: Document Object Model
+
+* Overview
+The Document Object Model (DOM) is an abstract representation of an [[id:c11dfdff-dac6-40ba-b8a0-f37e30abe8fc][HTML]] document that can be queried and manipulated through its [[id:e7b32d9c-0f2e-4405-bdd4-8d97b784c772][API]].
+
+The DOM allows client-side scripts to access individual HTML elements by their ~id~ and to traverse the structure of elements programmatically. The DOM also includes an event model, allowing code to hook into events such as form submission and keystrokes.
+
+[[id:a8674408-c841-4212-9b34-e474b1387b6c][Ajax]]-based application heavily use DOM manipulation techniques.
+
+* Resources
+- WAHH

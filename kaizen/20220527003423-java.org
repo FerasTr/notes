@@ -1,0 +1,4 @@
+:PROPERTIES:
+:ID:       a42f4bae-13f6-466d-ae66-b75d1774c1e8
+:END:
+#+title: Java

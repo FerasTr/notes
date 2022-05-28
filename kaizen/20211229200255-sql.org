@@ -2,3 +2,9 @@
 :ID:       5b33d78a-58bb-4df4-af2d-ac8eced7fe2e
 :END:
 #+title: SQL
+#+filetags: :db:
+
+* Overview
+Structured Query Language (SQL) is used to access data in relational databases, such as Oracle, MS-SQL server and MySQL. The vast majority of today's web applications employ SQL-based databases as their back-end data store.
+
+* Resources

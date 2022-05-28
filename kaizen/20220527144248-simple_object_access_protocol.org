@@ -1,0 +1,37 @@
+:PROPERTIES:
+:ID:       dea30fc2-f494-4a3f-9160-5dfd4d0a12db
+:ROAM_ALIASES: SOAP
+:END:
+#+title: Simple Object Access Protocol
+
+* Overview
+#+begin_quote
+[[id:7a06a766-b669-41b5-b379-e9043a97f9d8][Web services]] use Simple Object Access Protocol to exchange data.
+#+end_quote
+SOAP transmits messages using [[id:2a8da6c9-ff7d-45a2-b0fd-9fe91fefd738][HTTP]] and the data is represented using [[id:8085e534-6cd0-44b1-854f-1c86add0419e][XML]] format.
+
+A typical SOAP request is as follow:
+#+begin_src html
+POST /doTransfer.asp HTTP/1.0
+Host: mdsec-mgr.int.mdsec.net
+Content-Type: application/soap+xml; charset=utf-8
+Content-Length: 891
+<?xml version=”1.0”?>
+<soap:Envelope xmlns:soap="http://www.w3.org/2001/12/soap-envelope">
+    <soap:Body>
+        <pre:Add xmlns:pre=http://target/lists soap:encodingStyle= "http://www.w3.org/2001/12/soap-encoding">
+        <Account>
+            <FromAccount>18281008</FromAccount>
+            <Amount>1430</Amount>
+            <ClearedFunds>False</ClearedFunds>
+            <ToAccount>08447656</ToAccount>
+        </Account>
+        </pre:Add>
+    </soap:Body>
+</soap:Envelope>
+#+end_src
+
+Tools such as /soapUI/ can be used to create sample requests based on a published [[id:fc86d2e0-268a-42e0-ad77-03145627c442][WSDL]] file to call the authentication web service, gain an authentication token, and make subsequent web service requests.
+
+* Resources
+- WAHH

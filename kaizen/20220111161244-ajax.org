@@ -4,4 +4,28 @@
 #+title: AJAX
 
 * Overview
-This allows us to make requests to other websites (domains) or apis, without refreshing the page or rerunning the code.
+#+begin_quote
+Asynchronous [[id:91bb374f-27a4-49a0-bb6b-5fb77987abc6][JavaScript]] and [[id:8085e534-6cd0-44b1-854f-1c86add0419e][XML]] (AJAX) is a collection of programming techniques used on the client side to create user interfaces that aim to mimic the smooth interaction and dynamic behavior of traditional desktop applications.
+#+end_quote
+
+Although the name implies the usage of asynchronous and XML, web applications use AJAX requests that are synchronous and use other form of markup language for data.
+
+Before AJAX, web applications reacted to every user action by refreshing the current page or by sending a completely new page. With AJAX however, user actions are handled within client-side script code and do not cause a full reload of the page.
+
+Scripts perform a request "in the background" and typically receives a much smaller response that is used to dynamically update /parts/ of the user interface.
+
+** Simple Example
+When adding an item to the cart in a shopping website, a request that updates the server-side record of the user's shopping cart is sent in the background, and a small response is received that updates the number of cart items showing on the user's screen.
+
+* XMLHttpRequest
+The core technology used in AJAX is ~XMLHttpRequest~. This object is native in [[id:91bb374f-27a4-49a0-bb6b-5fb77987abc6][JavaScript]] which can be used by client-side scripts to make "background" requests without requiring a window-level navigation event.
+
+~XMLHttpRequest~ allows arbitrary content to be sent in requests and received in responses.
+
+* Asynchronous vs Synchronous
+Using asynchronous requests is useful when fetching data that no other functionality depend on when making requests, this allows the user to have a smooth experience when interacting with the application.
+
+Some AJAX applications prevent user interaction with the application while a particular action is carried out and a complete page refresh is not needed.
+
+* Resources
+- WAHH
