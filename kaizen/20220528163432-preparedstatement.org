@@ -1,0 +1,30 @@
+:PROPERTIES:
+:ID:       48d9d6c4-eb4d-4cc5-b03b-77e397547846
+:END:
+#+title: PreparedStatement
+
+* Overview
+Prepared statements, or parameterized queries, protect against [[id:20113752-5c4c-4119-ae16-f96d112bdfaf][SQL injection]].
+
+* Example
+Consider two ways of doing the same thing:
+#+begin_src javascript
+PreparedStatement stmt = conn.createStatement("INSERT INTO students VALUES('" + user + "')");
+stmt.execute();
+#+end_src
+or
+#+begin_src javascript
+PreparedStatement stmt = conn.prepareStatement("INSERT INTO student VALUES(?)");
+stmt.setString(1, user);
+stmt.execute();
+#+end_src
+
+The first query is vulnerable to [[id:20113752-5c4c-4119-ae16-f96d112bdfaf][SQL Injection]], for example, the following input can be used to drop the table:
+#+begin_src SQL
+Robert'); DROP TABLE students; --
+#+end_src
+
+* Why it Works
+
+* Resources
+- [[https://stackoverflow.com/questions/1582161/how-does-a-preparedstatement-avoid-or-prevent-sql-injection][This]] Stackoverflow question

@@ -1,0 +1,4 @@
+:PROPERTIES:
+:ID:       17dd20d7-52bd-41ed-b981-7081ee73fdaf
+:END:
+#+title: sqlmap

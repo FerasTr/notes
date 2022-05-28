@@ -1,0 +1,9 @@
+:PROPERTIES:
+:ID:       737fa080-d560-48b3-8428-dba230a0fd36
+:ROAM_ALIASES: OAST
+:END:
+#+title: Out-of-band Application Security Testing
+
+* Overview
+* Resources
+- PortSwigger's [[https://portswigger.net/burp/application-security-testing/oast][article]] on OAST

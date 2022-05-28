@@ -8,6 +8,13 @@
 Business logic vulnerabilities are flaws in the design and implementation of an application that allow an attacker to elicit unintended behavior. This potentially enables attackers to manipulate legitimate functionality to achieve a malicious goal. These flaws are generally the result of failing to anticipate unusual application states that may occur and, consequently, failing to handle them safely.
 #+end_quote
 
+Logic flaws are different from technical vulnerabilities, which directly relate to code, implementation or configuration errors. They are flaws related to the /working/ of applications.
+
 Most logic flaws arise because developers make assumptions on how users will interact with their application. When the user deviates from the expected user behavior, the application will fail to handle it safely, potentially allowing for an attack to go through.
 
+Logic flaws can be used to leverage:
+- Temporal attacks
+- Bypassing a workflow
+
 * Resources
+- vaadata's [[https://www.vaadata.com/blog/what-are-business-logic-flaws-on-web-applications/][article]] about business logic flaws
