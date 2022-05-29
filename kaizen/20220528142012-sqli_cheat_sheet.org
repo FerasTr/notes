@@ -20,10 +20,6 @@ SELECT version()
 #+end_src
 
 ** Database information
-#+begin_src SQL
-SELECT * FROM information_schema.tables
-#+end_src
-
 *** MySQL and MSSQL and PostgreSQL
 - For tables:
   #+begin_src
