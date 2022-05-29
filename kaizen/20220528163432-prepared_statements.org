@@ -1,0 +1,48 @@
+:PROPERTIES:
+:ID:       48d9d6c4-eb4d-4cc5-b03b-77e397547846
+:END:
+#+title: Prepared Statements
+
+* Overview
+Prepared statements, or parameterized queries, protect against [[id:20113752-5c4c-4119-ae16-f96d112bdfaf][SQL injection]]. A prepared statement forces the developer to write the [[id:5b33d78a-58bb-4df4-af2d-ac8eced7fe2e][SQL]] command and the user-provided data separately.
+
+* Example
+Consider two ways of doing the same thing:
+#+begin_src php
+$query = "SELECT * FROM users WHERE user = '$username' and password = '$password'";
+$result = mysql_query($query);
+#+end_src
+In this example, user-provided data is embedded directly in the [[id:5b33d78a-58bb-4df4-af2d-ac8eced7fe2e][SQL]] query. This approach is vulnerable to [[id:20113752-5c4c-4119-ae16-f96d112bdfaf][SQL Injection]], for example, the following input can be used to login into the admin account without needing the password.
+#+begin_src SQL
+admin' OR '1'='1
+#+end_src
+
+On the other hand, prepared statements separate the query from the data:
+#+begin_src php
+$stmt = $mysqli->prepare("SELECT * FROM users WHERE user = ? AND password = ?");
+$stmt->bind_param("ss", $username, $password);
+$stmt->execute();
+#+end_src
+The user-provided data is not directly embedded in the SQL query. Instead, there as a placeholder in place, "?". The query is compiled with this placeholder, and only after that the user's data is added in.
+
+If the user would use the same input as before, the database will look for a user "admin" whose password is literally "admin' OR '1'='1"
+
+* Why it Works :ATTACH:
+An additional phase is added in the [[id:5b33d78a-58bb-4df4-af2d-ac8eced7fe2e][SQL]] compilation process. This step is for placeholder replacement.
+
+Prepared statements are not complete SQL queries and contain placeholders, which at run-time are replaced by actual user-provided data.
+
+A prepared statement will go through all the compilation process as a normal query. The query gets parsed and compiled with placeholders.
+
+[[attachment:_20220529_111935ps-sql-query-processing.png]]
+
+** Placeholder Replacement
+When the query reaches this phase, it is already compiled and converted into byte-code.
+
+At this point, the placeholders are replaced with the user's data. But since the query is /already/ pre-compiled, it will not go through the compilation phase again.
+
+The user-provided data will always be interpreted as a simple string and cannot modify the original query's logic.
+
+* Resources
+- [[https://stackoverflow.com/questions/1582161/how-does-a-preparedstatement-avoid-or-prevent-sql-injection][This]] Stackoverflow question
+- hackedu's [[https://www.hackedu.com/blog/how-to-prevent-sql-injection-vulnerabilities-how-prepared-statements-work][article]] about prepared statements

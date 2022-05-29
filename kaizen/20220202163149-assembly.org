@@ -204,9 +204,9 @@ long myfunc(long a, long b, long c, long d,
 #+end_src
 The stack frame will be as follows:
 
-[[attachment:_20220205_195609stack-frame.png]]
+[[attachment:_20220529_154849stack-frame.png]]
 
-Since we have a total of 8 parameters, we start from the last one "g" which is pushed to the stack, followed by "h" aswell. The next 6 starting from "f" are pushed to the registers.
+Since we have a total of 8 parameters, we start from the last one "g" which is pushed to the stack, followed by "h" as well. The next 6 starting from "f" are pushed to the registers.
 
 Intel and AMD documentation says that for 64-bit mode, only 48 bits are actually available for virtual addresses, and bits from 48 to 63 must replicate bit 47 (sign-extension).
 

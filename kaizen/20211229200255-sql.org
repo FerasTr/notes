@@ -7,8 +7,39 @@
 * Overview
 Structured Query Language (SQL) is used to access data in relational databases, such as Oracle, MS-SQL server and MySQL. The vast majority of today's web applications employ SQL-based databases as their back-end data store.
 
-* Processing of an SQL Query
+* Processing of an SQL Query :ATTACH:
+The SQL query processing workflow consists of three phases, each of which is comprised of steps:
+1. Compilation phase.
+   1. Parsing.
+   2. Semantics check.
+   3. Binding.
+2. Optimization phase.
+   1. Query Optimization.
+   2. Cache.
+3. Execution phase.
+   1. Execution.
 
+When the query is a [[id:48d9d6c4-eb4d-4cc5-b03b-77e397547846][prepared statement]], an additional phase after the caching takes place, this step is responsible for placeholder replacement.
+
+[[attachment:_20220529_110746sql-query-processing.png]]
+
+** Parsing
+The SQL query is broken into individual tokens. Syntax errors and misspelling are preformed to ensure that the query is valid.
+
+** Semantics Check
+The Database Management System establishes the validity of the query. Checks if the table and column exist. The DBMS also checks if the user has privilege to execute the query.
+
+** Binding
+The query is converted to machine code. Keywords used in the query like ~SELECT~, ~FROM~, ~WHERE~, etc. are converted into format understandable by machine.
+
+** Query Optimization
+[[id:c68a92dd-fb43-4bc7-9aa0-d0be73f0a75d][Decision Tree]] is created for finding the ways in which query can be executed. Finds out the number of /ways/ in which the query can be executed and the cost associated with each way. The DBMS chooses the best way (algorithm) for the execution based on the cost.
+
+** Cache
+The algorithm choice is saved in the cache for when a similar query is executed, the first four steps are skipped.
+
+** Execution
+The query is executed and the results are returned to the user.
 
 * Setting Up a Testing Database
 * Resources
