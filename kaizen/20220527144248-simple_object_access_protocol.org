@@ -6,7 +6,7 @@
 
 * Overview
 #+begin_quote
-[[id:7a06a766-b669-41b5-b379-e9043a97f9d8][Web services]] use Simple Object Access Protocol to exchange data.
+[[id:7a06a766-b669-41b5-b379-e9043a97f9d8][Web services]] use Simple Object Access Protocol (SOAP) to exchange data.
 #+end_quote
 SOAP transmits messages using [[id:2a8da6c9-ff7d-45a2-b0fd-9fe91fefd738][HTTP]] and the data is represented using [[id:8085e534-6cd0-44b1-854f-1c86add0419e][XML]] format.
 
