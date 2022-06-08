@@ -93,11 +93,11 @@ Obtaining information about the database itself via [[id:5b33d78a-58bb-4df4-af2d
 
 Since this is highly dependent on the database being used, a [[id:74bb259b-6f1b-492f-b4ac-3c55af2a93a7][SQL injection cheat sheet]] is handy to maintain.
 
-Quering the database for its version and type can provide valuable information for an attacker, for example, it might be that the version used is vulnerable to a known CVE.
+Querying the database for its version and type can provide valuable information for an attacker, for example, it might be that the version used is vulnerable to a known CVE.
 
 In addition, information about the database (not the software), is key. This allows an attacker to enumerate table names and columns.
 
-For example, quering
+For example, querying
 #+begin_src SQL
 SELECT * FROM information_schema.tables
 #+end_src
