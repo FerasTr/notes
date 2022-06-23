@@ -1,0 +1,4 @@
+:PROPERTIES:
+:ID:       30ae3a30-714f-45a6-b862-9bfd58c8176d
+:END:
+#+title: Binary Search

