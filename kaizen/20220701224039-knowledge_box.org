@@ -1,0 +1,47 @@
+:PROPERTIES:
+:ID:       a081ec6b-ded4-48af-ad7c-9e1b66d93d8c
+:END:
+#+title: Knowledge Box
+#+Description: A dump of things I learned while working on something else.
+
+* Bash Double Dash
+A double dash ~--~ is used in most [[id:d9396133-7ae8-458a-a6a5-73ebcbbb8333][bash]] built-in commands (and maybe other commands) to signifiy the end of command options, after which only positional arguments are accepted.
+
+This can be used to grep the string ~-v~ from a file without treating it as a flag for grep.
+#+begin_src sh
+grep -- -v file
+#+end_src
+
+* GDB Attach to Docker
+First you must add the following line to the ~docker-compose.yml~ file:
+#+begin_src yml
+cap_add:
+    - SYS_PTRACE
+#+end_src
+1 you can pass ~--cap-add=SYS_PTRACE~ as an argument to ~docker run~.
+
+You can attach [[id:c5b71d95-8d50-4508-9ef9-0d043022ba5a][gdb]] on a process running inside a docker container. To do so you need to ~exec~ into the container with a shell. Then install gdb if its not there and run ~attach 1~.
+
+* objdump Intel Syntax
+Can use the following command to generate an Intel syntax instead of AT&T syntax using [[id:8007f451-3d1f-4d74-815c-06034cde28e2][objdump]].
+#+begin_src sh
+objdump -M intel -d program_name
+#+end_src
+
+* GDB Intel Syntax
+In [[id:c5b71d95-8d50-4508-9ef9-0d043022ba5a][GDB]] you can set the syntax flavor using ~set disassembly-flavor intel~
+
+* GDB Structs
+In [[id:c5b71d95-8d50-4508-9ef9-0d043022ba5a][GDB]] you can use ~ptype /o~ to print offsets and sizes of all fields in a struct.
+
+* Finding base address and memory size of program
+To view the base address of an [[id:a849be62-1306-4acf-b0b6-31ee531b9238][ELF]]:
+- Get the process id using ~info inferior~ or ~print getpid()~.
+- Get the memory map of the process using ~shell pmap -x {pid}~ (this is not a functionality of [[id:c5b71d95-8d50-4508-9ef9-0d043022ba5a][gdb]]).
+  Note: Instead of ~pmap~ we can look directly at the ~/proc/{pid}/maps~ file.
+
+* Attaching to the logs of a docker container
+We can attach to the logs of a [[id:6396875a-1a4f-48fd-8b47-190176d553dd][Docker]] container by using ~docker logs {id} --follow~.
+
+* Get PS on a docker container
+To get ~ps~ to work on a docker container install ~procps~.

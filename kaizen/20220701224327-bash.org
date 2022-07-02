@@ -1,0 +1,4 @@
+:PROPERTIES:
+:ID:       d9396133-7ae8-458a-a6a5-73ebcbbb8333
+:END:
+#+title: Bash
