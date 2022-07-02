@@ -12,7 +12,8 @@ SELECT @@version
 #+end_src
 *** Oracle
 #+begin_src SQL
-SELECT * FROM v$version
+SELECT banner FROM v$version
+SELECT version FROM v$instance
 #+end_src
 *** PostgreSQL
 #+begin_src SQL
@@ -99,6 +100,7 @@ admin") or "1"="1"/*
 - The comment sequence ~--~ causes the remainder of the query to be ignored.
 - In sqlite3, we can use the keyword ~AS~ to give a column a temporary name, this helps when the query is fixed using a certain column name.
 - Some databases accept wildcards such as the asterisk ~*~ which matches all entries in a table. To find credentials in this case, we can write a script that appends ~*~ to the username/password and collect all characters that result in valid requests.
+- In the Oracle database, every ~SELECT~ statement must specify a table to select ~FROM~. /dual/ is a built-in database in Oracle which can be used for this purpose.
 
 * Resources
 - PortSwigger's SQL injection [[https://portswigger.net/web-security/sql-injection/cheat-sheet][cheat sheet]]
