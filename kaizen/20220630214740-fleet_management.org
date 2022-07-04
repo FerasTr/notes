@@ -3,3 +3,13 @@
 :END:
 #+title: Fleet Management
 #+filetags: :writeup:pwn:ctf:hackthebox:
+
+* Description
+* Recon
+* Foothold
+In the ~skid_check~ function, a sandbox is configured using [[id:0d128e60-3469-4ba2-a8c6-ea8c7961809a][seccomp]]. The sandbox is initialized to ~SCMP_ACT_KILL~ (0) and only 5 syscalls are allowed:
+- 0xf - 15 - ~sys_getgroups~
+- 0x28 - 40 - ~sys_sendfile~
+- 0x3c - 60 - ~sys_exit~
+- 0xe7 - 231 - ~sys_exit_group~
+- 0x101 - 257 - ~sys_openat~

@@ -4,7 +4,6 @@
 :END:
 #+title: Assembly
 #+filetags: :binaryexp:prog-lag:reversing:binary:
-
 * Overview
 #+begin_quote
 In computer programming, assembly language (or assembler language), sometimes abbreviated asm, is any low-level programming language in which there is a very strong correspondence between the instructions in the language and the architecture's machine code instructions.
@@ -239,3 +238,5 @@ Before a function address has been resolved, the GOT points to an entry in the P
 - "x86 Dissassembly" [[https://en.wikibooks.org/wiki/X86_Disassembly][articles]] on WikiBooks
 - "x86 Assembly Guide" [[https://www.cs.virginia.edu/~evans/cs216/guides/x86.html][article]] from CS216
 - tenouk's [[https://www.tenouk.com/Bufferoverflowc/Bufferoverflow2a.html][article]] about "Buffer Overflow 6: The Function Stack"
+- The definitive Guide to Linux System Calls ([[https://blog.packagecloud.io/the-definitive-guide-to-linux-system-calls/][link]])
+- Linux System Call Table For x86 64 ([[https://blog.rchapman.org/posts/Linux_System_Call_Table_for_x86_64/][link]])

@@ -45,3 +45,6 @@ We can attach to the logs of a [[id:6396875a-1a4f-48fd-8b47-190176d553dd][Docker
 
 * Get PS on a docker container
 To get ~ps~ to work on a docker container install ~procps~.
+
+* Syscalls
+In linux system calls ([[id:b52b44e8-d225-4619-9b2b-6a2900a753f7][assembly]]), return values in ~EAX~ or ~RAX~.
