@@ -48,3 +48,9 @@ To get ~ps~ to work on a docker container install ~procps~.
 
 * Syscalls
 In linux system calls ([[id:b52b44e8-d225-4619-9b2b-6a2900a753f7][assembly]]), return values in ~EAX~ or ~RAX~.
+
+* Generate Shellcode using objdump
+To generate shellcode using [[id:8007f451-3d1f-4d74-815c-06034cde28e2][objdump]] (extract opcode with ~\x~ appended to the start) use the following command:
+#+begin_src sh
+objdump -d ./your_program|grep '[0-9a-f]:'|grep -v 'file'|cut -f2 -d:|cut -f1-6 -d' '|tr -s ' '|tr '\t' ' '|sed 's/ $//g'|sed 's/ /\\x/g'|paste -d '' -s |sed 's/^/"/'|sed 's/$/"/g'
+#+end_src
