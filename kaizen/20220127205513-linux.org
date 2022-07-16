@@ -5,7 +5,12 @@
 #+filetags: :os:
 
 * Processes
-Each process is a running program, a program is a file on the computer. Each process has a "current working directory".
+Each process is a running program, a program is a file on the computer. Each process has a "current working directory". There are several ways to view information about a process:
+- ~/proc~
+- ~pmap~
+- [[id:c5b71d95-8d50-4508-9ef9-0d043022ba5a][GDB]]
+
+When executing a program, a unique identifier called PID is given to the program by the Kernel. All information regarding this process is identifiable in the ~/proc /$pid/~ folder.
 
 * Environment Variables
 "Environment variables" are a set of key/value pairs passed into every process when it is launched. Critical variables:

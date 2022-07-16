@@ -1,0 +1,23 @@
+:PROPERTIES:
+:ID:       b75e90e8-301f-4b52-a05b-d323fd6adb27
+:END:
+#+title: Compilers
+#+filetags: :os:
+
+* Overview :ATTACH:
+From high-level code to machine language to being loaded into memory.
+
+[[attachment:_20220716_161030asm_linkage.png]]
+
+* Control Unit
+The Control Unit (CU) is a component of the CPU that directs the operation of the processor.
+
+* Arithmetic and Logic Unit
+An Arithmetic Logic Unit (ALU) is a digital electronic circuit that performs arithmetic and bitwise operations on integer binary numbers.
+
+* Registers
+- Memory Address Register (MAR): hold the address of the location in memory.
+- Memory Data Register (MDR): hold data just read from or written to memory.
+- Program Counter (PC): Hold the address of the next instruction to be fetched.
+- Instruction Register (IR): Hold the current instruction being executed.
+- General Purpose Register: Used for anything.

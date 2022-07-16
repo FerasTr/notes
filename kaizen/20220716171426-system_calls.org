@@ -1,0 +1,7 @@
+:PROPERTIES:
+:ID:       f841c3ff-f23f-424f-83ea-fb245aa36d68
+:END:
+#+title: System Calls
+
+* Resources
+- Anatomy of a system call ([[https://lwn.net/Articles/604287/][1]],[[https://lwn.net/Articles/604515/][2]])

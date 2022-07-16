@@ -20,31 +20,59 @@ x86-64 (amd64, i64) is a 64-bit Complex Instruction Set Computing (CISC) archite
 ** Registers
 A key component of x86-64 registers is multi-sized access which means the register ~RAX~ can have its lower 32 bits accessed with ~EAX~. The next lower 16 bits can be accessed with ~AX~ and the lowest 9 bits can be accessed with ~AL~.
 
-There are three special registers:
-1. ~RIP~ is the instruction pointer.
-2. ~RSP~ is the stack pointer.
-3. ~RBP~ is the base pointer.
-
 The x64 architecture extends x86's 8 general-purpose registers to be 64-bit, and adds 8 new 64-bit registers. The 64-bit registers have names beginning with "r", so for example, the 64-bit extension of ~EAX~ is called ~RAX~. The new registers are named ~R8~ through ~R15~.
 
-| 8-byte | Bytes 0-3 | Bytes 0-1 | Byte 0 |
-|--------+-----------+-----------+--------|
-| rax    | eax       | ax        | al     |
-| rcx    | ecx       | cx        | cl     |
-| rdx    | edx       | dx        | dl     |
-| rbx    | ebx       | bx        | bl     |
-| rsi    | esi       | si        | sil    |
-| rdi    | edi       | di        | dil    |
-| rsp    | esp       | sp        | spl    |
-| rbp    | ebp       | bp        | bpl    |
-| r8     | r8d       | r8w       | r8b    |
-| r9     | r9d       | r9w       | r9b    |
-| r10    | r10d      | r10w      | r10b   |
-| r11    | r11d      | r11w      | r11b   |
-| r12    | r12d      | r12w      | r12b   |
-| r13    | r13d      | r13w      | r13b   |
-| r14    | r14d      | r14w      | r14b   |
-| r15    | r15d      | r15w      | r15b   |
+*** Register Naming
+| 8-byte | Bytes 0-3 | Bytes 0-1 | Byte 1 | Byte 0 |
+|--------+-----------+-----------+--------+--------|
+| rax    | eax       | ax        | ah     | al     |
+| rcx    | ecx       | cx        | ch     | cl     |
+| rdx    | edx       | dx        | dh     | dl     |
+| rbx    | ebx       | bx        | bh     | bl     |
+| rsi    | esi       | si        | n/a    | sil    |
+| rdi    | edi       | di        | n/a    | dil    |
+| rsp    | esp       | sp        | n/a    | spl    |
+| rbp    | ebp       | bp        | n/a    | bpl    |
+| r8     | r8d       | r8w       | n/a    | r8b    |
+| r9     | r9d       | r9w       | n/a    | r9b    |
+| r10    | r10d      | r10w      | n/a    | r10b   |
+| r11    | r11d      | r11w      | n/a    | r11b   |
+| r12    | r12d      | r12w      | n/a    | r12b   |
+| r13    | r13d      | r13w      | n/a    | r13b   |
+| r14    | r14d      | r14w      | n/a    | r14b   |
+| r15    | r15d      | r15w      | n/a    | r15b   |
+
+*** Register Purpose
+Registers can be of general purpose but some have additional server an additional purpose. The ~RIP~, ~RSP~ and ~RBP~ are the three special registers.
+- ~RAX~ is for: General purpose / Function return value / [[id:f841c3ff-f23f-424f-83ea-fb245aa36d68][Syscall]] number / Arithmetic operation result.
+- ~RCX~ is for: General purpose / Loop counter / Fourth parameter of function.
+- ~RDX~ is for: General purpose / Rest of the multiplications and divisions / Third parameter of function.
+- ~RSI~ is for: String source / Second parameter of function.
+- ~RDI~ is for: String destination / First parameter of function.
+- ~RBX~ is for: General purpose.
+- ~RSP~ is for: Stack pointer.
+- ~RBP~ is for: Stack base pointer.
+- ~RIP~ is for: Next instruction to be executed.
+- ~R8~ is for: General purpose / Fifth parameter of function.
+- ~R9~ is for: General purpose / Sixth parameter of function.
+- ~R10~ - ~R15~ are for: General purpose.
+
+*** EFLAGS :ATTACH:
+~EFLAGS~ is a registry used as a collection of bits representing Boolean values to store the results of operations and the state of the processor.
+
+[[attachment:_20220716_164519eflags.png]]
+
+*** Segment Registers
+The primary purpose of segment registers is to keep the location of specific segments in virtual memory. Each 16-bit register may contain the location of a segment such as the code segment, held by the ~CS~ register.
+
+This register can then be used by the processor to find out where the code is in memory and access the offset accordingly. Because segment registers are only 16 bits wide, they are only able to reference the offset of a loading address for a given process. Segmentation is unnecessary in 64-bit systems; however, registries such as ~FS~ are important for pointing to the structural data of Windows.
+
+- Code Segment ~CS~: Contains the executable instructions of an object file. The ~CS~ register is sometimes called the text segment. Because the ~CS~ register has read and execute permissions, but not write permission, multiple instances of the program can run concurrently. The ~CS~ register often points to an offset containing the start address of the executable code for a given process.
+- Stack Segment ~SS~: Used to store information about the memory segment that stores the call stack of currently executed program.
+- Data Segment ~DS~.
+- ~ES~.
+- ~FS~.
+- ~GS~.
 
 ** Instructions
 An instruction represents a single operation for the CPU to perform. There are different types of instructions including:
@@ -116,7 +144,6 @@ jmp label
 
 Note that the return address is current address + size of two instructions.
 
-
 ** The Stack
 In x86, the stack is simply an area in RAM that was chosen to be the stack - there is no special hardware to store stack contents. When the ~push~ instruction is used, ~ESP~ decrements by 4 (or 8 on 64-bit x86), and the value is stored there. When the ~pop~ instruction is used, ~ESP~ is dereferenced (hence, the value is retrieved), and then incremented by 4 (or 8).
 
@@ -172,6 +199,17 @@ The exist sequence must undo the things that the entry sequence did. Therefore t
 1. Remove space for the local variables, by reverting ~ESP~ to its old value.
 2. Restore the old value of ~EBP~ to its old value, which is on top of the stack.
 3. Return to the calling function with a ~ret~ command.
+
+*** Stack Layout :ATTACH:
+Typically, a program memory can be divided into 5 "areas":
+- ~text~: contains executable code and is generally read-only and fixed size.
+- ~data~: contains initialized static variables.
+- ~bss~: contains uninitialized static data.
+- ~heap~: contains dynamically allocated memory, commonly begins at the end of the BSS segment and grows to larger addresses from there.
+- ~stack~: contains the call stack, a LIFO structure, typically located in the higher parts of memory.
+
+[[attachment:_20220716_171039Program_memory_layout.pdf.jpg]]
+
 
 ** The Heap
 The heap is a place in memory where a program creates dynamic objects.
