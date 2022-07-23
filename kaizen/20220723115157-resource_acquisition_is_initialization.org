@@ -1,0 +1,48 @@
+:PROPERTIES:
+:ID:       2b5b6aa8-c4f1-4f14-b9fb-d78db8a78374
+:END:
+#+title: Resource Acquisition is Initialization
+
+* Overview
+Resource Acquisition Is Initialization or RAII, is a programming idiom which binds the life cycle of a resource that must be acquired before use (allocated heap memory, thread of execution, open socket, open file, locked mutex, disk space, database connection—anything that exists in limited supply) to the lifetime of an object. RAII is most commonly used in [[id:96b64d17-e8b0-46de-b6a5-4f3e2b543809][C++]].
+
+RAII guarantees that the resource is available to any function that may access the object (resource availability is a class invariant). It also guarantees that all resources are released when the lifetime of their controlling object ends, in reverse order of acquisition. Likewise, if resource acquisition fails (the constructor exits with an exception), all resources acquired by every fully-constructed member and base subobject are released in reverse order of initialization.
+
+There are three parts to an RAII class:
+1. The resource is relinquished in the destructor (e.g. closing a file)
+2. Instances of the class are stack allocated
+3. The resource is aquired in the constructor (e.g. opening a file). This part is optional, but common.
+
+* Example
+#+begin_src cpp
+class OpenFile {
+public:
+    OpenFile(const char* filename){
+        //throws an exception on failure
+        _file.open(filename);
+    }
+
+    ~OpenFile(){
+        _file.close();
+    }
+
+    std::string readLine() {
+        return _file.readLine();
+    }
+
+private:
+    File _file;
+};
+
+
+// then we can use it like this
+OpenFile f("boo.txt");
+//exception safe, and no closing necessary
+{
+    loadFromFile(f); // the file is closed at the end of the scope.
+}
+#+end_src
+* Resources
+- cppreference's [[https://en.cppreference.com/w/cpp/language/raii][article]] about RAII
+- What is meant by Resource Acquisition is Initialization (RAII)? ([[https://stackoverflow.com/questions/2321511/what-is-meant-by-resource-acquisition-is-initialization-raii][link]])
+- RAII explained ([[https://www.tomdalling.com/blog/software-design/resource-acquisition-is-initialisation-raii-explained/][link]])

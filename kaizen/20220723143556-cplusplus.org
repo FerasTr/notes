@@ -1,0 +1,70 @@
+:PROPERTIES:
+:ID:       96b64d17-e8b0-46de-b6a5-4f3e2b543809
+:ROAM_ALIASES: C++
+:END:
+#+title: CPlusPlus
+#+filetags: :prog-lag:
+
+* Overview
+* Constructors and Destructors
+Constructor is a special non-static member function of a class that is used to initialize objects of its class type.
+
+** Member Initializer Lists
+The body of a function definition of any constructor, before the opening brace of the compound statement, may include the member initializer list, whose syntax is the colon character :, followed by the comma-separated list of one or more member-initializers.
+
+#+begin_src cpp
+struct S
+{
+    int n;
+
+    S(int);       // constructor declaration
+
+    S() : n(7) {} // constructor definition:
+                  // ": n(7)" is the initializer list
+                  // ": n(7) {}" is the function body
+};
+#+end_src
+
+** Copy Constructors
+:PROPERTIES:
+:ID:       aff0cb9a-73fa-43b3-a7a9-e4aa54ea1fc3
+:END:
+A copy constructor of class ~T~ is a non-template constructor whose first parameter is ~T&~.
+
+If the copy constructor is followed by:
+- ~= default~ then the compiler is forced to generate a copy constructor.
+- ~= delete~ then the compiler is told not to implicitly generate a copy constructor.
+
+The copy constructor is called whenever an object is initialized (by direct-initialization or copy-initialization) from another object of the same type, which includes:
+- initialization: ~T a = b~; or ~T a(b)~;, where ~b~ is of type ~T~;
+- function argument passing: ~f(a)~;, where a is of type ~T~ and ~f~ is void ~f(T t)~;
+- function return: ~return a~; inside a function such as ~T f()~, where a is of type ~T~, which has no move constructor.
+* Pointers
+** Smart Pointers
+Smart pointers are a way to automate the new/delete procedure. Smart pointers are a wrapper around the raw pointer. When creating a smart pointer, it will call new and allocate memory. Depending on the type of smart pointer used, it will also call free on that memory.
+
+*** unique_ptr
+~unique_ptr~ are scoped pointers, when the pointer goes out of scope, the pointer calls free and deletes the allocated memory. ~unique_ptr~ have to be unique and cannot be copied.
+
+If a ~unique_ptr~ is copied, two pointers will be pointing to the same memory and when one of them is destroyed it will free that memory and the second pointer remains pointing to that memory, potentially creating a [[id:d5aaabc2-6ccd-4d98-aae5-af31d4183b40][double free]] vulnerability.
+
+* Type Qualifiers
+** const
+** volatile
+* Functions
+Some notes about builtin C++ functions.
+
+** strdup()
+~strdup()~ does dynamic memory allocation for the character array including the end character '\0' and returns the address of the heap memory. It give us another string identical to the string given by its argument, without requiring us to allocate memory. But we still need to free it, later.
+#+begin_src cpp
+char *strdup (const char *s)
+{
+    char *p = malloc (strlen (s) + 1);   // allocate memory
+    if (p != NULL)
+        strcpy (p,s);                    // copy string
+    return p;                            // return the memory
+}
+#+end_src
+
+* Resources
+- [[en.cppreference.com][cppreference.com]]

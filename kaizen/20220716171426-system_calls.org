@@ -3,5 +3,41 @@
 :END:
 #+title: System Calls
 
+* Overview
+* x86
+The steps required for using the system calls are:
+1. Put the system call number in the EAX register.
+2. Store the arguments to the system call in the registers EBX, ECX, etc.
+3. Call the relevant interrupt (80h).
+4. The result is usually returned in the EAX register.
+
+** Create File
+1. Put ~sys_create()~ in ~EAX~.
+2. Put the filename in ~EBX~.
+3. Put the file permissions in ~ECX~.
+
+** Open File
+1. Put ~sys_open()~ in ~EAX~.
+2. Put the filename in ~EBX~.
+3. Put the file access mode in ~ECX~.
+4. Put the file permissions in ~EDX~.
+
+** Read File
+1. Put ~sys_read()~ in ~EAX~.
+2. Put the fd in ~EBX~.
+3. Put the pointer to the input buffer in ~ECX~.
+4. Put the number of bytes to read in ~EDX~.
+
+** Write File
+1. Put ~sys_write()~ in ~EAX~.
+2. Put the fd in ~EBX~.
+3. Put the pointer to the output buffer in ~ECX~.
+4. Put the number of bytes to write in ~EDX~.
+
+* x64
+64-bit x86 uses ~syscall~ instead of interrupt ~0x80~. The result value will be in ~RAX~.
+
 * Resources
 - Anatomy of a system call ([[https://lwn.net/Articles/604287/][1]],[[https://lwn.net/Articles/604515/][2]])
+- linux system call table for x86_64 ([[https://blog.rchapman.org/posts/Linux_System_Call_Table_for_x86_64/][link]])
+- File Management tutorial from ([[https://www.tutorialspoint.com/assembly_programming/assembly_file_management.htm][link]])

@@ -4,6 +4,7 @@
 :END:
 #+title: Assembly
 #+filetags: :binaryexp:prog-lag:reversing:binary:
+
 * Overview
 #+begin_quote
 In computer programming, assembly language (or assembler language), sometimes abbreviated asm, is any low-level programming language in which there is a very strong correspondence between the instructions in the language and the architecture's machine code instructions.
@@ -210,7 +211,6 @@ Typically, a program memory can be divided into 5 "areas":
 
 [[attachment:_20220716_171039Program_memory_layout.pdf.jpg]]
 
-
 ** The Heap
 The heap is a place in memory where a program creates dynamic objects.
 
@@ -278,3 +278,4 @@ Before a function address has been resolved, the GOT points to an entry in the P
 - tenouk's [[https://www.tenouk.com/Bufferoverflowc/Bufferoverflow2a.html][article]] about "Buffer Overflow 6: The Function Stack"
 - The definitive Guide to Linux System Calls ([[https://blog.packagecloud.io/the-definitive-guide-to-linux-system-calls/][link]])
 - Linux System Call Table For x86 64 ([[https://blog.rchapman.org/posts/Linux_System_Call_Table_for_x86_64/][link]])
+- Assembly Tutorial ([[https://www.tutorialspoint.com/assembly_programming/assembly_introduction.htm][link]])
