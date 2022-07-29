@@ -65,6 +65,44 @@ char *strdup (const char *s)
     return p;                            // return the memory
 }
 #+end_src
+* Move Semantics
+** lvalues and rvalues
+In general, ~lvalues~ are on the left side of an equal sign and ~rvalues~ are on the right side of an equal sign. src_cpp{int i = 10;}
+
+Functions can return ~lvalue~ reference, which can then be used to assign ~rvalues~ to it.
+#+begin_src cpp
+int& GetValue()
+{
+    static int value = 10;
+    return value;
+}
+int main()
+{
+    int i = GetValue();
+    GetValue() = 5;
+}
+#+end_src
+
+*** rvalue Reference
+An ~rvalue~ reference is used to hold the temporary object's resources passed to a function.
+#+begin_src cpp
+void PrintValue(std::string&& value)
+{
+    std::cout << value << std::endl;
+}
+int main()
+{
+    std::string pre = "fd";
+    std::string suf = "xd";
+
+    std::string full = pre + suf;
+
+    PrintValue(full); // fails
+    PrintValue(pre + suf); // works
+}
+#+end_src
+
+The main use of ~rvalue~ reference is moving a temporary object instead of creating a copy of it. This is done by casting the object to a temporary or calling ~std::move~ on it. The next thing to do is to implement a move constructor that moves the data from the temporary object to the new one, whilst also destroying the temprary object (setting pointers to null)
 
 * Resources
 - [[en.cppreference.com][cppreference.com]]
